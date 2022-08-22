@@ -2,6 +2,11 @@
 name = "bevy-widgets"
 version = "0.1.0"
 edition = "2021"
+authors = ["Andreas Weibye"]
+license = "MIT OR Apache-2.0"
+categories = ["games", "game-development"]
+keywords = ["bevy"]
+exclude = ["assets/**/*", "tools/**/*", ".github/**/*"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
