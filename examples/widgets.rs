@@ -223,7 +223,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         container.spawn_bundle(CheckboxBundle {
                             // style: todo!(),
                             text: Text::from_section(
-                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                Icon::CheckBoxOutlineBlank.to_string(),
                                 icon_style.clone(),
                             ),
                             ..default()
@@ -231,7 +231,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         container.spawn_bundle(CheckboxBundle {
                             // style: todo!(),
                             text: Text::from_section(
-                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                Icon::CheckBoxOutlineBlank.to_string(),
                                 icon_style.clone(),
                             ),
                             ..default()
@@ -239,7 +239,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         container.spawn_bundle(CheckboxBundle {
                             // style: todo!(),
                             text: Text::from_section(
-                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                Icon::CheckBoxOutlineBlank.to_string(),
                                 icon_style.clone(),
                             ),
                             ..default()
@@ -247,7 +247,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         container.spawn_bundle(CheckboxBundle {
                             // style: todo!(),
                             text: Text::from_section(
-                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                Icon::CheckBoxOutlineBlank.to_string(),
                                 icon_style.clone(),
                             ),
                             ..default()
@@ -255,7 +255,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         container.spawn_bundle(CheckboxBundle {
                             // style: todo!(),
                             text: Text::from_section(
-                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                Icon::CheckBoxOutlineBlank.to_string(),
                                 icon_style.clone(),
                             ),
                             ..default()
@@ -263,7 +263,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         container.spawn_bundle(CheckboxBundle {
                             // style: todo!(),
                             text: Text::from_section(
-                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                Icon::CheckBoxOutlineBlank.to_string(),
                                 icon_style.clone(),
                             ),
                             ..default()
@@ -271,7 +271,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         container.spawn_bundle(CheckboxBundle {
                             // style: todo!(),
                             text: Text::from_section(
-                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                Icon::CheckBoxOutlineBlank.to_string(),
                                 icon_style.clone(),
                             ),
                             ..default()
@@ -279,7 +279,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         container.spawn_bundle(CheckboxBundle {
                             // style: todo!(),
                             text: Text::from_section(
-                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                Icon::CheckBoxOutlineBlank.to_string(),
                                 icon_style.clone(),
                             ),
                             ..default()
