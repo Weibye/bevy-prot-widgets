@@ -2,11 +2,12 @@
 
 use bevy::prelude::*;
 use bevy_widgets::*;
+use material_icons::{icon_to_char, Icon};
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        // .insert_resource(Icons::default())
+        .add_plugin(WidgetPlugin)
         // Startup
         .add_startup_system(setup_camera)
         .add_startup_system(setup)
@@ -22,15 +23,20 @@ const PRESSED_BUTTON: Color = Color::rgb(0.35, 0.75, 0.35);
 const BUTTON_FONT_SIZE: f32 = 15.0;
 const H1_FONT_SIZE: f32 = 30.0;
 
+const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
 const FONT: &str = "fonts/Roboto/Roboto-Medium.ttf";
-const CHECKBOX_EMPTY: &str = "textures/Icons/checkbox-empty.png";
-const CHECKBOX_CHECKED: &str = "textures/Icons/checkbox-checked.png";
 
 fn setup_camera(mut cmd: Commands) {
     cmd.spawn_bundle(Camera2dBundle::default());
 }
 
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+    let icon_style = TextStyle {
+        font: asset_server.load(MATERIAL_FONT),
+        font_size: 40.0,
+        color: Color::DARK_GRAY,
+    };
+
     // root node
     commands
         .spawn_bundle(NodeBundle {
@@ -38,7 +44,8 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
                 ..default()
             },
-            color: Color::rgb(0.9, 0.9, 0.9).into(),
+            // color: Color::rgb(0.9, 0.9, 0.9).into(),
+            color: Color::WHITE.into(),
             ..default()
         })
         .with_children(|root| {
@@ -50,7 +57,8 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     padding: UiRect::all(Val::Px(10.0)),
                     ..default()
                 },
-                color: Color::rgb(0.5, 0.5, 0.5).into(),
+                // color: Color::rgb(0.5, 0.5, 0.5).into(),
+                color: Color::WHITE.into(),
                 ..default()
             })
             .with_children(|rect01| {
@@ -60,7 +68,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     TextStyle {
                         font: asset_server.load(FONT),
                         font_size: H1_FONT_SIZE,
-                        color: Color::WHITE,
+                        color: Color::BLACK,
                     },
                 ));
                 // Separator
@@ -75,7 +83,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     },
-                    color: Color::WHITE.into(),
+                    color: Color::BLACK.into(),
                     ..default()
                 });
 
@@ -182,7 +190,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     TextStyle {
                         font: asset_server.load(FONT),
                         font_size: H1_FONT_SIZE,
-                        color: Color::WHITE,
+                        color: Color::BLACK,
                     },
                 ));
                 // Separator
@@ -197,7 +205,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     },
-                    color: Color::WHITE.into(),
+                    color: Color::BLACK.into(),
                     ..default()
                 });
 
@@ -207,7 +215,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         style: Style {
                             size: Size::new(Val::Auto, Val::Px(45.0)),
                             flex_direction: FlexDirection::Row,
-                            align_items: AlignItems::Stretch,
+                            // align_items: AlignItems::Stretch,
                             justify_content: JustifyContent::SpaceBetween,
                             ..default()
                         },
@@ -215,93 +223,69 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     })
                     .with_children(|container| {
                         container.spawn_bundle(CheckboxBundle {
-                            style: Style {
-                                // For some reason the aspect ratio works when this has _some_ size.
-                                size: Size::new(Val::Px(1.), Val::Auto),
-                                aspect_ratio: Some(1.0),
-                                ..default()
-                            },
-                            image: asset_server.load(CHECKBOX_EMPTY).into(),
-                            icons: CheckboxIcons {
-                                checkbox_empty: asset_server.load(CHECKBOX_EMPTY).into(),
-                                checkbox_checked: asset_server.load(CHECKBOX_CHECKED).into(),
-                            },
+                            // style: todo!(),
+                            text: Text::from_section(
+                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                icon_style.clone(),
+                            ),
                             ..default()
                         });
-
-                        container
-                            .spawn_bundle(ImageBundle {
-                                style: Style {
-                                    // For some reason the aspect ratio works when this has _some_ size.
-                                    size: Size::new(Val::Px(1.), Val::Auto),
-                                    aspect_ratio: Some(1.0),
-                                    ..default()
-                                },
-                                color: Color::BLUE.into(),
-                                image: asset_server.load(CHECKBOX_EMPTY).into(),
-                                ..default()
-                            })
-                            .insert(Button)
-                            .insert(Interaction::default())
-                            .insert(CheckboxWidget)
-                            .insert(ToggleState(false));
-
-                        container
-                            .spawn_bundle(ImageBundle {
-                                style: Style {
-                                    // For some reason the aspect ratio works when this has _some_ size.
-                                    size: Size::new(Val::Px(1.), Val::Auto),
-                                    // TODO: We should support multiple aspect-ratio policies here:
-                                    // Height
-                                    aspect_ratio: Some(1.0),
-                                    ..default()
-                                },
-                                color: Color::BLUE.into(),
-                                image: asset_server.load(CHECKBOX_EMPTY).into(),
-                                ..default()
-                            })
-                            .insert(Button)
-                            .insert(Interaction::default())
-                            .insert(CheckboxWidget)
-                            .insert(ToggleState(false));
-
-                        container
-                            .spawn_bundle(ImageBundle {
-                                style: Style {
-                                    // For some reason the aspect ratio works when this has _some_ size.
-                                    size: Size::new(Val::Px(1.), Val::Auto),
-                                    // TODO: We should support multiple aspect-ratio policies here:
-                                    // Height
-                                    aspect_ratio: Some(1.0),
-                                    ..default()
-                                },
-                                color: Color::BLUE.into(),
-                                image: asset_server.load(CHECKBOX_EMPTY).into(),
-                                ..default()
-                            })
-                            .insert(Button)
-                            .insert(Interaction::default())
-                            .insert(CheckboxWidget)
-                            .insert(ToggleState(false));
-
-                        container
-                            .spawn_bundle(ImageBundle {
-                                style: Style {
-                                    // For some reason the aspect ratio works when this has _some_ size.
-                                    size: Size::new(Val::Px(1.), Val::Auto),
-                                    // TODO: We should support multiple aspect-ratio policies here:
-                                    // Height
-                                    aspect_ratio: Some(1.0),
-                                    ..default()
-                                },
-                                color: Color::BLUE.into(),
-                                image: asset_server.load(CHECKBOX_EMPTY).into(),
-                                ..default()
-                            })
-                            .insert(Button)
-                            .insert(Interaction::default())
-                            .insert(CheckboxWidget)
-                            .insert(ToggleState(false));
+                        container.spawn_bundle(CheckboxBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(CheckboxBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(CheckboxBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(CheckboxBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(CheckboxBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(CheckboxBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(CheckboxBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                icon_to_char(Icon::CheckBoxOutlineBlank),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
                     });
             });
         });

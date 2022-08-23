@@ -3,10 +3,14 @@ use bevy::{
         Bundle, Button, Component, ComputedVisibility, Deref, GlobalTransform, Handle, Image,
         Transform, Visibility,
     },
+    text::Text,
     ui::{
         widget::ImageMode, CalculatedSize, FocusPolicy, Interaction, Node, Style, UiColor, UiImage,
     },
 };
+use material_icons::Icon;
+
+// Resources
 
 // Widgets
 
@@ -15,10 +19,19 @@ use bevy::{
 pub struct CheckboxWidget;
 
 /// Component that defines the icons of the [CheckboxWidget].
-#[derive(Component, Debug, Clone, Default)]
+#[derive(Component, Debug, Clone)]
 pub struct CheckboxIcons {
-    pub checkbox_empty: Handle<Image>,
-    pub checkbox_checked: Handle<Image>,
+    pub empty: Icon,
+    pub checked: Icon,
+}
+
+impl Default for CheckboxIcons {
+    fn default() -> Self {
+        Self {
+            empty: Icon::CheckBoxOutlineBlank,
+            checked: Icon::CheckBox,
+        }
+    }
 }
 
 /// A Checkbox Widget
@@ -29,14 +42,10 @@ pub struct CheckboxBundle {
     pub node: Node,
     /// Describes the style including flexbox settings
     pub style: Style,
-    /// Configures how the image should scale
-    pub image_mode: ImageMode,
+    /// Contains the text of the node
+    pub text: Text,
     /// The calculated size based on the given image
     pub calculated_size: CalculatedSize,
-    /// The color of the node
-    pub color: UiColor,
-    /// The image of the node
-    pub image: UiImage,
     /// Whether this node should block interaction with lower nodes
     pub focus_policy: FocusPolicy,
     /// The transform of the node
