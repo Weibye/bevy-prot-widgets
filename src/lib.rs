@@ -1,5 +1,5 @@
 use bevy::{
-    prelude::{info, App, Changed, Entity, Plugin, Query, ParallelSystemDescriptorCoercion},
+    prelude::{info, App, Changed, Entity, ParallelSystemDescriptorCoercion, Plugin, Query},
     ui::Interaction,
 };
 
@@ -19,7 +19,8 @@ impl Plugin for WidgetPlugin {
             .add_system(button_output)
             .add_system(toggle_system)
             .add_system(update_checkbox.after(toggle_system))
-            .add_system(update_checkbox_color);
+            .add_system(update_radio.after(toggle_system))
+            .add_system(update_widget_colors);
     }
 }
 
