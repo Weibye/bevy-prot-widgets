@@ -1,39 +1,34 @@
 use bevy::{
-    prelude::{info, AssetServer, Button, Changed, Children, Entity, Query, Res, ResMut, With},
-    ui::{Interaction, UiColor, UiImage},
+    prelude::{info, AssetServer, Changed, Query, Res, With, Color, Commands},
+    text::{Text, TextStyle},
+    ui::Interaction,
 };
 
-use crate::entity::{CheckboxWidget, ToggleState};
+use crate::{
+    entity::{CheckboxWidget, ToggleState},
+    CheckboxIcons,
+};
 
-// fn load_icons(mut icons: ResMut<Icons>, asset_server: Res<AssetServer>) {
-//     icons.checkbox = asset_server.load(CHECKBOX_EMPTY);
-//     icons.checkbox_checked = asset_server.load(CHECKBOX_CHECKED);
-// }
+const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
+const ICON_SIZE: f32 = 40.0;
+const ICON_COLOR: Color = Color::DARK_GRAY;
 
-// fn button_system(
-//     mut query: Query<(&Interaction, &mut UiColor, &Children),(Changed<Interaction>, With<Button>)>,
-//     mut text_query: Query<&mut Text>,
-// ) {
-//     for (interaction, mut color, children) in &mut query {
-//         let mut text = text_query.get_mut(children[0]).unwrap();
-//         match *interaction {
-//             Interaction::Clicked => {
-//                 text.sections[0].value = "Press".to_string();
-//                 *color = PRESSED_BUTTON.into();
-//             }
-//             Interaction::Hovered => {
-//                 text.sections[0].value = "Hover".to_string();
-//                 *color = HOVERED_BUTTON.into();
-//             }
-//             Interaction::None => {
-//                 text.sections[0].value = "Button".to_string();
-//                 *color = NORMAL_BUTTON.into();
-//             }
-//         }
-//     }
-// }
+const ICON_COLOR_NORMAL: Color = Color::DARK_GRAY;
+const ICON_COLOR_HOVERED: Color = Color::rgb(0.5, 0.5, 0.5);
+const ICON_COLOR_SELECTED: Color = Color::rgb_linear(0.3, 0.3, 0.7);
 
-/// System responsible for toggling the state of buttons that can toggle
+// #[derive(Resource)]
+pub struct IconStyle(pub TextStyle);
+
+pub(crate) fn setup_resources(mut cmd: Commands, asset_server: Res<AssetServer>) {
+    cmd.insert_resource(IconStyle(TextStyle {
+        font: asset_server.load(MATERIAL_FONT),
+        font_size: ICON_SIZE,
+        color: ICON_COLOR,
+    }));
+}
+
+/// System responsible for toggling the state of widgets that can toggle
 pub(crate) fn toggle_system(mut q: Query<(&mut ToggleState, &Interaction), Changed<Interaction>>) {
     for (mut state, interaction) in &mut q {
         match *interaction {
@@ -46,15 +41,25 @@ pub(crate) fn toggle_system(mut q: Query<(&mut ToggleState, &Interaction), Chang
     }
 }
 
-// fn update_checkbox(
-//     mut q: Query<(&mut UiImage, &ToggleState), (Changed<ToggleState>, With<CheckboxWidget>)>,
-//     icons: Res<Icons>,
-// ) {
-//     for (mut image, state) in &mut q {
-//         image.0 = if state.0 {
-//             icons.checkbox_checked.unwrap()
-//         } else {
-//             icons.checkbox.unwrap()
-//         }
-//     }
-// }
+/// System that updates the visual of the checkbox according to their state
+pub(crate) fn update_checkbox(
+    mut q: Query<(&mut Text, &ToggleState, &CheckboxIcons), (Changed<ToggleState>, With<CheckboxWidget>)>,
+) {
+    for (mut text, state, icons) in &mut q {
+        // Assume only one section in widgets for now
+        text.sections[0].value = (if state.0 { icons.checked } else { icons.empty }).to_string();
+    }
+}
+
+pub(crate) fn update_checkbox_color(
+    mut q: Query<(&mut Text, &Interaction), (Changed<Interaction>, With<CheckboxWidget>)>
+) {
+    for (mut text, interaction) in &mut q {
+        // Assume only one section in widgets for now
+        text.sections[0].style.color = match interaction {
+            Interaction::Clicked => ICON_COLOR_SELECTED,
+            Interaction::Hovered => ICON_COLOR_HOVERED,
+            Interaction::None => ICON_COLOR_NORMAL,
+        }
+    }
+}

@@ -1,5 +1,5 @@
 use bevy::{
-    prelude::{info, App, Changed, Entity, Plugin, Query},
+    prelude::{info, App, Changed, Entity, Plugin, Query, ParallelSystemDescriptorCoercion},
     ui::Interaction,
 };
 
@@ -10,46 +10,30 @@ pub use entity::*;
 pub use system::*;
 
 // Widgetplugin should be the collector of all the widget systems
-struct WidgetPlugin;
+pub struct WidgetPlugin;
 
 impl Plugin for WidgetPlugin {
     fn build(&self, app: &mut App) {
         // Systems
-        // app.add_system(button_system)
-        app.add_system(button_output).add_system(toggle_system);
+        app.add_startup_system(setup_resources)
+            .add_system(button_output)
+            .add_system(toggle_system)
+            .add_system(update_checkbox.after(toggle_system))
+            .add_system(update_checkbox_color);
     }
 }
 
-// Debug systems
+struct WidgetConfig {
+    // Font
+    // TODO: Make it possible to add config on font style
+}
 
+// Debug systems
 fn button_output(q: Query<(Entity, &Interaction), Changed<Interaction>>) {
     for (entity, interaction) in &q {
         info!("{:?} changed: {:?}", entity, interaction);
     }
 }
-
-// fn button_system(
-//     mut query: Query<(&Interaction, &mut UiColor, &Children),(Changed<Interaction>, With<Button>)>,
-//     mut text_query: Query<&mut Text>,
-// ) {
-//     for (interaction, mut color, children) in &mut query {
-//         let mut text = text_query.get_mut(children[0]).unwrap();
-//         match *interaction {
-//             Interaction::Clicked => {
-//                 text.sections[0].value = "Press".to_string();
-//                 *color = PRESSED_BUTTON.into();
-//             }
-//             Interaction::Hovered => {
-//                 text.sections[0].value = "Hover".to_string();
-//                 *color = HOVERED_BUTTON.into();
-//             }
-//             Interaction::None => {
-//                 text.sections[0].value = "Button".to_string();
-//                 *color = NORMAL_BUTTON.into();
-//             }
-//         }
-//     }
-// }
 
 // #[cfg(test)]
 // mod tests {
