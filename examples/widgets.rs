@@ -44,7 +44,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
                 ..default()
             },
-            // color: Color::rgb(0.9, 0.9, 0.9).into(),
             color: Color::WHITE.into(),
             ..default()
         })
@@ -57,7 +56,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     padding: UiRect::all(Val::Px(10.0)),
                     ..default()
                 },
-                // color: Color::rgb(0.5, 0.5, 0.5).into(),
                 color: Color::WHITE.into(),
                 ..default()
             })
@@ -282,6 +280,110 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                             // style: todo!(),
                             text: Text::from_section(
                                 icon_to_char(Icon::CheckBoxOutlineBlank),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                    });
+
+                // Checkboxes title
+                rect01.spawn_bundle(TextBundle::from_section(
+                    "Radio Buttons",
+                    TextStyle {
+                        font: asset_server.load(FONT),
+                        font_size: H1_FONT_SIZE,
+                        color: Color::BLACK,
+                    },
+                ));
+                // Separator
+                rect01.spawn_bundle(NodeBundle {
+                    style: Style {
+                        size: Size::new(Val::Percent(100.0), Val::Px(1.0)),
+                        margin: UiRect::new(
+                            Val::Undefined,
+                            Val::Px(5.0),
+                            Val::Undefined,
+                            Val::Px(5.0),
+                        ),
+                        ..default()
+                    },
+                    color: Color::BLACK.into(),
+                    ..default()
+                });
+
+                // Checkbox container
+                rect01
+                    .spawn_bundle(NodeBundle {
+                        style: Style {
+                            size: Size::new(Val::Auto, Val::Px(45.0)),
+                            flex_direction: FlexDirection::Row,
+                            // align_items: AlignItems::Stretch,
+                            justify_content: JustifyContent::SpaceBetween,
+                            ..default()
+                        },
+                        ..default()
+                    })
+                    .with_children(|container| {
+                        container.spawn_bundle(RadioButtonBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                Icon::RadioButtonUnchecked.to_string(),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(RadioButtonBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                Icon::RadioButtonUnchecked.to_string(),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(RadioButtonBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                Icon::RadioButtonUnchecked.to_string(),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(RadioButtonBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                Icon::RadioButtonUnchecked.to_string(),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(RadioButtonBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                Icon::RadioButtonUnchecked.to_string(),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(RadioButtonBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                Icon::RadioButtonUnchecked.to_string(),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(RadioButtonBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                Icon::RadioButtonUnchecked.to_string(),
+                                icon_style.clone(),
+                            ),
+                            ..default()
+                        });
+                        container.spawn_bundle(RadioButtonBundle {
+                            // style: todo!(),
+                            text: Text::from_section(
+                                Icon::RadioButtonUnchecked.to_string(),
                                 icon_style.clone(),
                             ),
                             ..default()

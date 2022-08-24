@@ -1,12 +1,12 @@
 use bevy::{
-    prelude::{info, AssetServer, Changed, Query, Res, With, Color, Commands},
+    prelude::{info, AssetServer, Changed, Color, Commands, Query, Res, With, AnyOf, Or},
     text::{Text, TextStyle},
     ui::Interaction,
 };
 
 use crate::{
     entity::{CheckboxWidget, ToggleState},
-    CheckboxIcons,
+    CheckboxIcons, RadioButtonWidget, RadioButtonIcons,
 };
 
 const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
@@ -15,7 +15,7 @@ const ICON_COLOR: Color = Color::DARK_GRAY;
 
 const ICON_COLOR_NORMAL: Color = Color::DARK_GRAY;
 const ICON_COLOR_HOVERED: Color = Color::rgb(0.5, 0.5, 0.5);
-const ICON_COLOR_SELECTED: Color = Color::rgb_linear(0.3, 0.3, 0.7);
+const ICON_COLOR_SELECTED: Color = Color::rgb_linear(1.0, 0.3, 0.2);
 
 // #[derive(Resource)]
 pub struct IconStyle(pub TextStyle);
@@ -43,7 +43,10 @@ pub(crate) fn toggle_system(mut q: Query<(&mut ToggleState, &Interaction), Chang
 
 /// System that updates the visual of the checkbox according to their state
 pub(crate) fn update_checkbox(
-    mut q: Query<(&mut Text, &ToggleState, &CheckboxIcons), (Changed<ToggleState>, With<CheckboxWidget>)>,
+    mut q: Query<
+        (&mut Text, &ToggleState, &CheckboxIcons),
+        (Changed<ToggleState>, With<CheckboxWidget>),
+    >,
 ) {
     for (mut text, state, icons) in &mut q {
         // Assume only one section in widgets for now
@@ -51,8 +54,22 @@ pub(crate) fn update_checkbox(
     }
 }
 
-pub(crate) fn update_checkbox_color(
-    mut q: Query<(&mut Text, &Interaction), (Changed<Interaction>, With<CheckboxWidget>)>
+/// System that updates the visual of the checkbox according to their state
+pub(crate) fn update_radio(
+    mut q: Query<
+        (&mut Text, &ToggleState, &RadioButtonIcons),
+        (Changed<ToggleState>, With<RadioButtonWidget>),
+    >,
+) {
+    for (mut text, state, icons) in &mut q {
+        // Assume only one section in widgets for now
+        text.sections[0].value = (if state.0 { icons.checked } else { icons.empty }).to_string();
+    }
+}
+
+
+pub(crate) fn update_widget_colors(
+    mut q: Query<(&mut Text, &Interaction), (Changed<Interaction>, Or<(With<CheckboxWidget>, With<RadioButtonWidget>)>)>,
 ) {
     for (mut text, interaction) in &mut q {
         // Assume only one section in widgets for now
