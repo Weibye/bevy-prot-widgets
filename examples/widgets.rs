@@ -44,7 +44,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
                 ..default()
             },
-            // color: Color::rgb(0.9, 0.9, 0.9).into(),
             color: Color::WHITE.into(),
             ..default()
         })
@@ -57,132 +56,131 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     padding: UiRect::all(Val::Px(10.0)),
                     ..default()
                 },
-                // color: Color::rgb(0.5, 0.5, 0.5).into(),
                 color: Color::WHITE.into(),
                 ..default()
             })
             .with_children(|rect01| {
-                // // Buttons title
-                // rect01.spawn_bundle(TextBundle::from_section(
-                //     "Buttons",
-                //     TextStyle {
-                //         font: asset_server.load(FONT),
-                //         font_size: H1_FONT_SIZE,
-                //         color: Color::BLACK,
-                //     },
-                // ));
-                // // Separator
-                // rect01.spawn_bundle(NodeBundle {
-                //     style: Style {
-                //         size: Size::new(Val::Percent(100.0), Val::Px(1.0)),
-                //         margin: UiRect::new(
-                //             Val::Undefined,
-                //             Val::Px(5.0),
-                //             Val::Undefined,
-                //             Val::Px(5.0),
-                //         ),
-                //         ..default()
-                //     },
-                //     color: Color::BLACK.into(),
-                //     ..default()
-                // });
+                // Buttons title
+                rect01.spawn_bundle(TextBundle::from_section(
+                    "Buttons",
+                    TextStyle {
+                        font: asset_server.load(FONT),
+                        font_size: H1_FONT_SIZE,
+                        color: Color::BLACK,
+                    },
+                ));
+                // Separator
+                rect01.spawn_bundle(NodeBundle {
+                    style: Style {
+                        size: Size::new(Val::Percent(100.0), Val::Px(1.0)),
+                        margin: UiRect::new(
+                            Val::Undefined,
+                            Val::Px(5.0),
+                            Val::Undefined,
+                            Val::Px(5.0),
+                        ),
+                        ..default()
+                    },
+                    color: Color::BLACK.into(),
+                    ..default()
+                });
 
-                // // Button container
-                // rect01
-                //     .spawn_bundle(NodeBundle {
-                //         style: Style {
-                //             size: Size::new(Val::Auto, Val::Px(45.0)),
-                //             flex_direction: FlexDirection::Row,
-                //             align_items: AlignItems::Stretch,
-                //             justify_content: JustifyContent::SpaceBetween,
-                //             ..default()
-                //         },
-                //         ..default()
-                //     })
-                //     .with_children(|button_container| {
-                //         // Button 01
-                //         button_container
-                //             .spawn_bundle(ButtonBundle {
-                //                 style: Style {
-                //                     size: Size::new(Val::Auto, Val::Auto),
-                //                     justify_content: JustifyContent::Center, // For centering button text
-                //                     align_items: AlignItems::Center, // For centering button text
-                //                     flex_grow: 1.,
-                //                     ..default()
-                //                 },
-                //                 color: NORMAL_BUTTON.into(),
-                //                 ..default()
-                //             })
-                //             .with_children(|parent| {
-                //                 parent.spawn_bundle(TextBundle::from_section(
-                //                     "First button",
-                //                     TextStyle {
-                //                         font: asset_server.load(FONT),
-                //                         font_size: BUTTON_FONT_SIZE,
-                //                         color: Color::WHITE,
-                //                     },
-                //                 ));
-                //             });
+                // Button container
+                rect01
+                    .spawn_bundle(NodeBundle {
+                        style: Style {
+                            size: Size::new(Val::Auto, Val::Px(45.0)),
+                            flex_direction: FlexDirection::Row,
+                            align_items: AlignItems::Stretch,
+                            justify_content: JustifyContent::SpaceBetween,
+                            ..default()
+                        },
+                        ..default()
+                    })
+                    .with_children(|button_container| {
+                        // Button 01
+                        button_container
+                            .spawn_bundle(ButtonBundle {
+                                style: Style {
+                                    size: Size::new(Val::Auto, Val::Auto),
+                                    justify_content: JustifyContent::Center, // For centering button text
+                                    align_items: AlignItems::Center, // For centering button text
+                                    flex_grow: 1.,
+                                    ..default()
+                                },
+                                color: NORMAL_BUTTON.into(),
+                                ..default()
+                            })
+                            .with_children(|parent| {
+                                parent.spawn_bundle(TextBundle::from_section(
+                                    "First button",
+                                    TextStyle {
+                                        font: asset_server.load(FONT),
+                                        font_size: BUTTON_FONT_SIZE,
+                                        color: Color::WHITE,
+                                    },
+                                ));
+                            });
 
-                //         // Button 02
-                //         button_container
-                //             .spawn_bundle(ButtonBundle {
-                //                 style: Style {
-                //                     size: Size::new(Val::Auto, Val::Auto),
-                //                     // horizontally center child text
-                //                     margin: UiRect::new(
-                //                         Val::Px(5.0),
-                //                         Val::Px(5.0),
-                //                         Val::Undefined,
-                //                         Val::Undefined,
-                //                     ),
-                //                     justify_content: JustifyContent::Center,
-                //                     // vertically center child text
-                //                     align_items: AlignItems::Center,
-                //                     flex_grow: 1.,
-                //                     ..default()
-                //                 },
-                //                 color: NORMAL_BUTTON.into(),
-                //                 ..default()
-                //             })
-                //             .with_children(|parent| {
-                //                 parent.spawn_bundle(TextBundle::from_section(
-                //                     "Second",
-                //                     TextStyle {
-                //                         font: asset_server.load(FONT),
-                //                         font_size: BUTTON_FONT_SIZE,
-                //                         color: Color::WHITE,
-                //                     },
-                //                 ));
-                //             });
+                        // Button 02
+                        button_container
+                            .spawn_bundle(ButtonBundle {
+                                style: Style {
+                                    size: Size::new(Val::Auto, Val::Auto),
+                                    // horizontally center child text
+                                    margin: UiRect::new(
+                                        Val::Px(5.0),
+                                        Val::Px(5.0),
+                                        Val::Undefined,
+                                        Val::Undefined,
+                                    ),
+                                    justify_content: JustifyContent::Center,
+                                    // vertically center child text
+                                    align_items: AlignItems::Center,
+                                    flex_grow: 1.,
+                                    ..default()
+                                },
+                                color: NORMAL_BUTTON.into(),
+                                ..default()
+                            })
+                            .with_children(|parent| {
+                                parent.spawn_bundle(TextBundle::from_section(
+                                    "Second",
+                                    TextStyle {
+                                        font: asset_server.load(FONT),
+                                        font_size: BUTTON_FONT_SIZE,
+                                        color: Color::WHITE,
+                                    },
+                                ));
+                            });
 
-                //         // Button 03
-                //         button_container
-                //             .spawn_bundle(ButtonBundle {
-                //                 style: Style {
-                //                     size: Size::new(Val::Auto, Val::Auto),
-                //                     // margin: UiRect::new(Val::Px(5.0), Val::Undefined, Val::Undefined, Val::Undefined),
-                //                     // horizontally center child text
-                //                     justify_content: JustifyContent::Center,
-                //                     // vertically center child text
-                //                     align_items: AlignItems::Center,
-                //                     flex_grow: 1.,
-                //                     ..default()
-                //                 },
-                //                 color: NORMAL_BUTTON.into(),
-                //                 ..default()
-                //             })
-                //             .with_children(|parent| {
-                //                 parent.spawn_bundle(TextBundle::from_section(
-                //                     "Third",
-                //                     TextStyle {
-                //                         font: asset_server.load(FONT),
-                //                         font_size: BUTTON_FONT_SIZE,
-                //                         color: Color::WHITE,
-                //                     },
-                //                 ));
-                //             });
-                //     });
+                        // Button 03
+                        button_container
+                            .spawn_bundle(ButtonBundle {
+                                style: Style {
+                                    size: Size::new(Val::Auto, Val::Auto),
+                                    // margin: UiRect::new(Val::Px(5.0), Val::Undefined, Val::Undefined, Val::Undefined),
+                                    // horizontally center child text
+                                    justify_content: JustifyContent::Center,
+                                    // vertically center child text
+                                    align_items: AlignItems::Center,
+                                    flex_grow: 1.,
+                                    ..default()
+                                },
+                                color: NORMAL_BUTTON.into(),
+                                ..default()
+                            })
+                            .with_children(|parent| {
+                                parent.spawn_bundle(TextBundle::from_section(
+                                    "Third",
+                                    TextStyle {
+                                        font: asset_server.load(FONT),
+                                        font_size: BUTTON_FONT_SIZE,
+                                        color: Color::WHITE,
+                                    },
+                                ));
+                            });
+                    });
 
                 // Checkboxes title
                 rect01.spawn_bundle(TextBundle::from_section(
