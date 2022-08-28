@@ -1,12 +1,12 @@
 use bevy::{
-    prelude::{info, AssetServer, Changed, Color, Commands, Query, Res, With, AnyOf, Or},
+    prelude::{info, AnyOf, AssetServer, Changed, Color, Commands, Or, Query, Res, With},
     text::{Text, TextStyle},
     ui::Interaction,
 };
 
 use crate::{
-    entity::{CheckboxWidget, ToggleState},
-    CheckboxIcons, RadioButtonWidget, RadioButtonIcons,
+    widget::checkbox::{CheckboxIcons, CheckboxState, CheckboxWidget},
+    RadioButtonIcons, RadioButtonWidget, ToggleState,
 };
 
 const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
@@ -44,13 +44,18 @@ pub(crate) fn toggle_system(mut q: Query<(&mut ToggleState, &Interaction), Chang
 /// System that updates the visual of the checkbox according to their state
 pub(crate) fn update_checkbox(
     mut q: Query<
-        (&mut Text, &ToggleState, &CheckboxIcons),
-        (Changed<ToggleState>, With<CheckboxWidget>),
+        (&mut Text, &CheckboxState, &CheckboxIcons),
+        (Changed<CheckboxState>, With<CheckboxWidget>),
     >,
 ) {
     for (mut text, state, icons) in &mut q {
         // Assume only one section in widgets for now
-        text.sections[0].value = (if state.0 { icons.checked } else { icons.empty }).to_string();
+        text.sections[0].value = match state {
+            CheckboxState::Checked => icons.checked,
+            CheckboxState::Unchecked => icons.unchecked,
+            CheckboxState::Indeterminate => icons.indeterminate,
+        }
+        .to_string();
     }
 }
 
@@ -67,9 +72,27 @@ pub(crate) fn update_radio(
     }
 }
 
-
 pub(crate) fn update_widget_colors(
-    mut q: Query<(&mut Text, &Interaction), (Changed<Interaction>, Or<(With<CheckboxWidget>, With<RadioButtonWidget>)>)>,
+    mut q: Query<
+        (&mut Text, &Interaction),
+        (
+            Changed<Interaction>,
+            Or<(With<CheckboxWidget>, With<RadioButtonWidget>)>,
+        ),
+    >,
+) {
+    for (mut text, interaction) in &mut q {
+        // Assume only one section in widgets for now
+        text.sections[0].style.color = match interaction {
+            Interaction::Clicked => ICON_COLOR_SELECTED,
+            Interaction::Hovered => ICON_COLOR_HOVERED,
+            Interaction::None => ICON_COLOR_NORMAL,
+        }
+    }
+}
+
+pub(crate) fn update_checkbox_colors(
+    mut q: Query<(&mut Text, &Interaction), (Changed<Interaction>, With<CheckboxWidget>)>,
 ) {
     for (mut text, interaction) in &mut q {
         // Assume only one section in widgets for now

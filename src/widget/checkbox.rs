@@ -1,40 +1,47 @@
 use bevy::{
     prelude::{
-        Bundle, Button, Component, ComputedVisibility, Deref, GlobalTransform, Handle, Image,
-        Transform, Visibility,
+        Bundle, Button, Component, ComputedVisibility, GlobalTransform, Transform, Visibility,
     },
     text::Text,
-    ui::{
-        widget::ImageMode, CalculatedSize, FocusPolicy, Interaction, Node, Style, UiColor, UiImage,
-    },
+    ui::{CalculatedSize, FocusPolicy, Interaction, Node, Style, UiColor, UiImage},
 };
 use material_icons::Icon;
 
-// Resources
+use crate::ToggleState;
 
-/// Marker component for a CheckBoxWidget
+/// Marker component for a [CheckboxWidget].
 #[derive(Component, Debug, Clone, Default)]
-pub struct RadioButtonWidget;
+pub struct CheckboxWidget;
+
+#[derive(Component, Debug, Clone, Default)]
+pub enum CheckboxState {
+    Checked,
+    #[default]
+    Unchecked,
+    Indeterminate,
+}
 
 /// Component that defines the icons of the [CheckboxWidget].
 #[derive(Component, Debug, Clone)]
-pub struct RadioButtonIcons {
-    pub empty: Icon,
+pub struct CheckboxIcons {
+    pub unchecked: Icon,
     pub checked: Icon,
+    pub indeterminate: Icon,
 }
 
-impl Default for RadioButtonIcons {
+impl Default for CheckboxIcons {
     fn default() -> Self {
         Self {
-            empty: Icon::RadioButtonUnchecked,
-            checked: Icon::RadioButtonChecked,
+            unchecked: Icon::CheckBoxOutlineBlank,
+            checked: Icon::CheckBox,
+            indeterminate: Icon::IndeterminateCheckBox,
         }
     }
 }
 
 /// A Checkbox Widget
 #[derive(Bundle, Clone, Debug, Default)]
-pub struct RadioButtonBundle {
+pub struct CheckboxBundle {
     // From image-bundle
     /// Describes the size of the node
     pub node: Node,
@@ -61,15 +68,15 @@ pub struct RadioButtonBundle {
     /// Interaction state of the widget
     pub interaction: Interaction,
     /// Marker to make it a "CheckboxWidget"
-    pub radio: RadioButtonWidget,
+    pub checkbox: CheckboxWidget,
     /// State of the widget
     pub toggle: ToggleState,
     /// The different icons for the widget
-    pub icons: RadioButtonIcons,
+    pub icons: CheckboxIcons,
+    /// The different state the checkbox can be in
+    pub state: CheckboxState,
+    /// Background color
+    pub color: UiColor,
+    /// Describes the image of the node
+    pub image: UiImage,
 }
-
-// State
-
-/// Stores the state of a toggled widget element.
-#[derive(Component, Clone, Debug, Default)]
-pub struct ToggleState(pub bool);
