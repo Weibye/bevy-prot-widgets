@@ -191,13 +191,6 @@ pub(crate) fn button_color(
                 }
             }
         }
-
-        //                 color.0 = match *state {
-        //     ButtonState::Pressed => Color::hsla(1., 1., 1.0, 0.1),
-        //     ButtonState::Released => Color::hsla(195., 1., 1.0, 0.1),
-        //     ButtonState::Hovered => Color::hsla(1., 1., 1.0, 0.03),
-        //     ButtonState::None => Color::hsla(0.0, 0.0, 0.0, 0.0),
-        // }
     }
 }
 
