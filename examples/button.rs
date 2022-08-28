@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, ecs::system::Resource};
 use bevy_widgets::{
     widget::button::{ButtonColor, ButtonTheme, ButtonWidgetBundle, TriggerPolicy},
     WidgetPlugin,
@@ -20,15 +20,17 @@ const COLOR_CONTENT_EXAMPLE: Color = Color::rgb(0.055, 0.12, 0.19);
 
 const PRIMARY: Color = Color::rgb(0.2274, 0.2, 0.2078);
 // const COLOR_CONTENT_BACKGROUND: Color = Color::hsl(224, 15, 39);
-const H1_FONT: &str = "fonts/Roboto/Roboto-Bold.ttf";
 const H1_FONT_SIZE: f32 = 30.0;
 const COLOR_TEXT: Color = Color::rgb(0.905, 0.921, 0.941);
 
+const H1_FONT: &str = "fonts/Roboto/Roboto-Bold.ttf";
 const TEXT_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
+const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
+
+
 const TEXT_FONT_SIZE: f32 = 18.0;
 const BUTTON_FONT_SIZE: f32 = 20.0;
 
-const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
 
 const BUTTON_THEME: ButtonTheme = ButtonTheme {
     background_enabled: ButtonColor {
@@ -57,15 +59,26 @@ const BUTTON_THEME: ButtonTheme = ButtonTheme {
     },
 };
 
+struct Fonts {
+    h1: Handle<Font>,
+    p: Handle<Font>,
+    icon: Handle<Font>
+}
+
 /// Camera
 fn setup_camera(mut cmd: Commands) {
     cmd.spawn_bundle(Camera2dBundle::default());
 }
 
-// Button can be interacted with
-// It has some content
-// That content is either an icon, some text or both
+
 fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
+    // Fonts
+    let fonts = Fonts {
+        h1: asset_server.load(H1_FONT),
+        p: asset_server.load(TEXT_FONT),
+        icon: asset_server.load(MATERIAL_FONT),
+    };
+
     // root node
     cmd.spawn_bundle(NodeBundle {
             style: Style {
@@ -95,7 +108,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 content.spawn_bundle(TextBundle::from_section(
                     "Buttons", 
                     TextStyle {
-                        font: asset_server.load(H1_FONT).into(),
+                        font: fonts.h1.clone(),
                         font_size: H1_FONT_SIZE,
                         color: COLOR_TEXT,
                     }
@@ -107,7 +120,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 content.spawn_bundle(TextBundle::from_section(
                     "Buttons are used to trigger actions. They can be clicked and hovered.",
                     TextStyle {
-                        font: asset_server.load(TEXT_FONT).into(),
+                        font: fonts.p.clone(),
                         font_size: TEXT_FONT_SIZE,
                         color: COLOR_TEXT,
                     }
@@ -141,7 +154,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             "Ok",
                             TextStyle {
-                                font: asset_server.load(TEXT_FONT).into(),
+                                font: fonts.p.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -162,7 +175,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             "Submit",
                             TextStyle {
-                                font: asset_server.load(TEXT_FONT).into(),
+                                font: fonts.p.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -183,7 +196,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             Icon::Delete.to_string(),
                             TextStyle {
-                                font: asset_server.load(MATERIAL_FONT).into(),
+                                font: fonts.icon.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -194,7 +207,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             "Delete",
                             TextStyle {
-                                font: asset_server.load(TEXT_FONT).into(),
+                                font: fonts.p.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -206,7 +219,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 content.spawn_bundle(TextBundle::from_section(
                     "Disabled Buttons", 
                     TextStyle {
-                        font: asset_server.load(H1_FONT).into(),
+                        font: fonts.h1.clone(),
                         font_size: H1_FONT_SIZE,
                         color: COLOR_TEXT,
                     }
@@ -220,7 +233,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                             When they are disabled, they should look the part, \
                             and not be able to be triggered by the user.",
                     TextStyle {
-                        font: asset_server.load(TEXT_FONT).into(),
+                        font: fonts.p.clone(),
                         font_size: TEXT_FONT_SIZE,
                         color: COLOR_TEXT,
                     }
@@ -255,7 +268,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             "Ok",
                             TextStyle {
-                                font: asset_server.load(TEXT_FONT).into(),
+                                font: fonts.p.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -277,7 +290,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             "Submit",
                             TextStyle {
-                                font: asset_server.load(TEXT_FONT).into(),
+                                font: fonts.p.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -299,7 +312,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             Icon::Wifi.to_string(),
                             TextStyle {
-                                font: asset_server.load(MATERIAL_FONT).into(),
+                                font: fonts.icon.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -310,7 +323,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             "Enable Wifi",
                             TextStyle {
-                                font: asset_server.load(TEXT_FONT).into(),
+                                font: fonts.p.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -323,7 +336,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 content.spawn_bundle(TextBundle::from_section(
                     "Trigger Policy", 
                     TextStyle {
-                        font: asset_server.load(H1_FONT).into(),
+                        font: fonts.h1.clone(),
                         font_size: H1_FONT_SIZE,
                         color: COLOR_TEXT,
                     }
@@ -335,7 +348,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 content.spawn_bundle(TextBundle::from_section(
                     "Buttons are triggered on release by default. By setting the trigger-policy you can change the button to trigger on press instead.",
                     TextStyle {
-                        font: asset_server.load(TEXT_FONT).into(),
+                        font: fonts.p.clone(),
                         font_size: TEXT_FONT_SIZE,
                         color: COLOR_TEXT,
                     }
@@ -370,7 +383,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             "Ok",
                             TextStyle {
-                                font: asset_server.load(TEXT_FONT).into(),
+                                font: fonts.p.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -392,7 +405,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             "Submit",
                             TextStyle {
-                                font: asset_server.load(TEXT_FONT).into(),
+                                font: fonts.p.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -414,7 +427,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             Icon::Wifi.to_string(),
                             TextStyle {
-                                font: asset_server.load(MATERIAL_FONT).into(),
+                                font: fonts.icon.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -425,7 +438,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             "Enable Wifi",
                             TextStyle {
-                                font: asset_server.load(TEXT_FONT).into(),
+                                font: fonts.p.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
@@ -438,7 +451,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 content.spawn_bundle(TextBundle::from_section(
                     "Icon Buttons", 
                     TextStyle {
-                        font: asset_server.load(H1_FONT).into(),
+                        font: fonts.h1.clone(),
                         font_size: H1_FONT_SIZE,
                         color: COLOR_TEXT,
                     }
@@ -450,7 +463,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 content.spawn_bundle(TextBundle::from_section(
                     "Some buttons only need icon.",
                     TextStyle {
-                        font: asset_server.load(TEXT_FONT).into(),
+                        font: fonts.p.clone(),
                         font_size: TEXT_FONT_SIZE,
                         color: COLOR_TEXT,
                     }
@@ -484,7 +497,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             Icon::Wifi.to_string(),
                             TextStyle {
-                                font: asset_server.load(MATERIAL_FONT).into(),
+                                font: fonts.icon.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             })
@@ -505,7 +518,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             Icon::Subtitles.to_string(),
                             TextStyle {
-                                font: asset_server.load(MATERIAL_FONT).into(),
+                                font: fonts.icon.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             })
@@ -526,7 +539,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             Icon::Delete.to_string(),
                             TextStyle {
-                                font: asset_server.load(MATERIAL_FONT).into(),
+                                font: fonts.icon.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             })
@@ -547,7 +560,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             Icon::AlarmAdd.to_string(),
                             TextStyle {
-                                font: asset_server.load(MATERIAL_FONT).into(),
+                                font: fonts.icon.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             })
@@ -568,7 +581,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         button.spawn_bundle(TextBundle::from_section(
                             Icon::Camera.to_string(),
                             TextStyle {
-                                font: asset_server.load(MATERIAL_FONT).into(),
+                                font: fonts.icon.clone(),
                                 font_size: BUTTON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             })
