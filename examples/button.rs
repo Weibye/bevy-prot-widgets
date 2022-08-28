@@ -1,4 +1,4 @@
-use bevy::{prelude::*, ecs::system::Resource};
+use bevy::{prelude::*, ecs::system::Resource, reflect::erased_serde::private::serde::__private::de};
 use bevy_widgets::{
     widget::button::{ButtonColor, ButtonTheme, ButtonWidgetBundle, TriggerPolicy},
     WidgetPlugin,
@@ -13,6 +13,10 @@ fn main() {
         .add_startup_system(setup_page)
         .run();
 }
+
+// TODO: Show buttons with labels in different positions
+// TODO: Show buttons with different themes / styles
+// TODO: Show that clicking buttons actually change something
 
 const COLOR_BACKGROUND: Color = Color::rgb(0.047, 0.109, 0.172);
 const COLOR_CONTENT_BACKGROUND: Color = Color::rgb(0.065, 0.127, 0.195);
@@ -30,6 +34,7 @@ const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
 
 const TEXT_FONT_SIZE: f32 = 18.0;
 const BUTTON_FONT_SIZE: f32 = 20.0;
+const ICON_FONT_SIZE: f32 = 25.0;
 
 
 const BUTTON_THEME: ButtonTheme = ButtonTheme {
@@ -94,7 +99,8 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
             root.spawn_bundle(NodeBundle {
                 style: Style {
                     size: Size::new(Val::Auto, Val::Percent(100.0)),
-                    min_size: Size::new(Val::Px(800.0), Val::Auto),
+                    // min_size: Size::new(Val::Px(400.0), Val::Auto),
+                    // max_size: Size::new(Val::Px(800.0), Val::Auto),
                     padding: UiRect::all(Val::Px(30.0)),
                     flex_direction: FlexDirection::ColumnReverse,
                     justify_content: JustifyContent::FlexStart,
@@ -118,7 +124,9 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 }));
                 // Paragraph
                 content.spawn_bundle(TextBundle::from_section(
-                    "Buttons are used to trigger actions. They can be clicked and hovered.",
+                    "Buttons are used to trigger actions. \
+                    They can be hovered and clicked. \
+                    The most basic button is the text button",
                     TextStyle {
                         font: fonts.p.clone(),
                         font_size: TEXT_FONT_SIZE,
@@ -140,79 +148,30 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     color: COLOR_CONTENT_EXAMPLE.into(),
                     ..default()
                 }).with_children(| example_showcase | {
-                    // 1. Button without content
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(150.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::Center,
-                            ..default()
-                        }, 
-                        BUTTON_THEME
-                    )).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            "Ok",
-                            TextStyle {
-                                font: fonts.p.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            }
-                        ));
-                    });
 
-                    // 2. Button with text
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(150.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::Center,
-                            ..default()
-                        }, 
-                        BUTTON_THEME
-                    )).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            "Submit",
-                            TextStyle {
-                                font: fonts.p.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            }
-                        ));
-                    });
-
-                    // 3. Button with icon and text
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(150.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::FlexStart,
-                            ..default()
-                        }, 
-                        BUTTON_THEME
-                    )).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            Icon::Delete.to_string(),
-                            TextStyle {
-                                font: fonts.icon.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            }
-                        ).with_style(Style {
-                            margin: UiRect::all(Val::Px(10.0)),
-                            ..default()
-                        }));
-                        button.spawn_bundle(TextBundle::from_section(
-                            "Delete",
-                            TextStyle {
-                                font: fonts.p.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            }
-                        ));
-                    });
+                    // Spawn text-buttons
+                    for text in ["Ok", "Submit", "Restart Game"] {
+                        example_showcase.spawn_bundle(
+                            ButtonWidgetBundle::new(Style {
+                                size: Size::new(Val::Auto, Val::Auto),
+                                padding: UiRect::new(Val::Px(25.0), Val::Px(25.0), Val::Px(10.0), Val::Px(10.0)),
+                                margin: UiRect::all(Val::Px(10.0)),
+                                align_items: AlignItems::Center,
+                                justify_content: JustifyContent::Center,
+                                ..default()
+                            }, 
+                            BUTTON_THEME
+                        )).with_children(| button | {
+                            button.spawn_bundle(TextBundle::from_section(
+                                text,
+                                TextStyle {
+                                    font: fonts.p.clone(),
+                                    font_size: BUTTON_FONT_SIZE,
+                                    color: COLOR_TEXT,
+                                }
+                            ));
+                        });
+                    }
                 });
 
                 // Title text
@@ -230,8 +189,8 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 // Paragraph
                 content.spawn_bundle(TextBundle::from_section(
                     "Buttons can be either enabled or disabled. \
-                            When they are disabled, they should look the part, \
-                            and not be able to be triggered by the user.",
+                            Disabled buttons should not be triggered by the user. \
+                            Buttons should clearly show when they are disabled by changing colors.",
                     TextStyle {
                         font: fonts.p.clone(),
                         font_size: TEXT_FONT_SIZE,
@@ -253,82 +212,31 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     color: COLOR_CONTENT_EXAMPLE.into(),
                     ..default()
                 }).with_children(| example_showcase | {
-                    // 1. Button without content
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(150.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::Center,
-                            ..default()
-                        }, 
-                        BUTTON_THEME
-                    ).with_enabled(false)
-                    ).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            "Ok",
-                            TextStyle {
-                                font: fonts.p.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            }
-                        ));
-                    });
 
-                    // 2. Button with text
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(150.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::Center,
-                            ..default()
-                        }, 
-                        BUTTON_THEME
-                    ).with_enabled(false)
-                    ).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            "Submit",
-                            TextStyle {
-                                font: fonts.p.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            }
-                        ));
-                    });
-
-                    // 3. Button with icon and text
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(150.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::FlexStart,
-                            ..default()
-                        }, 
-                        BUTTON_THEME
-                    ).with_enabled(false)
-                    ).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            Icon::Wifi.to_string(),
-                            TextStyle {
-                                font: fonts.icon.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            }
-                        ).with_style(Style {
-                            margin: UiRect::all(Val::Px(10.0)),
-                            ..default()
-                        }));
-                        button.spawn_bundle(TextBundle::from_section(
-                            "Enable Wifi",
-                            TextStyle {
-                                font: fonts.p.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            }
-                        ));
-                    });
+                    // Spawn text-buttons
+                    for text in ["Ok", "Submit", "Restart Game"] {
+                        example_showcase.spawn_bundle(
+                            ButtonWidgetBundle::new(Style {
+                                size: Size::new(Val::Auto, Val::Auto),
+                                padding: UiRect::new(Val::Px(25.0), Val::Px(25.0), Val::Px(10.0), Val::Px(10.0)),
+                                margin: UiRect::all(Val::Px(10.0)),
+                                align_items: AlignItems::Center,
+                                justify_content: JustifyContent::Center,
+                                ..default()
+                            }, 
+                            BUTTON_THEME
+                        ).with_enabled(false)
+                        ).with_children(| button | {
+                            button.spawn_bundle(TextBundle::from_section(
+                                text,
+                                TextStyle {
+                                    font: fonts.p.clone(),
+                                    font_size: BUTTON_FONT_SIZE,
+                                    color: COLOR_TEXT,
+                                }
+                            ));
+                        });
+                    }
                 });
 
 
@@ -418,7 +326,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                             size: Size::new(Val::Px(150.0), Val::Px(40.0)),
                             margin: UiRect::all(Val::Px(10.0)),
                             align_items: AlignItems::Center,
-                            justify_content: JustifyContent::FlexStart,
+                            justify_content: JustifyContent::Center,
                             ..default()
                         }, 
                         BUTTON_THEME
@@ -428,13 +336,10 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                             Icon::Wifi.to_string(),
                             TextStyle {
                                 font: fonts.icon.clone(),
-                                font_size: BUTTON_FONT_SIZE,
+                                font_size: ICON_FONT_SIZE,
                                 color: COLOR_TEXT,
                             }
-                        ).with_style(Style {
-                            margin: UiRect::all(Val::Px(10.0)),
-                            ..default()
-                        }));
+                        ));
                         button.spawn_bundle(TextBundle::from_section(
                             "Enable Wifi",
                             TextStyle {
@@ -483,122 +388,109 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     color: COLOR_CONTENT_EXAMPLE.into(),
                     ..default()
                 }).with_children(| example_showcase | {
-                    // 1. Icon button
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(40.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            justify_content: JustifyContent::Center,
-                            align_items: AlignItems::Center,
-                            ..default()
-                        }, 
-                        BUTTON_THEME
-                    )).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            Icon::Wifi.to_string(),
-                            TextStyle {
-                                font: fonts.icon.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            })
-                        );
-                    });
 
-                    // 2. Icon button
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(40.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            justify_content: JustifyContent::Center,
-                            align_items: AlignItems::Center,
-                            ..default()
-                        }, 
-                        BUTTON_THEME
-                    )).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            Icon::Subtitles.to_string(),
-                            TextStyle {
-                                font: fonts.icon.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            })
-                        );
-                    });
-
-                    // 3. Icon button
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(40.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            justify_content: JustifyContent::Center,
-                            align_items: AlignItems::Center,
-                            ..default()
-                        }, 
-                        BUTTON_THEME
-                    )).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            Icon::Delete.to_string(),
-                            TextStyle {
-                                font: fonts.icon.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            })
-                        );
-                    });
-
-                    // 3. Icon button
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(40.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            justify_content: JustifyContent::Center,
-                            align_items: AlignItems::Center,
-                            ..default()
-                        }, 
-                        BUTTON_THEME
-                    )).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            Icon::AlarmAdd.to_string(),
-                            TextStyle {
-                                font: fonts.icon.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            })
-                        );
-                    });
-
-                    // 3. Icon button
-                    example_showcase.spawn_bundle(
-                        ButtonWidgetBundle::new(Style {
-                            size: Size::new(Val::Px(40.0), Val::Px(40.0)),
-                            margin: UiRect::all(Val::Px(10.0)),
-                            justify_content: JustifyContent::Center,
-                            align_items: AlignItems::Center,
-                            ..default()
-                        },
-                        BUTTON_THEME
-                    )).with_children(| button | {
-                        button.spawn_bundle(TextBundle::from_section(
-                            Icon::Camera.to_string(),
-                            TextStyle {
-                                font: fonts.icon.clone(),
-                                font_size: BUTTON_FONT_SIZE,
-                                color: COLOR_TEXT,
-                            })
-                        );
-                    });
+                    // Spawn icon-buttons
+                    for entry in [Icon::Wifi, Icon::Subtitles, Icon::Delete, Icon::Add, Icon::Home] {
+                        example_showcase.spawn_bundle(
+                            ButtonWidgetBundle::new(Style {
+                                size: Size::new(Val::Px(40.0), Val::Px(40.0)),
+                                margin: UiRect::all(Val::Px(10.0)),
+                                justify_content: JustifyContent::Center,
+                                align_items: AlignItems::Center,
+                                ..default()
+                            }, 
+                            BUTTON_THEME
+                        )).with_children(| button | {
+                            button.spawn_bundle(TextBundle::from_section(
+                                entry.to_string(),
+                                TextStyle {
+                                    font: fonts.icon.clone(),
+                                    font_size: ICON_FONT_SIZE,
+                                    color: COLOR_TEXT,
+                                })
+                            );
+                        });
+                    }
                 });
 
+                // Title text
+                content.spawn_bundle(TextBundle::from_section(
+                    "Icon and text buttons", 
+                    TextStyle {
+                        font: fonts.h1.clone(),
+                        font_size: H1_FONT_SIZE,
+                        color: COLOR_TEXT,
+                    }
+                ).with_style(Style {
+                    margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(15.0), Val::Undefined),
+                   ..default()
+               }));
+                // Paragraph
+                content.spawn_bundle(TextBundle::from_section(
+                    "We can also create buttons that has both icons and text.",
+                    TextStyle {
+                        font: fonts.p.clone(),
+                        font_size: TEXT_FONT_SIZE,
+                        color: COLOR_TEXT,
+                    }
+                ));
+                
+                // Example Showcase
+                content.spawn_bundle(NodeBundle {
+                    style: Style {
+                        size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
+                        margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
+                        flex_direction: FlexDirection::Row,
+                        align_items: AlignItems::Center,
+                        justify_content: JustifyContent::Center,
+                        
+                        ..default()
+                    },
+                    color: COLOR_CONTENT_EXAMPLE.into(),
+                    ..default()
+                }).with_children(| example_showcase | {
+
+                    // Spawn icon-buttons
+                    for (icon, text) in [
+                        (Icon::Wifi, "Enable Wifi"), 
+                        (Icon::Subtitles, "Toggle Subtitles"), 
+                        (Icon::Delete, "Delete Item"), 
+                        (Icon::Add, "Add item"), 
+                        (Icon::Home, "Home")
+                    ] {
+                        example_showcase.spawn_bundle(
+                            ButtonWidgetBundle::new(Style {
+                                size: Size::new(Val::Auto, Val::Auto),
+                                padding: UiRect::new(Val::Px(15.0), Val::Px(15.0), Val::Px(10.0), Val::Px(10.0)),
+                                margin: UiRect::all(Val::Px(3.0)),
+                                align_items: AlignItems::Center,
+                                justify_content: JustifyContent::Center,
+                                ..default()
+                            }, 
+                            BUTTON_THEME
+                        )).with_children(| button | {
+                            button.spawn_bundle(TextBundle::from_section(
+                                icon.to_string(),
+                                TextStyle {
+                                    font: fonts.icon.clone(),
+                                    font_size: ICON_FONT_SIZE,
+                                    color: COLOR_TEXT,
+                                }
+                            ).with_style(Style {
+                                margin: UiRect::new(Val::Undefined, Val::Px(5.0), Val::Undefined, Val::Undefined),
+                                ..default()
+                            }));
+                            button.spawn_bundle(TextBundle::from_section(
+                                text,
+                                TextStyle {
+                                    font: fonts.p.clone(),
+                                    font_size: BUTTON_FONT_SIZE,
+                                    color: COLOR_TEXT,
+                                }
+                            ));
+                        });
+                    }
+                });
             });
         });
 }
-
-// Handling clicks
-// Upload file button
-// Button with icon and label
-
-// All buttons should showcase
-// Hover visual behaviour
-// Button click visuals
-// Button disabled visuals
-//
