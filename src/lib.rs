@@ -7,9 +7,13 @@ use system::{setup_resources, toggle_system, update_checkbox, update_radio, upda
 mod entity;
 mod system;
 pub mod widget;
+pub mod content_builder;
+pub mod theme;
 
 pub use entity::*;
 pub use system::*;
+pub use content_builder::*;
+
 use widget::button::{
     button_color, button_interaction, button_trigger, on_button_trigger, ButtonEvent,
     PrevInteraction,

@@ -1,5 +1,3 @@
-use std::process::Child;
-
 use bevy::{
     prelude::{
         default, info, AnyOf, Bundle, Button, Changed, Children, Color, Component, Entity,
@@ -49,15 +47,14 @@ pub struct ButtonColor {
     pub pressed: Color,
     pub released: Color,
     pub hovered: Color,
+    pub disabled: Color,
     pub default: Color,
 }
 
 #[derive(Component, Clone, Debug, Default)]
 pub struct ButtonTheme {
-    pub background_enabled: ButtonColor,
-    pub background_disabled: ButtonColor,
-    pub foreground_enabled: ButtonColor,
-    pub foreground_disabled: ButtonColor,
+    pub background: ButtonColor,
+    pub foreground: ButtonColor,
 }
 
 /// A Button Widget
@@ -84,7 +81,7 @@ impl ButtonWidgetBundle {
         ButtonWidgetBundle {
             node_bundle: NodeBundle {
                 style,
-                color: UiColor(theme.background_enabled.default.into()),
+                color: UiColor(theme.background.default.into()),
                 ..default()
             },
             theme,
@@ -157,36 +154,32 @@ pub(crate) fn button_color(
     mut content: Query<&mut Text>,
 ) {
     for (mut color, state, enabled, button_theme, children) in &mut q {
-        let (background_theme, foreground_theme) = match enabled {
-            ButtonEnabledState::Enabled => (
-                &button_theme.background_enabled,
-                &button_theme.foreground_enabled,
-            ),
-            ButtonEnabledState::Disabled => (
-                &button_theme.background_disabled,
-                &button_theme.foreground_disabled,
-            ),
-        };
-
-        color.0 = match *state {
-            ButtonState::Pressed => background_theme.pressed,
-            ButtonState::Released => background_theme.released,
-            ButtonState::Hovered => background_theme.hovered,
-            ButtonState::None => background_theme.default,
-        };
-
-        if children.is_none() {
-            continue;
+        
+        if *enabled == ButtonEnabledState::Enabled {
+            color.0 = match *state {
+                ButtonState::Pressed => button_theme.background.pressed,
+                ButtonState::Released => button_theme.background.released,
+                ButtonState::Hovered => button_theme.background.hovered,
+                ButtonState::None => button_theme.background.default,
+            };
+        } else {
+            color.0 = button_theme.background.disabled;
         }
+
+        if children.is_none() { continue; }
 
         for child in children.unwrap() {
             if let Ok(mut text) = content.get_mut(*child) {
                 for section in text.sections.iter_mut() {
-                    section.style.color = match *state {
-                        ButtonState::Pressed => foreground_theme.pressed,
-                        ButtonState::Released => foreground_theme.released,
-                        ButtonState::Hovered => foreground_theme.hovered,
-                        ButtonState::None => foreground_theme.default,
+                    if *enabled == ButtonEnabledState::Enabled {
+                        section.style.color = match *state {
+                            ButtonState::Pressed => button_theme.foreground.pressed,
+                            ButtonState::Released => button_theme.foreground.released,
+                            ButtonState::Hovered => button_theme.foreground.hovered,
+                            ButtonState::None => button_theme.foreground.default,
+                        }
+                    } else {
+                        section.style.color = button_theme.foreground.disabled;
                     }
                 }
             }
