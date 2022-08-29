@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_widgets::{
-    widget::button::{ButtonColor, ButtonTheme},
+    widget::button::{ButtonColor, ButtonTheme, TriggerPolicy},
     WidgetPlugin, theme::WidgetTheme, create_text_button, create_h1, create_p, create_icon_button, create_label_button,
 };
 use material_icons::Icon;
@@ -113,9 +113,9 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     ..default()
                 }).with_children(| example_showcase | {
 
-                    create_text_button(example_showcase, &theme, "Open Inventory");
-                    create_icon_button(example_showcase, &theme, Icon::Menu);
-                    create_label_button(example_showcase, &theme, Icon::Send, "Send");
+                    create_text_button(example_showcase, &theme, "Open Inventory", true, TriggerPolicy::OnRelease);
+                    create_icon_button(example_showcase, &theme, Icon::Menu, true, TriggerPolicy::OnRelease);
+                    create_label_button(example_showcase, &theme, Icon::Send, "Send", true, TriggerPolicy::OnRelease);
                 });
 
 
@@ -142,8 +142,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
 
                     // Spawn text-buttons
                     for text in ["Ok", "Submit", "Restart Game"] {
-                        // TODO: These should be disabled
-                        create_text_button(example_showcase, &theme, text);
+                        create_text_button(example_showcase, &theme, text, false, TriggerPolicy::OnRelease);
                     }
                 });
 
@@ -165,10 +164,9 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     color: COLOR_CONTENT_EXAMPLE.into(),
                     ..default()
                 }).with_children(| example_showcase | {
-                    // TODO: These buttons should have OnPress Trigger
-                    create_text_button(example_showcase, &theme, "Ok");
-                    create_text_button(example_showcase, &theme, "Ok");
-                    create_label_button(example_showcase, &theme, Icon::Wifi, "Enable Wifi");
+                    create_text_button(example_showcase, &theme, "Ok", true, TriggerPolicy::OnPress);
+                    create_text_button(example_showcase, &theme, "Ok", true, TriggerPolicy::OnPress);
+                    create_label_button(example_showcase, &theme, Icon::Wifi, "Enable Wifi", true, TriggerPolicy::OnPress);
 
                 });
 
@@ -192,7 +190,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
 
                     // Spawn icon-buttons
                     for icon in [Icon::Wifi, Icon::Subtitles, Icon::Delete, Icon::Add, Icon::Home] {
-                        create_icon_button(example_showcase, &theme, icon);
+                        create_icon_button(example_showcase, &theme, icon, true, TriggerPolicy::OnRelease);
                     }
                 });
 
@@ -222,7 +220,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         (Icon::Add, "Add item"), 
                         (Icon::Home, "Home")
                     ] {
-                        create_label_button(example_showcase, &theme, icon, text);
+                        create_label_button(example_showcase, &theme, icon, text,  true, TriggerPolicy::OnRelease);
                     }
                 });
             });
