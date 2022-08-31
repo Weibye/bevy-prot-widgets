@@ -1,11 +1,4 @@
-use bevy::{
-    prelude::{
-        Bundle, Button, Component, ComputedVisibility, GlobalTransform, Transform, Visibility,
-    },
-    text::Text,
-    ui::{CalculatedSize, FocusPolicy, Interaction, Node, Style},
-};
-use material_icons::Icon;
+use bevy::prelude::Component;
 
 // Resources
 

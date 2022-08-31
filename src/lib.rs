@@ -23,11 +23,6 @@ impl Plugin for WidgetPlugin {
     }
 }
 
-struct WidgetConfig {
-    // Font
-    // TODO: Make it possible to add config on font style
-}
-
 // Debug systems
 fn button_output(q: Query<(Entity, &Interaction), Changed<Interaction>>) {
     for (entity, interaction) in &q {
