@@ -10,5 +10,5 @@ pub struct WidgetTheme {
     pub icon: TextStyle,
     pub widget: TextStyle,
     // Whatever colors we need
-    pub button_theme: ButtonTheme
+    pub button_theme: ButtonTheme,
 }

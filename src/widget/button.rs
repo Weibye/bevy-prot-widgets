@@ -1,4 +1,5 @@
 use bevy::{
+    ecs::query::WorldQuery,
     prelude::{
         default, info, AnyOf, Bundle, Button, Changed, Children, Color, Component, Entity,
         EventReader, EventWriter, NodeBundle, Or, Query, With,
@@ -25,7 +26,7 @@ pub enum ButtonState {
 }
 
 /// Determines if user can interact with button at all
-#[derive(Component, Default, Clone, Copy, Debug, PartialEq)]
+#[derive(Component, Default, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ButtonEnabledState {
     #[default]
     Enabled,
@@ -81,7 +82,7 @@ impl ButtonWidgetBundle {
         ButtonWidgetBundle {
             node_bundle: NodeBundle {
                 style,
-                color: UiColor(theme.background.default.into()),
+                color: UiColor(theme.background.default),
                 ..default()
             },
             theme,
@@ -107,12 +108,35 @@ impl ButtonWidgetBundle {
     }
 }
 
+#[derive(WorldQuery)]
+pub(crate) struct ButtonStateChanged {
+    with: With<ButtonWidget>,
+    changed: Changed<ButtonState>,
+}
+
+#[derive(WorldQuery)]
+pub(crate) struct ButtonChanged {
+    with: With<ButtonWidget>,
+    changed: AnyOf<(
+        Changed<ButtonState>,
+        Changed<ButtonEnabledState>,
+        Changed<ButtonTheme>,
+    )>,
+}
+
+#[derive(WorldQuery)]
+#[world_query(mutable)]
+pub(crate) struct ButtonColorQuery<'a> {
+    pub color: &'a mut UiColor,
+    pub state: &'a ButtonState,
+    pub enabled: &'a ButtonEnabledState,
+    pub theme: &'a ButtonTheme,
+    pub children: Option<&'a Children>,
+}
+
 /// Responsible for triggering the button event if the player interacts with the button
 pub(crate) fn button_trigger(
-    q: Query<
-        (Entity, &ButtonState, &TriggerPolicy, &ButtonEnabledState),
-        (With<ButtonWidget>, Changed<ButtonState>),
-    >,
+    q: Query<(Entity, &ButtonState, &TriggerPolicy, &ButtonEnabledState), ButtonStateChanged>,
     mut trigger: EventWriter<ButtonEvent>,
 ) {
     for (button, state, policy, enabled) in &q {
@@ -134,52 +158,37 @@ pub(crate) fn button_trigger(
 }
 
 pub(crate) fn button_color(
-    mut q: Query<
-        (
-            &mut UiColor,
-            &ButtonState,
-            &ButtonEnabledState,
-            &ButtonTheme,
-            Option<&Children>,
-        ),
-        (
-            With<ButtonWidget>,
-            AnyOf<(
-                Changed<ButtonState>,
-                Changed<ButtonEnabledState>,
-                Changed<ButtonTheme>,
-            )>,
-        ),
-    >,
+    mut q: Query<ButtonColorQuery, ButtonStateChanged>,
     mut content: Query<&mut Text>,
 ) {
-    for (mut color, state, enabled, button_theme, children) in &mut q {
-        
-        if *enabled == ButtonEnabledState::Enabled {
-            color.0 = match *state {
-                ButtonState::Pressed => button_theme.background.pressed,
-                ButtonState::Released => button_theme.background.released,
-                ButtonState::Hovered => button_theme.background.hovered,
-                ButtonState::None => button_theme.background.default,
+    for mut button_color in &mut q {
+        if *button_color.enabled == ButtonEnabledState::Enabled {
+            button_color.color.0 = match *button_color.state {
+                ButtonState::Pressed => button_color.theme.background.pressed,
+                ButtonState::Released => button_color.theme.background.released,
+                ButtonState::Hovered => button_color.theme.background.hovered,
+                ButtonState::None => button_color.theme.background.default,
             };
         } else {
-            color.0 = button_theme.background.disabled;
+            button_color.color.0 = button_color.theme.background.disabled;
         }
 
-        if children.is_none() { continue; }
+        if button_color.children.is_none() {
+            continue;
+        }
 
-        for child in children.unwrap() {
+        for child in button_color.children.unwrap() {
             if let Ok(mut text) = content.get_mut(*child) {
                 for section in text.sections.iter_mut() {
-                    if *enabled == ButtonEnabledState::Enabled {
-                        section.style.color = match *state {
-                            ButtonState::Pressed => button_theme.foreground.pressed,
-                            ButtonState::Released => button_theme.foreground.released,
-                            ButtonState::Hovered => button_theme.foreground.hovered,
-                            ButtonState::None => button_theme.foreground.default,
+                    if *button_color.enabled == ButtonEnabledState::Enabled {
+                        section.style.color = match *button_color.state {
+                            ButtonState::Pressed => button_color.theme.foreground.pressed,
+                            ButtonState::Released => button_color.theme.foreground.released,
+                            ButtonState::Hovered => button_color.theme.foreground.hovered,
+                            ButtonState::None => button_color.theme.foreground.default,
                         }
                     } else {
-                        section.style.color = button_theme.foreground.disabled;
+                        section.style.color = button_color.theme.foreground.disabled;
                     }
                 }
             }

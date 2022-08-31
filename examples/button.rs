@@ -1,7 +1,9 @@
 use bevy::prelude::*;
 use bevy_widgets::{
+    create_h1, create_icon_button, create_label_button, create_p, create_text_button,
+    theme::WidgetTheme,
     widget::button::{ButtonColor, ButtonTheme, TriggerPolicy},
-    WidgetPlugin, theme::WidgetTheme, create_text_button, create_h1, create_p, create_icon_button, create_label_button,
+    WidgetPlugin,
 };
 use material_icons::Icon;
 
@@ -25,7 +27,6 @@ const H1_FONT: &str = "fonts/Roboto/Roboto-Bold.ttf";
 const TEXT_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
 const WIDGET_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
 const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
-
 
 const H1_FONT_SIZE: f32 = 30.0;
 const TEXT_FONT_SIZE: f32 = 18.0;
@@ -55,15 +56,29 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn_bundle(Camera2dBundle::default());
 }
 
-
 fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
-
     // Setup theme used for these widgets
     let theme = WidgetTheme {
-        h1: TextStyle { font: asset_server.load(H1_FONT), font_size: H1_FONT_SIZE, color: COLOR_TEXT },
-        p: TextStyle { font: asset_server.load(TEXT_FONT), font_size: TEXT_FONT_SIZE, color: COLOR_TEXT },
-        icon: TextStyle { font: asset_server.load(MATERIAL_FONT), font_size: ICON_FONT_SIZE, color: COLOR_TEXT },
-        widget: TextStyle { font: asset_server.load(WIDGET_FONT), font_size: BUTTON_FONT_SIZE, color: COLOR_TEXT },
+        h1: TextStyle {
+            font: asset_server.load(H1_FONT),
+            font_size: H1_FONT_SIZE,
+            color: COLOR_TEXT,
+        },
+        p: TextStyle {
+            font: asset_server.load(TEXT_FONT),
+            font_size: TEXT_FONT_SIZE,
+            color: COLOR_TEXT,
+        },
+        icon: TextStyle {
+            font: asset_server.load(MATERIAL_FONT),
+            font_size: ICON_FONT_SIZE,
+            color: COLOR_TEXT,
+        },
+        widget: TextStyle {
+            font: asset_server.load(WIDGET_FONT),
+            font_size: BUTTON_FONT_SIZE,
+            color: COLOR_TEXT,
+        },
         button_theme: BUTTON_THEME,
     };
 
@@ -181,7 +196,6 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        
                         ..default()
                     },
                     color: COLOR_CONTENT_EXAMPLE.into(),

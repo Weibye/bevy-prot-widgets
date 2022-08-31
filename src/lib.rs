@@ -4,19 +4,18 @@ use bevy::{
 };
 use system::{setup_resources, toggle_system, update_checkbox, update_radio, update_widget_colors};
 
+pub mod content_builder;
 mod entity;
 mod system;
-pub mod widget;
-pub mod content_builder;
 pub mod theme;
+pub mod widget;
 
+pub use content_builder::*;
 pub use entity::*;
 pub use system::*;
-pub use content_builder::*;
 
 use widget::button::{
     button_color, button_interaction, button_trigger, on_button_trigger, ButtonEvent,
-    PrevInteraction,
 };
 
 // Widgetplugin should be the collector of all the widget systems
@@ -35,8 +34,8 @@ impl Plugin for WidgetPlugin {
             .add_system(on_button_trigger.after(button_trigger))
             .add_system(update_checkbox.after(toggle_system))
             .add_system(update_radio.after(toggle_system))
-            .add_system(update_widget_colors)
-            .add_system(update_checkbox_colors);
+            .add_system(update_widget_colors);
+        // .add_system(update_checkbox_colors);
     }
 }
 
