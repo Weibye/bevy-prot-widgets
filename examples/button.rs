@@ -121,7 +121,6 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        
                         ..default()
                     },
                     color: COLOR_CONTENT_EXAMPLE.into(),
@@ -139,7 +138,6 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 create_p(content, &theme, "Buttons can be either enabled or disabled. \
                 Disabled buttons should not be triggered by the user. \
                 Buttons should clearly show when they are disabled by changing colors.");
-                
                 // Example Showcase
                 content.spawn_bundle(NodeBundle {
                     style: Style {
@@ -148,7 +146,6 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        
                         ..default()
                     },
                     color: COLOR_CONTENT_EXAMPLE.into(),
@@ -164,7 +161,6 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 create_h1(content, &theme, "Trigger Policy");
                 create_p(content, &theme, "Buttons are triggered on release by default. \
                 By setting the trigger-policy you can change the button to trigger on press instead.");
-                
                 // Example Showcase
                 content.spawn_bundle(NodeBundle {
                     style: Style {
@@ -173,7 +169,6 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        
                         ..default()
                     },
                     color: COLOR_CONTENT_EXAMPLE.into(),
@@ -219,7 +214,6 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        
                         ..default()
                     },
                     color: COLOR_CONTENT_EXAMPLE.into(),
