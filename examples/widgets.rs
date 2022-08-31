@@ -1,7 +1,10 @@
 //! This example illustrates the various widgets in Bevy UI.
 
-use bevy::{prelude::*, sprite::COLOR_MATERIAL_SHADER_HANDLE, utils::tracing::Instrument};
-use bevy_widgets::{widget::checkbox::CheckboxBundle, *};
+use bevy::prelude::*;
+use bevy_widgets::{
+    widget::{checkbox::CheckboxBundle, radio::RadioButtonBundle},
+    *,
+};
 use material_icons::Icon;
 
 fn main() {
