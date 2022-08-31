@@ -1,12 +1,15 @@
 use bevy::{
-    prelude::{info, AnyOf, AssetServer, Changed, Color, Commands, Or, Query, Res, With},
+    prelude::{info, AssetServer, Changed, Color, Commands, Or, Query, Res, With},
     text::{Text, TextStyle},
     ui::Interaction,
 };
 
 use crate::{
-    widget::checkbox::{CheckboxIcons, CheckboxState, CheckboxWidget},
-    RadioButtonIcons, RadioButtonWidget, ToggleState,
+    entity::ToggleState,
+    widget::{
+        checkbox::{CheckboxIcons, CheckboxState, CheckboxWidget},
+        radio::{RadioButtonIcons, RadioButtonWidget},
+    },
 };
 
 const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";

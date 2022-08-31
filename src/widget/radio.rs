@@ -3,45 +3,35 @@ use bevy::{
         Bundle, Button, Component, ComputedVisibility, GlobalTransform, Transform, Visibility,
     },
     text::Text,
-    ui::{CalculatedSize, FocusPolicy, Interaction, Node, Style, UiColor, UiImage},
+    ui::{CalculatedSize, FocusPolicy, Interaction, Node, Style},
 };
 use material_icons::Icon;
 
 use crate::entity::ToggleState;
 
-/// Marker component for a [CheckboxWidget].
+/// Marker component for a CheckBoxWidget
 #[derive(Component, Debug, Clone, Default)]
-pub struct CheckboxWidget;
-
-#[derive(Component, Debug, Clone, Default)]
-pub enum CheckboxState {
-    Checked,
-    #[default]
-    Unchecked,
-    Indeterminate,
-}
+pub struct RadioButtonWidget;
 
 /// Component that defines the icons of the [CheckboxWidget].
 #[derive(Component, Debug, Clone)]
-pub struct CheckboxIcons {
-    pub unchecked: Icon,
+pub struct RadioButtonIcons {
+    pub empty: Icon,
     pub checked: Icon,
-    pub indeterminate: Icon,
 }
 
-impl Default for CheckboxIcons {
+impl Default for RadioButtonIcons {
     fn default() -> Self {
         Self {
-            unchecked: Icon::CheckBoxOutlineBlank,
-            checked: Icon::CheckBox,
-            indeterminate: Icon::IndeterminateCheckBox,
+            empty: Icon::RadioButtonUnchecked,
+            checked: Icon::RadioButtonChecked,
         }
     }
 }
 
 /// A Checkbox Widget
 #[derive(Bundle, Clone, Debug, Default)]
-pub struct CheckboxBundle {
+pub struct RadioButtonBundle {
     // From image-bundle
     /// Describes the size of the node
     pub node: Node,
@@ -68,15 +58,9 @@ pub struct CheckboxBundle {
     /// Interaction state of the widget
     pub interaction: Interaction,
     /// Marker to make it a "CheckboxWidget"
-    pub checkbox: CheckboxWidget,
+    pub radio: RadioButtonWidget,
     /// State of the widget
     pub toggle: ToggleState,
     /// The different icons for the widget
-    pub icons: CheckboxIcons,
-    /// The different state the checkbox can be in
-    pub state: CheckboxState,
-    /// Background color
-    pub color: UiColor,
-    /// Describes the image of the node
-    pub image: UiImage,
+    pub icons: RadioButtonIcons,
 }

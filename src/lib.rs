@@ -2,12 +2,11 @@ use bevy::{
     prelude::{info, App, Changed, Entity, ParallelSystemDescriptorCoercion, Plugin, Query},
     ui::Interaction,
 };
+use system::{setup_resources, toggle_system, update_checkbox, update_radio, update_widget_colors};
 
 mod entity;
 mod system;
-
-pub use entity::*;
-pub use system::*;
+pub mod widget;
 
 // Widgetplugin should be the collector of all the widget systems
 pub struct WidgetPlugin;
