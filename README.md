@@ -1,37 +1,37 @@
-# Exploring Widgets in Bevy
+# Bevy-Prot-Widgets
 
-WARNING: This is currently a work in progress.
+Prototype widgets for [Bevy](https://github.com/bevyengine/bevy)!
 
-The purpose of this repo is to explore designs and posibilites when it comes to UI Widgets in [Bevy](https://github.com/bevyengine/bevy).
+Bevy is in need of _Widgets_ and higher levels of abstractions on top of the base UI functionality. 
+But in order to understand the actual requirements, this project will strive to build widget-functionality starting at the lowest level first.
+Then move on to identify commonalities and higher levels of abstractions that will make sense.
 
-At the moment, the goal is to establish the required low-level functionality that can be built on top of later.
 
 ## Widgets
 
 ### Button Widget
 
-A button is pressed and fired once.
-It will not be toggled on or off.
+**Description:** Allows user to trigger an action.
 
-Status: Not supported
+| Feature | Status |
+|---|---|
+| Enabled / Disabled | Yes |
+| Trigger policy | Yes |
+| Hover visuals | Yes |
+| Press / Release visuals | Yes |
+| Action mapping | No |
+| Animations | No |
 
+**Types:**
 - Text button
-    - Text
-    - Contained
-    - Outlined
-- Button with icon _and_ text
 - Icon button
-    - Single button with an icon
-
-
-Button Visual Behaviour
-
+- Label button (Button with icon + text)
 
 [Reference](https://mui.com/material-ui/react-button/#basic-button)
 
 ### Button group
 
-Status: Not supported
+**Planned, not yet supported.**
 
 ### Text Widget
 
@@ -40,15 +40,16 @@ Status: Not supported
 - Can the user focus on this widget?
 - Rich text support
 
+**Planned, not yet supported.**
+
 ### Text input widget
 
-- 
-
+**Planned, not yet supported.**
 
 
 ### Checkboxes
 
-Status: Not supported
+**Planned, some support.**
 
 - Checkbox
 - Checkbox with label
@@ -59,16 +60,16 @@ Status: Not supported
 
 ### Radio Button
 
-Status: Not supported
+**Planned, not yet supported.**
 
 
 ### Radio Group
 
-Status: Not supported
+**Planned, not yet supported.**
 
 - Controls that only one of the radio-buttons in the group is selected at any given time
 - Needs to be set with an initial value
-- 
+
 
 
 ## Features needed

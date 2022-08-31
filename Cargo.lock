@@ -191,7 +191,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "bevy-widgets"
+name = "bevy-prot-widgets"
 version = "0.1.0"
 dependencies = [
  "bevy",

@@ -1,5 +1,5 @@
 [package]
-name = "bevy-widgets"
+name = "bevy-prot-widgets"
 version = "0.1.0"
 edition = "2021"
 authors = ["Andreas Weibye"]

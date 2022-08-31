@@ -1,7 +1,7 @@
 //! Example that showcases how to use the material-icon fonts
 
 use bevy::prelude::*;
-use material_icons::{icon_to_char, Icon};
+use material_icons::Icon;
 
 fn main() {
     App::new()

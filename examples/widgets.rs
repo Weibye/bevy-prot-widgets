@@ -1,9 +1,9 @@
 //! This example illustrates the various widgets in Bevy UI.
 
 use bevy::prelude::*;
-use bevy_widgets::{
+use bevy_prot_widgets::{
     widget::{checkbox::CheckboxBundle, radio::RadioButtonBundle},
-    *,
+    WidgetPlugin,
 };
 use material_icons::Icon;
 

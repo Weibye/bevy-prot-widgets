@@ -10,7 +10,6 @@ mod system;
 pub mod theme;
 pub mod widget;
 
-pub use content_builder::*;
 pub use entity::*;
 pub use system::*;
 
