@@ -26,7 +26,7 @@ impl Plugin for WidgetPlugin {
         // Systems
         app.add_event::<ButtonEvent>()
             .add_startup_system(setup_resources)
-            // .add_system(button_output)
+            .add_system(button_output)
             .add_system(toggle_system)
             .add_system(button_color)
             .add_system(button_interaction)

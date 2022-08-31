@@ -115,6 +115,19 @@ pub(crate) struct ButtonStateChanged {
 }
 
 #[derive(WorldQuery)]
+pub(crate) struct ButtonInteractionChanged {
+    or: Or<(Changed<Interaction>, Changed<PrevInteraction>)>,
+}
+
+#[derive(WorldQuery)]
+#[world_query(mutable)]
+pub(crate) struct ButtonInteractionQuery<'a> {
+    pub new: &'a Interaction,
+    pub prev: &'a mut PrevInteraction,
+    pub state: &'a mut ButtonState,
+}
+
+#[derive(WorldQuery)]
 pub(crate) struct ButtonChanged {
     with: With<ButtonWidget>,
     changed: AnyOf<(
@@ -205,18 +218,15 @@ pub(crate) fn on_button_trigger(mut reader: EventReader<ButtonEvent>) {
 
 // TODO: This need to clear the pressed state the next frame
 pub(crate) fn button_interaction(
-    mut changed: Query<
-        (&Interaction, &mut PrevInteraction, &mut ButtonState),
-        Or<(Changed<Interaction>, Changed<PrevInteraction>)>,
-    >,
+    mut changed: Query<ButtonInteractionQuery, ButtonInteractionChanged>,
 ) {
-    for (new_state, mut prev_state, mut button_state) in &mut changed {
-        if prev_state.0 == Interaction::Clicked && *new_state == Interaction::Hovered {
-            *button_state = ButtonState::Released;
-        } else if prev_state.0 == Interaction::Hovered && *new_state == Interaction::Hovered {
-            *button_state = ButtonState::Hovered;
+    for mut button in &mut changed {
+        if button.prev.0 == Interaction::Clicked && *button.new == Interaction::Hovered {
+            *button.state = ButtonState::Released;
+        } else if button.prev.0 == Interaction::Hovered && *button.new == Interaction::Hovered {
+            *button.state = ButtonState::Hovered;
         } else {
-            *button_state = match new_state {
+            *button.state = match button.new {
                 Interaction::Clicked => ButtonState::Pressed,
                 Interaction::Hovered => ButtonState::Hovered,
                 Interaction::None => ButtonState::None,
@@ -224,6 +234,6 @@ pub(crate) fn button_interaction(
         }
 
         // Cache the state for next frame
-        prev_state.0 = *new_state
+        button.prev.0 = *button.new
     }
 }
