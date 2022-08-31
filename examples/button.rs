@@ -1,6 +1,7 @@
 use bevy::prelude::*;
-use bevy_widgets::{
-    create_h1, create_icon_button, create_label_button, create_p, create_text_button,
+
+use bevy_prot_widgets::{
+    content_builder::*,
     theme::WidgetTheme,
     widget::button::{ButtonColor, ButtonTheme, TriggerPolicy},
     WidgetPlugin,
