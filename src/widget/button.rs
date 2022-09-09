@@ -9,7 +9,7 @@ use bevy::{
 };
 
 /// Event that a button has triggered
-pub struct ButtonEvent(Entity);
+pub struct ButtonEvent(pub Entity);
 
 /// Marker component for a ButtonWidget
 #[derive(Component, Default, Clone, Debug)]
