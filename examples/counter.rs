@@ -1,9 +1,13 @@
-use bevy::prelude::*;
+use std::ptr::null;
+
+use bevy::{prelude::*, reflect::erased_serde::__private::serde::__private::de};
 
 use bevy_prot_widgets::{
     content_builder::*,
     theme::WidgetTheme,
-    widget::{button::{ButtonColor, ButtonTheme, TriggerPolicy, ButtonWidgetBundle}, counter::CounterWidget},
+    widget::{
+        button::{ButtonColor, ButtonTheme, ButtonWidgetBundle, TriggerPolicy, ButtonEvent},
+    },
     WidgetPlugin,
 };
 use material_icons::Icon;
@@ -14,6 +18,8 @@ fn main() {
         .add_plugin(WidgetPlugin)
         .add_startup_system(setup_camera)
         .add_startup_system(setup_page)
+        .add_system(counter_interact)
+        .add_system(display_counter_text.after(counter_interact))
         .run();
 }
 
@@ -48,7 +54,6 @@ const BUTTON_THEME: ButtonTheme = ButtonTheme {
     },
 };
 
-
 /// Camera
 fn setup_camera(mut cmd: Commands) {
     cmd.spawn_bundle(Camera2dBundle::default());
@@ -81,6 +86,9 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
     };
 
     // root node
+    // let mut counter_widget = cmd.spawn().insert(CounterWidget);
+    // let mut counter_widget: Option<CounterWidget>;
+
     cmd.spawn_bundle(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
@@ -90,11 +98,12 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
         },
         color: COLOR_BACKGROUND.into(),
         ..default()
-    }).with_children(| root| {
+    })
+    .with_children(|root| {
         // Content container
         root.spawn_bundle(NodeBundle {
             style: Style {
-                size: Size::new(Val::Auto, Val::Percent(100.0)),
+                size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
                 // min_size: Size::new(Val::Px(400.0), Val::Auto),
                 // max_size: Size::new(Val::Px(800.0), Val::Auto),
                 padding: UiRect::all(Val::Px(30.0)),
@@ -105,109 +114,195 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
             },
             color: COLOR_BACKGROUND.into(),
             ..default()
-        }).with_children(| content | {
-
+        })
+        .with_children(|content| {
             create_h1(content, &theme, "Counter");
-            
-            // Example Showcase
-            content.spawn_bundle(NodeBundle {
-                style: Style {
-                    size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
-                    margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
-                    flex_direction: FlexDirection::Row,
-                    align_items: AlignItems::Center,
-                    justify_content: JustifyContent::Center,
-                    ..default()
-                },
-                color: COLOR_CONTENT_EXAMPLE.into(),
-                ..default()
-            }).with_children(| example_showcase | {
-                // create_label_button(example_showcase, &theme, Icon::Add, "Add", true, TriggerPolicy::OnRelease);
-                let add_button = example_showcase
-                    .spawn_bundle(
-                        ButtonWidgetBundle::new(
-                            Style {
-                                size: Size::new(Val::Auto, Val::Auto),
-                                padding: UiRect::new(
-                                    Val::Px(15.0),
-                                    Val::Px(15.0),
-                                    Val::Px(10.0),
-                                    Val::Px(10.0),
-                                ),
-                                margin: UiRect::all(Val::Px(4.0)),
-                                align_items: AlignItems::Center,
-                                justify_content: JustifyContent::Center,
-                                ..default()
-                            },
-                            theme.button_theme.clone(),
-                        )
-                        .with_enabled(true)
-                        .with_policy(TriggerPolicy::OnRelease),
-                    )
-                    .with_children(|button| {
-                        button.spawn_bundle(
-                            TextBundle::from_section(Icon::Add.to_string(), theme.icon.clone()).with_style(Style {
-                                margin: UiRect::new(
-                                    Val::Undefined,
-                                    Val::Px(3.0),
-                                    Val::Undefined,
-                                    Val::Undefined,
-                                ),
-                                ..default()
-                            }),
-                        );
-                    }).id();
-                
-                let counter = example_showcase
-                    .spawn_bundle(TextBundle::from_section("0", theme.h1).with_style(Style {
-                        min_size: Size::new(Val::Px(30.0), Val::Auto),
-                        ..default()
-                    })).id();
-                
-                let remove_button = example_showcase
-                    .spawn_bundle(
-                        ButtonWidgetBundle::new(
-                            Style {
-                                size: Size::new(Val::Auto, Val::Auto),
-                                padding: UiRect::new(
-                                    Val::Px(15.0),
-                                    Val::Px(15.0),
-                                    Val::Px(10.0),
-                                    Val::Px(10.0),
-                                ),
-                                margin: UiRect::all(Val::Px(4.0)),
-                                align_items: AlignItems::Center,
-                                justify_content: JustifyContent::Center,
-                                ..default()
-                            },
-                            theme.button_theme.clone(),
-                        )
-                        .with_enabled(true)
-                        .with_policy(TriggerPolicy::OnRelease),
-                    )
-                    .with_children(| button| {
-                        button.spawn_bundle(
-                            TextBundle::from_section(Icon::Remove.to_string(), theme.icon.clone()).with_style(Style {
-                                margin: UiRect::new(
-                                    Val::Undefined,
-                                    Val::Px(3.0),
-                                    Val::Undefined,
-                                    Val::Undefined,
-                                ),
-                                ..default()
-                            }),
-                        );
-                    }).id();
+            create_p(content, &theme, "This example showcases a simple counter. This also demonstrates how to connect buttons to functionality though the rest of your application.");
 
-                cmd.entity(counter).insert(CounterWidget { count: 0, increase: add_button, decrease: remove_button });
-            });
+            // Example Showcase
+            content
+                .spawn_bundle(NodeBundle {
+                    style: Style {
+                        size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
+                        margin: UiRect::new(
+                            Val::Undefined,
+                            Val::Undefined,
+                            Val::Px(10.0),
+                            Val::Px(10.0),
+                        ),
+                        flex_direction: FlexDirection::Row,
+                        align_items: AlignItems::Center,
+                        justify_content: JustifyContent::Center,
+                        ..default()
+                    },
+                    color: COLOR_CONTENT_EXAMPLE.into(),
+                    ..default()
+                })
+                .with_children(|example_showcase| {
+                    example_showcase
+                        .spawn_bundle(NodeBundle {
+                            style: Style {
+                                size: Size::new(Val::Auto, Val::Auto),
+                                ..default()
+                            },
+                            color: theme.button_theme.background.default.clone().into(),
+                            ..default()
+                        })
+                        .with_children(|counter_background| {
+                            let add_button =
+                                counter_background
+                                    .spawn_bundle(
+                                        ButtonWidgetBundle::new(
+                                            Style {
+                                                size: Size::new(Val::Auto, Val::Auto),
+                                                padding: UiRect::new(
+                                                    Val::Px(10.0),
+                                                    Val::Px(10.0),
+                                                    Val::Px(5.0),
+                                                    Val::Px(5.0),
+                                                ),
+                                                // margin: UiRect::all(Val::Px(4.0)),
+                                                align_items: AlignItems::Center,
+                                                justify_content: JustifyContent::Center,
+                                                ..default()
+                                            },
+                                            theme.button_theme.clone(),
+                                        )
+                                        .with_enabled(true)
+                                        .with_policy(TriggerPolicy::OnRelease),
+                                    )
+                                    .with_children(|button| {
+                                        button.spawn_bundle(
+                                            TextBundle::from_section(
+                                                Icon::Add.to_string(),
+                                                theme.icon.clone(),
+                                            )
+                                            .with_style(Style {
+                                                margin: UiRect::new(
+                                                    Val::Undefined,
+                                                    Val::Px(3.0),
+                                                    Val::Undefined,
+                                                    Val::Undefined,
+                                                ),
+                                                ..default()
+                                            }),
+                                        );
+                                    })
+                                    .id();
+
+                            let counter = counter_background.spawn_bundle(
+                                TextBundle::from_section("0", theme.h1).with_style(Style {
+                                    // min_size: Size::new(Val::Px(50.0), Val::Auto),
+                                    // margin: UiRect::new(Val::Px(50.0), Val::Px(15.0), Val::Px(10.0), Val::Px(10.0)),
+                                    // margin: UiRect::new(Val::Px(15.0), Val::Px(15.0), Val::Px(10.0), Val::Px(10.0)),
+                                    ..default()
+                                })
+                                .with_text_alignment(TextAlignment::CENTER)
+                                .with_style(Style {
+                                    // align_items: todo!(),
+                                    align_self: AlignSelf::Center,
+                                    // align_content: todo!(),
+                                    // justify_content: todo!(),
+                                    // margin: todo!(),
+                                    margin: UiRect::new(Val::Px(15.0), Val::Px(15.0), Val::Undefined, Val::Undefined),
+                                    ..default()
+                                }),
+                            ).insert(Counter(0)).id();
+
+                            let remove_button =
+                            counter_background
+                                    .spawn_bundle(
+                                        ButtonWidgetBundle::new(
+                                            Style {
+                                                size: Size::new(Val::Auto, Val::Auto),
+                                                padding: UiRect::new(
+                                                    Val::Px(10.0),
+                                                    Val::Px(10.0),
+                                                    Val::Px(5.0),
+                                                    Val::Px(5.0),
+                                                ),
+                                                // margin: UiRect::all(Val::Px(4.0)),
+                                                align_items: AlignItems::Center,
+                                                justify_content: JustifyContent::Center,
+                                                ..default()
+                                            },
+                                            theme.button_theme.clone(),
+                                        )
+                                        .with_enabled(true)
+                                        .with_policy(TriggerPolicy::OnRelease),
+                                    )
+                                    .with_children(|button| {
+                                        button.spawn_bundle(
+                                            TextBundle::from_section(
+                                                Icon::Remove.to_string(),
+                                                theme.icon.clone(),
+                                            )
+                                            .with_style(Style {
+                                                margin: UiRect::new(
+                                                    Val::Undefined,
+                                                    Val::Px(3.0),
+                                                    Val::Undefined,
+                                                    Val::Undefined,
+                                                ),
+                                                ..default()
+                                            }),
+                                        );
+                                    })
+                                    .id();
+                            
+                            // counter_background.spawn().insert(CounterWidget {
+                            //     count: 0,
+                            //     increment_button: add_button,
+                            //     decrement_button: remove_button,
+                            //     display_text: counter,
+                            // });
+
+                            // counter_widget = Some();
+                        });
+
+                    // cmd.entity(counter).insert(CounterWidget { count: 0, increase: add_button, decrease: remove_button });
+                });
         });
     });
+
+    // if let Some(value) = counter_widget {
+    //     cmd.spawn().insert(value);
+    // }
 }
 
 
+#[derive(Component)]
+struct Counter(pub i32);
 
-// WHen button is pressed, it triggers an event
-// That event contains the entity of the button it was attached to
-// Somehow define
+#[derive(Component)]
+pub struct CounterWidget {
+    pub increment_button: Entity,
+    pub decrement_button: Entity,
+    pub display_text: Entity,
+}
 
+pub(crate) fn counter_interact(
+    mut q: Query<&mut CounterWidget>,
+    mut reader: EventReader<ButtonEvent>,
+) {
+    for event in reader.iter() {
+        for mut counter in &mut q {
+            counter.count += if counter.increment_button == event.0 {
+                1
+            } else if counter.decrement_button == event.0 {
+                -1
+            } else {
+                0
+            };
+        }
+    }
+}
+
+/// Update the text whenever the counter changes
+pub(crate) fn display_counter_text(mut q_text: Query<&mut Text>, q_counter: Query<&CounterWidget, Changed<CounterWidget>>) {
+    for widget in &q_counter {
+        if let Ok(mut display) = q_text.get_mut(widget.display_text) {
+            display.sections[0].value = widget.count.to_string();
+        }
+    }
+}

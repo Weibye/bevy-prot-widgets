@@ -13,9 +13,10 @@ pub mod widget;
 pub use entity::*;
 pub use system::*;
 
-use widget::{button::{
-    button_color, button_interaction, button_trigger, on_button_trigger, ButtonEvent,
-}, counter::{counter_interact, update_counter}};
+use widget::{
+    button::{button_color, button_interaction, button_trigger, on_button_trigger, ButtonEvent},
+    // counter::{counter_interact, update_counter},
+};
 
 // Widgetplugin should be the collector of all the widget systems
 pub struct WidgetPlugin;
@@ -33,9 +34,7 @@ impl Plugin for WidgetPlugin {
             .add_system(on_button_trigger.after(button_trigger))
             .add_system(update_checkbox.after(toggle_system))
             .add_system(update_radio.after(toggle_system))
-            .add_system(update_widget_colors)
-            .add_system(counter_interact)
-            .add_system(update_counter.after(counter_interact));
+            .add_system(update_widget_colors);
         // .add_system(update_checkbox_colors);
     }
 }
