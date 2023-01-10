@@ -5,7 +5,7 @@ use bevy::{
         EventReader, EventWriter, NodeBundle, Or, Query, With,
     },
     text::Text,
-    ui::{Interaction, Style, BackgroundColor},
+    ui::{BackgroundColor, Interaction, Style},
 };
 
 /// Event that a button has triggered

@@ -3,7 +3,7 @@ use bevy::{
         Bundle, Button, Component, ComputedVisibility, GlobalTransform, Transform, Visibility,
     },
     text::Text,
-    ui::{CalculatedSize, FocusPolicy, Interaction, Node, Style, UiImage, BackgroundColor},
+    ui::{BackgroundColor, CalculatedSize, FocusPolicy, Interaction, Node, Style, UiImage},
 };
 use material_icons::Icon;
 

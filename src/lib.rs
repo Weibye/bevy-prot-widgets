@@ -1,5 +1,5 @@
 use bevy::{
-    prelude::{info, App, Changed, Entity, Plugin, Query, IntoSystemDescriptor},
+    prelude::{info, App, Changed, Entity, IntoSystemDescriptor, Plugin, Query},
     ui::Interaction,
 };
 use system::{setup_resources, toggle_system, update_checkbox, update_radio, update_widget_colors};
