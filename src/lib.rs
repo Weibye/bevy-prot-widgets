@@ -3,7 +3,7 @@ use bevy::{
     ui::Interaction,
 };
 use fonts::load_fonts;
-use system::{setup_resources, toggle_system, update_checkbox, update_widget_colors};
+use system::{setup_resources, toggle_system, update_widget_colors};
 
 pub mod blueprint;
 pub mod content_builder;
@@ -18,8 +18,9 @@ pub use system::*;
 
 use widget::{
     button::{button_color, button_interaction, button_trigger, on_button_trigger, ButtonEvent},
+    checkbox::{update_checkbox_icon, update_checkbox_interaction},
     icon::update_changed_icons,
-    radio::{update_radio, update_radio_interaction},
+    radio::{update_radio_icon, update_radio_interaction},
 };
 
 // Widgetplugin should be the collector of all the widget systems
@@ -33,9 +34,15 @@ impl Plugin for WidgetPlugin {
             .add_startup_system(setup_resources)
             .add_system(update_radio_interaction)
             .add_system(
-                update_radio
+                update_radio_icon
                     .before(update_changed_icons)
                     .after(toggle_system),
+            )
+            .add_system(update_checkbox_interaction)
+            .add_system(
+                update_checkbox_icon
+                    .before(update_changed_icons)
+                    .after(update_checkbox_interaction),
             )
             .add_system(update_changed_icons)
             .add_system(button_output)
@@ -44,10 +51,9 @@ impl Plugin for WidgetPlugin {
             .add_system(button_interaction)
             .add_system(button_trigger.after(button_interaction))
             .add_system(on_button_trigger.after(button_trigger))
-            .add_system(update_checkbox.after(toggle_system))
+            // .add_system(update_checkbox.after(toggle_system))
             .add_system(update_widget_colors);
         // Load the correct fonts and put in a resource
-        // .add_system(update_checkbox_colors);
     }
 }
 

@@ -1,4 +1,4 @@
-//! This example showcases how to use the Radio Widget
+//! This example showcases how to use the Checkbox Widget
 
 use bevy::{
     prelude::{default, App, BuildChildren, Camera2dBundle, Color, Commands, NodeBundle, Res},
@@ -6,7 +6,10 @@ use bevy::{
     DefaultPlugins,
 };
 use bevy_prot_widgets::{
-    blueprint::WidgetBlueprint, fonts::FontLib, widget::radio::RadioBlueprint, WidgetPlugin,
+    blueprint::WidgetBlueprint,
+    fonts::FontLib,
+    widget::checkbox::{CheckBoxBlueprint, CheckboxState},
+    WidgetPlugin,
 };
 
 fn main() {
@@ -37,8 +40,8 @@ fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
     })
     .with_children(|root| {
         for _ in 0..12 {
-            RadioBlueprint {
-                checked: false,
+            CheckBoxBlueprint {
+                state: CheckboxState::Unchecked,
                 font: fonts.material.clone(),
             }
             .build(&mut root.spawn_empty());

@@ -1,19 +1,23 @@
 use bevy::{
-    prelude::{
-        Bundle, Button, Component, ComputedVisibility, GlobalTransform, Transform, Visibility,
-    },
-    text::Text,
-    ui::{BackgroundColor, CalculatedSize, FocusPolicy, Interaction, Node, Style, UiImage},
+    ecs::system::EntityCommands,
+    prelude::{default, Bundle, Button, Changed, Color, Component, Handle, Query},
+    text::{Font, Text, TextStyle},
+    ui::Interaction,
 };
 use material_icons::Icon;
 
-use crate::entity::ToggleState;
+use crate::blueprint::WidgetBlueprint;
+
+use super::icon::{IconWidget, IconWidgetBundle};
+
+const FONT_SIZE: f32 = 50.0;
+const ICON_COLOR: Color = Color::BLACK;
 
 /// Marker component for a [CheckboxWidget].
 #[derive(Component, Debug, Clone, Default)]
-pub struct CheckboxWidget;
+pub struct CheckboxWidget(pub CheckboxState);
 
-#[derive(Component, Debug, Clone, Default)]
+#[derive(Debug, Clone, Default)]
 pub enum CheckboxState {
     Checked,
     #[default]
@@ -21,62 +25,77 @@ pub enum CheckboxState {
     Indeterminate,
 }
 
-/// Component that defines the icons of the [CheckboxWidget].
-#[derive(Component, Debug, Clone)]
-pub struct CheckboxIcons {
-    pub unchecked: Icon,
-    pub checked: Icon,
-    pub indeterminate: Icon,
+pub struct CheckBoxBlueprint {
+    pub state: CheckboxState,
+    pub font: Handle<Font>,
 }
 
-impl Default for CheckboxIcons {
-    fn default() -> Self {
-        Self {
-            unchecked: Icon::CheckBoxOutlineBlank,
-            checked: Icon::CheckBox,
-            indeterminate: Icon::IndeterminateCheckBox,
-        }
+impl<'w, 's> WidgetBlueprint<'w, 's> for CheckBoxBlueprint {
+    fn build<'a>(
+        self,
+        cmd: &'a mut EntityCommands<'w, 's, 'a>,
+    ) -> &'a mut EntityCommands<'w, 's, 'a> {
+        let icon = match self.state {
+            CheckboxState::Checked => Icon::CheckBox,
+            CheckboxState::Unchecked => Icon::CheckBoxOutlineBlank,
+            CheckboxState::Indeterminate => Icon::IndeterminateCheckBox,
+        };
+
+        cmd.insert(CheckboxBundle {
+            checkbox: CheckboxWidget(self.state),
+            icon: IconWidgetBundle {
+                icon_widget: IconWidget(icon),
+                text: Text::from_section(
+                    icon.to_string(),
+                    TextStyle {
+                        font: self.font,
+                        font_size: FONT_SIZE,
+                        color: ICON_COLOR,
+                    },
+                ),
+                ..default()
+            },
+            ..default()
+        });
+
+        cmd
     }
 }
 
 /// A Checkbox Widget
-#[derive(Bundle, Clone, Debug, Default)]
+#[derive(Bundle, Debug, Default)]
 pub struct CheckboxBundle {
-    // From image-bundle
-    /// Describes the size of the node
-    pub node: Node,
-    /// Describes the style including flexbox settings
-    pub style: Style,
-    /// Contains the text of the node
-    pub text: Text,
-    /// The calculated size based on the given image
-    pub calculated_size: CalculatedSize,
-    /// Whether this node should block interaction with lower nodes
-    pub focus_policy: FocusPolicy,
-    /// The transform of the node
-    pub transform: Transform,
-    /// The global transform of the node
-    pub global_transform: GlobalTransform,
-    /// Describes the visibility properties of the node
-    pub visibility: Visibility,
-    /// Algorithmically-computed indication of whether an entity is visible and should be extracted for rendering
-    pub computed_visibility: ComputedVisibility,
-
-    // Additional stuff
-    /// Enables clicking on the widget
-    pub button: Button,
-    /// Interaction state of the widget
-    pub interaction: Interaction,
-    /// Marker to make it a "CheckboxWidget"
     pub checkbox: CheckboxWidget,
-    /// State of the widget
-    pub toggle: ToggleState,
-    /// The different icons for the widget
-    pub icons: CheckboxIcons,
-    /// The different state the checkbox can be in
-    pub state: CheckboxState,
-    /// Background color
-    pub color: BackgroundColor,
-    /// Describes the image of the node
-    pub image: UiImage,
+    #[bundle]
+    pub icon: IconWidgetBundle,
+
+    pub interaction: Interaction,
+
+    pub button: Button,
+}
+
+pub(crate) fn update_checkbox_interaction(
+    mut q: Query<(&mut CheckboxWidget, &Interaction), Changed<Interaction>>,
+) {
+    for (mut checkbox, interaction) in &mut q {
+        if matches!(interaction, Interaction::Clicked) {
+            checkbox.0 = match checkbox.0 {
+                CheckboxState::Checked => CheckboxState::Unchecked,
+                CheckboxState::Unchecked => CheckboxState::Checked,
+                CheckboxState::Indeterminate => CheckboxState::Checked,
+            }
+        }
+    }
+}
+
+pub(crate) fn update_checkbox_icon(
+    mut q: Query<(&CheckboxWidget, &mut IconWidget), Changed<CheckboxWidget>>,
+) {
+    for (checkbox, mut icon) in &mut q {
+        icon.0 = match checkbox.0 {
+            CheckboxState::Checked => Icon::CheckBox,
+            CheckboxState::Unchecked => Icon::CheckBoxOutlineBlank,
+            CheckboxState::Indeterminate => Icon::IndeterminateCheckBox,
+        };
+    }
 }

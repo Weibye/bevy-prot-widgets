@@ -7,10 +7,7 @@ use bevy::{
 
 use crate::{
     entity::ToggleState,
-    widget::{
-        checkbox::{CheckboxIcons, CheckboxState, CheckboxWidget},
-        radio::RadioWidget,
-    },
+    widget::{checkbox::CheckboxWidget, radio::RadioWidget},
 };
 
 const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
@@ -42,13 +39,13 @@ pub(crate) fn toggle_system(mut q: Query<(&mut ToggleState, &Interaction), Chang
     }
 }
 
-#[derive(WorldQuery)]
-#[world_query(mutable)]
-pub(crate) struct CheckboxQuery<'a> {
-    pub text: &'a mut Text,
-    pub state: &'a CheckboxState,
-    pub icons: &'a CheckboxIcons,
-}
+// #[derive(WorldQuery)]
+// #[world_query(mutable)]
+// pub(crate) struct CheckboxQuery<'a> {
+//     pub text: &'a mut Text,
+//     pub state: &'a CheckboxState,
+//     pub icons: &'a CheckboxIcons,
+// }
 
 // #[derive(WorldQuery)]
 // #[world_query(mutable)]
@@ -58,11 +55,11 @@ pub(crate) struct CheckboxQuery<'a> {
 //     // pub icons: &'a RadioButtonIcons,
 // }
 
-#[derive(WorldQuery)]
-pub(crate) struct CheckboxChanged {
-    changed: Changed<CheckboxState>,
-    with: With<CheckboxWidget>,
-}
+// #[derive(WorldQuery)]
+// pub(crate) struct CheckboxChanged {
+//     changed: Changed<CheckboxState>,
+//     with: With<CheckboxWidget>,
+// }
 
 #[derive(WorldQuery)]
 pub(crate) struct RadioChanged {
@@ -77,17 +74,17 @@ pub(crate) struct WidgetChanged {
 }
 
 /// System that updates the visual of the checkbox according to their state
-pub(crate) fn update_checkbox(mut q: Query<CheckboxQuery, CheckboxChanged>) {
-    for mut checkbox in &mut q {
-        // Assume only one section in widgets for now
-        checkbox.text.sections[0].value = match checkbox.state {
-            CheckboxState::Checked => checkbox.icons.checked,
-            CheckboxState::Unchecked => checkbox.icons.unchecked,
-            CheckboxState::Indeterminate => checkbox.icons.indeterminate,
-        }
-        .to_string();
-    }
-}
+// pub(crate) fn update_checkbox(mut q: Query<CheckboxQuery, CheckboxChanged>) {
+//     for mut checkbox in &mut q {
+//         // Assume only one section in widgets for now
+//         checkbox.text.sections[0].value = match checkbox.state {
+//             CheckboxState::Checked => checkbox.icons.checked,
+//             CheckboxState::Unchecked => checkbox.icons.unchecked,
+//             CheckboxState::Indeterminate => checkbox.icons.indeterminate,
+//         }
+//         .to_string();
+//     }
+// }
 
 pub(crate) fn update_widget_colors(mut q: Query<(&mut Text, &Interaction), WidgetChanged>) {
     for (mut text, interaction) in &mut q {

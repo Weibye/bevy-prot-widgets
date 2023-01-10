@@ -84,7 +84,9 @@ pub(crate) fn update_radio_interaction(
     }
 }
 
-pub(crate) fn update_radio(mut q: Query<(&RadioWidget, &mut IconWidget), Changed<RadioWidget>>) {
+pub(crate) fn update_radio_icon(
+    mut q: Query<(&RadioWidget, &mut IconWidget), Changed<RadioWidget>>,
+) {
     for (radio, mut icon) in &mut q {
         icon.0 = if radio.0 {
             Icon::RadioButtonChecked
