@@ -9,6 +9,7 @@ mod entity;
 mod system;
 pub mod theme;
 pub mod widget;
+pub mod blueprint;
 
 pub use entity::*;
 pub use system::*;

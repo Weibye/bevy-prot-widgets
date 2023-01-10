@@ -58,6 +58,11 @@ pub struct ButtonTheme {
     pub foreground: ButtonColor,
 }
 
+pub struct ButtonWidgetBlueprint {
+    pub button: ButtonWidgetBundle,
+    pub label: f32,
+}
+
 /// A Button Widget
 #[derive(Bundle, Clone, Debug, Default)]
 pub struct ButtonWidgetBundle {
