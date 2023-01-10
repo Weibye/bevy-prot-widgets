@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Andreas Weibye"]
 license = "MIT OR Apache-2.0"
-categories = ["games", "game-development"]
+categories = ["games", "game-development", "UI"]
 keywords = ["bevy"]
 exclude = ["assets/**/*", "tools/**/*", ".github/**/*"]
 

@@ -5,9 +5,7 @@ use bevy::{prelude::*, reflect::erased_serde::__private::serde::__private::de};
 use bevy_prot_widgets::{
     content_builder::*,
     theme::WidgetTheme,
-    widget::{
-        button::{ButtonColor, ButtonTheme, ButtonWidgetBundle, TriggerPolicy, ButtonEvent},
-    },
+    widget::button::{ButtonColor, ButtonEvent, ButtonTheme, ButtonWidgetBundle, TriggerPolicy},
     WidgetPlugin,
 };
 use material_icons::Icon;
@@ -85,9 +83,103 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
         button_theme: BUTTON_THEME,
     };
 
-    // root node
-    // let mut counter_widget = cmd.spawn().insert(CounterWidget);
-    // let mut counter_widget: Option<CounterWidget>;
+    // Create counter widget
+    let add_button = cmd
+        .spawn_bundle(
+            ButtonWidgetBundle::new(
+                Style {
+                    size: Size::new(Val::Auto, Val::Auto),
+                    padding: UiRect::new(Val::Px(10.0), Val::Px(10.0), Val::Px(5.0), Val::Px(5.0)),
+                    // margin: UiRect::all(Val::Px(4.0)),
+                    align_items: AlignItems::Center,
+                    justify_content: JustifyContent::Center,
+                    ..default()
+                },
+                theme.button_theme.clone(),
+            )
+            .with_enabled(true)
+            .with_policy(TriggerPolicy::OnRelease),
+        )
+        .with_children(|button| {
+            button.spawn_bundle(
+                TextBundle::from_section(Icon::Add.to_string(), theme.icon.clone()).with_style(
+                    Style {
+                        margin: UiRect::new(
+                            Val::Undefined,
+                            Val::Px(3.0),
+                            Val::Undefined,
+                            Val::Undefined,
+                        ),
+                        ..default()
+                    },
+                ),
+            );
+        });
+
+    let remove_button = cmd
+        .spawn_bundle(
+            ButtonWidgetBundle::new(
+                Style {
+                    size: Size::new(Val::Auto, Val::Auto),
+                    padding: UiRect::new(Val::Px(10.0), Val::Px(10.0), Val::Px(5.0), Val::Px(5.0)),
+                    // margin: UiRect::all(Val::Px(4.0)),
+                    align_items: AlignItems::Center,
+                    justify_content: JustifyContent::Center,
+                    ..default()
+                },
+                theme.button_theme.clone(),
+            )
+            .with_enabled(true)
+            .with_policy(TriggerPolicy::OnRelease),
+        )
+        .with_children(|button| {
+            button.spawn_bundle(
+                TextBundle::from_section(Icon::Remove.to_string(), theme.icon.clone()).with_style(
+                    Style {
+                        margin: UiRect::new(
+                            Val::Undefined,
+                            Val::Px(3.0),
+                            Val::Undefined,
+                            Val::Undefined,
+                        ),
+                        ..default()
+                    },
+                ),
+            );
+        });
+    
+    let add_button_entity = &add_button.id().clone();
+    let remove_button_entity = &remove_button.id().clone();
+
+    let counter = cmd
+        .spawn_bundle(
+            TextBundle::from_section("0", theme.h1.clone())
+                .with_style(Style {
+                    // min_size: Size::new(Val::Px(50.0), Val::Auto),
+                    // margin: UiRect::new(Val::Px(50.0), Val::Px(15.0), Val::Px(10.0), Val::Px(10.0)),
+                    // margin: UiRect::new(Val::Px(15.0), Val::Px(15.0), Val::Px(10.0), Val::Px(10.0)),
+                    ..default()
+                })
+                .with_text_alignment(TextAlignment::CENTER)
+                .with_style(Style {
+                    // align_items: todo!(),
+                    align_self: AlignSelf::Center,
+                    // align_content: todo!(),
+                    // justify_content: todo!(),
+                    // margin: todo!(),
+                    margin: UiRect::new(
+                        Val::Px(15.0),
+                        Val::Px(15.0),
+                        Val::Undefined,
+                        Val::Undefined,
+                    ),
+                    ..default()
+                }),
+        ).insert(CounterWidget {
+            count: 0,
+            increment_button: *add_button_entity,
+            decrement_button: *remove_button_entity,
+        });
 
     cmd.spawn_bundle(NodeBundle {
         style: Style {
@@ -139,6 +231,8 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     ..default()
                 })
                 .with_children(|example_showcase| {
+
+
                     example_showcase
                         .spawn_bundle(NodeBundle {
                             style: Style {
@@ -149,107 +243,112 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                             ..default()
                         })
                         .with_children(|counter_background| {
-                            let add_button =
-                                counter_background
-                                    .spawn_bundle(
-                                        ButtonWidgetBundle::new(
-                                            Style {
-                                                size: Size::new(Val::Auto, Val::Auto),
-                                                padding: UiRect::new(
-                                                    Val::Px(10.0),
-                                                    Val::Px(10.0),
-                                                    Val::Px(5.0),
-                                                    Val::Px(5.0),
-                                                ),
-                                                // margin: UiRect::all(Val::Px(4.0)),
-                                                align_items: AlignItems::Center,
-                                                justify_content: JustifyContent::Center,
-                                                ..default()
-                                            },
-                                            theme.button_theme.clone(),
-                                        )
-                                        .with_enabled(true)
-                                        .with_policy(TriggerPolicy::OnRelease),
-                                    )
-                                    .with_children(|button| {
-                                        button.spawn_bundle(
-                                            TextBundle::from_section(
-                                                Icon::Add.to_string(),
-                                                theme.icon.clone(),
-                                            )
-                                            .with_style(Style {
-                                                margin: UiRect::new(
-                                                    Val::Undefined,
-                                                    Val::Px(3.0),
-                                                    Val::Undefined,
-                                                    Val::Undefined,
-                                                ),
-                                                ..default()
-                                            }),
-                                        );
-                                    })
-                                    .id();
+                            // let add_button =
+                            //     counter_background
+                            //         .spawn_bundle(
+                            //             ButtonWidgetBundle::new(
+                            //                 Style {
+                            //                     size: Size::new(Val::Auto, Val::Auto),
+                            //                     padding: UiRect::new(
+                            //                         Val::Px(10.0),
+                            //                         Val::Px(10.0),
+                            //                         Val::Px(5.0),
+                            //                         Val::Px(5.0),
+                            //                     ),
+                            //                     // margin: UiRect::all(Val::Px(4.0)),
+                            //                     align_items: AlignItems::Center,
+                            //                     justify_content: JustifyContent::Center,
+                            //                     ..default()
+                            //                 },
+                            //                 theme.button_theme.clone(),
+                            //             )
+                            //             .with_enabled(true)
+                            //             .with_policy(TriggerPolicy::OnRelease),
+                            //         )
+                            //         .with_children(|button| {
+                            //             button.spawn_bundle(
+                            //                 TextBundle::from_section(
+                            //                     Icon::Add.to_string(),
+                            //                     theme.icon.clone(),
+                            //                 )
+                            //                 .with_style(Style {
+                            //                     margin: UiRect::new(
+                            //                         Val::Undefined,
+                            //                         Val::Px(3.0),
+                            //                         Val::Undefined,
+                            //                         Val::Undefined,
+                            //                     ),
+                            //                     ..default()
+                            //                 }),
+                            //             );
+                            //         })
+                            //         .id();
 
-                            let counter = counter_background.spawn_bundle(
-                                TextBundle::from_section("0", theme.h1).with_style(Style {
-                                    // min_size: Size::new(Val::Px(50.0), Val::Auto),
-                                    // margin: UiRect::new(Val::Px(50.0), Val::Px(15.0), Val::Px(10.0), Val::Px(10.0)),
-                                    // margin: UiRect::new(Val::Px(15.0), Val::Px(15.0), Val::Px(10.0), Val::Px(10.0)),
-                                    ..default()
-                                })
-                                .with_text_alignment(TextAlignment::CENTER)
-                                .with_style(Style {
-                                    // align_items: todo!(),
-                                    align_self: AlignSelf::Center,
-                                    // align_content: todo!(),
-                                    // justify_content: todo!(),
-                                    // margin: todo!(),
-                                    margin: UiRect::new(Val::Px(15.0), Val::Px(15.0), Val::Undefined, Val::Undefined),
-                                    ..default()
-                                }),
-                            ).insert(Counter(0)).id();
+                            // let mut counter = counter_background.spawn_bundle(
+                            //     TextBundle::from_section("0", theme.h1).with_style(Style {
+                            //         // min_size: Size::new(Val::Px(50.0), Val::Auto),
+                            //         // margin: UiRect::new(Val::Px(50.0), Val::Px(15.0), Val::Px(10.0), Val::Px(10.0)),
+                            //         // margin: UiRect::new(Val::Px(15.0), Val::Px(15.0), Val::Px(10.0), Val::Px(10.0)),
+                            //         ..default()
+                            //     })
+                            //     .with_text_alignment(TextAlignment::CENTER)
+                            //     .with_style(Style {
+                            //         // align_items: todo!(),
+                            //         align_self: AlignSelf::Center,
+                            //         // align_content: todo!(),
+                            //         // justify_content: todo!(),
+                            //         // margin: todo!(),
+                            //         margin: UiRect::new(Val::Px(15.0), Val::Px(15.0), Val::Undefined, Val::Undefined),
+                            //         ..default()
+                            //     }),
+                            // );
 
-                            let remove_button =
-                            counter_background
-                                    .spawn_bundle(
-                                        ButtonWidgetBundle::new(
-                                            Style {
-                                                size: Size::new(Val::Auto, Val::Auto),
-                                                padding: UiRect::new(
-                                                    Val::Px(10.0),
-                                                    Val::Px(10.0),
-                                                    Val::Px(5.0),
-                                                    Val::Px(5.0),
-                                                ),
-                                                // margin: UiRect::all(Val::Px(4.0)),
-                                                align_items: AlignItems::Center,
-                                                justify_content: JustifyContent::Center,
-                                                ..default()
-                                            },
-                                            theme.button_theme.clone(),
-                                        )
-                                        .with_enabled(true)
-                                        .with_policy(TriggerPolicy::OnRelease),
-                                    )
-                                    .with_children(|button| {
-                                        button.spawn_bundle(
-                                            TextBundle::from_section(
-                                                Icon::Remove.to_string(),
-                                                theme.icon.clone(),
-                                            )
-                                            .with_style(Style {
-                                                margin: UiRect::new(
-                                                    Val::Undefined,
-                                                    Val::Px(3.0),
-                                                    Val::Undefined,
-                                                    Val::Undefined,
-                                                ),
-                                                ..default()
-                                            }),
-                                        );
-                                    })
-                                    .id();
+                            // let remove_button =
+                            // counter_background
+                            //         .spawn_bundle(
+                            //             ButtonWidgetBundle::new(
+                            //                 Style {
+                            //                     size: Size::new(Val::Auto, Val::Auto),
+                            //                     padding: UiRect::new(
+                            //                         Val::Px(10.0),
+                            //                         Val::Px(10.0),
+                            //                         Val::Px(5.0),
+                            //                         Val::Px(5.0),
+                            //                     ),
+                            //                     // margin: UiRect::all(Val::Px(4.0)),
+                            //                     align_items: AlignItems::Center,
+                            //                     justify_content: JustifyContent::Center,
+                            //                     ..default()
+                            //                 },
+                            //                 theme.button_theme.clone(),
+                            //             )
+                            //             .with_enabled(true)
+                            //             .with_policy(TriggerPolicy::OnRelease),
+                            //         )
+                            //         .with_children(|button| {
+                            //             button.spawn_bundle(
+                            //                 TextBundle::from_section(
+                            //                     Icon::Remove.to_string(),
+                            //                     theme.icon.clone(),
+                            //                 )
+                            //                 .with_style(Style {
+                            //                     margin: UiRect::new(
+                            //                         Val::Undefined,
+                            //                         Val::Px(3.0),
+                            //                         Val::Undefined,
+                            //                         Val::Undefined,
+                            //                     ),
+                            //                     ..default()
+                            //                 }),
+                            //             );
+                            //         })
+                            //         .id();
                             
+                            // counter.insert(CounterWidget {
+                            //         count: 0,
+                            //         increment_button: add_button,
+                            //         decrement_button: remove_button,
+                            // });
                             // counter_background.spawn().insert(CounterWidget {
                             //     count: 0,
                             //     increment_button: add_button,
@@ -270,39 +369,36 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
     // }
 }
 
-
-#[derive(Component)]
-struct Counter(pub i32);
-
 #[derive(Component)]
 pub struct CounterWidget {
+    pub count: i32,
     pub increment_button: Entity,
     pub decrement_button: Entity,
-    pub display_text: Entity,
 }
 
+/// Increases or decreases the counter when relevant buttons are clikced.
 pub(crate) fn counter_interact(
     mut q: Query<&mut CounterWidget>,
     mut reader: EventReader<ButtonEvent>,
 ) {
     for event in reader.iter() {
         for mut counter in &mut q {
-            counter.count += if counter.increment_button == event.0 {
-                1
+            if counter.increment_button == event.0 {
+                counter.count += 1;
             } else if counter.decrement_button == event.0 {
-                -1
+                counter.count -= 1;
             } else {
-                0
-            };
+                continue;
+            }
         }
     }
 }
 
 /// Update the text whenever the counter changes
-pub(crate) fn display_counter_text(mut q_text: Query<&mut Text>, q_counter: Query<&CounterWidget, Changed<CounterWidget>>) {
-    for widget in &q_counter {
-        if let Ok(mut display) = q_text.get_mut(widget.display_text) {
-            display.sections[0].value = widget.count.to_string();
-        }
+pub(crate) fn display_counter_text(
+    mut q_text: Query<(&mut Text, &CounterWidget), Changed<CounterWidget>>,
+) {
+    for (mut text, counter) in &mut q_text {
+        text.sections[0].value = counter.count.to_string();
     }
 }

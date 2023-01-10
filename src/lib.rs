@@ -13,9 +13,8 @@ pub mod widget;
 pub use entity::*;
 pub use system::*;
 
-use widget::{
-    button::{button_color, button_interaction, button_trigger, on_button_trigger, ButtonEvent},
-    // counter::{counter_interact, update_counter},
+use widget::button::{
+    button_color, button_interaction, button_trigger, on_button_trigger, ButtonEvent,
 };
 
 // Widgetplugin should be the collector of all the widget systems
