@@ -1,15 +1,17 @@
 use bevy::{
-    prelude::{info, App, Changed, Entity, IntoSystemDescriptor, Plugin, Query},
+    prelude::{info, App, Changed, Entity, IntoSystemDescriptor, Plugin, Query, StartupStage},
     ui::Interaction,
 };
+use fonts::load_fonts;
 use system::{setup_resources, toggle_system, update_checkbox, update_radio, update_widget_colors};
 
+pub mod blueprint;
 pub mod content_builder;
 mod entity;
+pub mod fonts;
 mod system;
 pub mod theme;
 pub mod widget;
-pub mod blueprint;
 
 pub use entity::*;
 pub use system::*;
@@ -25,6 +27,7 @@ impl Plugin for WidgetPlugin {
     fn build(&self, app: &mut App) {
         // Systems
         app.add_event::<ButtonEvent>()
+            .add_startup_system_to_stage(StartupStage::PreStartup, load_fonts)
             .add_startup_system(setup_resources)
             .add_system(button_output)
             .add_system(toggle_system)
@@ -35,6 +38,7 @@ impl Plugin for WidgetPlugin {
             .add_system(update_checkbox.after(toggle_system))
             .add_system(update_radio.after(toggle_system))
             .add_system(update_widget_colors);
+        // Load the correct fonts and put in a resource
         // .add_system(update_checkbox_colors);
     }
 }
@@ -45,6 +49,8 @@ fn button_output(q: Query<(Entity, &Interaction), Changed<Interaction>>) {
         info!("{:?} changed: {:?}", entity, interaction);
     }
 }
+
+// #[derive(Resource)]
 
 // #[cfg(test)]
 // mod tests {

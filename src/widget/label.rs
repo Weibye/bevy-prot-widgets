@@ -1,4 +1,4 @@
-use bevy::prelude::{Bundle, NodeBundle, Component};
+use bevy::prelude::{Bundle, Component, NodeBundle};
 
 #[derive(Component)]
 pub struct LabelWidget {
@@ -9,5 +9,4 @@ pub struct LabelWidget {
 pub struct LabelWidgetBundle {
     #[bundle]
     pub node_bundle: NodeBundle,
-
 }
