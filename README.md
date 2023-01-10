@@ -33,6 +33,13 @@ Then move on to identify commonalities and higher levels of abstractions that wi
 
 **Planned, not yet supported.**
 
+### Icon Widget
+
+- Simply displays an icon.
+- Should be able to be used anywhere.
+
+https://material.angular.io/components/icon/overview
+
 ### Text Widget
 
 - Shows a single line of text.
@@ -70,7 +77,30 @@ Then move on to identify commonalities and higher levels of abstractions that wi
 - Controls that only one of the radio-buttons in the group is selected at any given time
 - Needs to be set with an initial value
 
+### Progress Bar
+- Determinate (0 -> 1 progress)
+- Indeterminate (unknown progress, just show loading animation)
+- Direction of flow (from what direction is it being filled up)
+- Can also be used for health-bars
 
+https://material.angular.io/components/progress-bar/overview
+
+### Progress Spinner
+- Determinate
+- Indeterminate
+
+https://material.angular.io/components/progress-spinner/overview
+
+### Slide Toggle
+
+https://material.angular.io/components/slide-toggle/overview
+
+### Slider
+
+https://material.angular.io/components/slider/overview
+
+
+### Tooltip widget
 
 ## Features needed
 

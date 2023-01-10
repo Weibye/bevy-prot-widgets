@@ -2,7 +2,12 @@
 
 use bevy::prelude::*;
 use bevy_prot_widgets::{
-    widget::{checkbox::CheckboxBundle, radio::RadioButtonBundle},
+    blueprint::WidgetBlueprint,
+    fonts::FontLib,
+    widget::{
+        checkbox::{CheckBoxBlueprint, CheckboxBundle, CheckboxState},
+        radio::{RadioBlueprint, RadioBundle},
+    },
     WidgetPlugin,
 };
 use material_icons::Icon;
@@ -34,7 +39,7 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
-fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
+fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>) {
     let icon_style = TextStyle {
         font: asset_server.load(MATERIAL_FONT),
         font_size: 40.0,
@@ -214,72 +219,13 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     ..default()
                 })
                 .with_children(|container| {
-                    container.spawn(CheckboxBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::CheckBoxOutlineBlank.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(CheckboxBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::CheckBoxOutlineBlank.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(CheckboxBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::CheckBoxOutlineBlank.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(CheckboxBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::CheckBoxOutlineBlank.to_string(),
-                            icon_style.clone(),
-                        ),
-                        color: Color::GREEN.into(),
-                        ..default()
-                    });
-                    container.spawn(CheckboxBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::CheckBoxOutlineBlank.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(CheckboxBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::CheckBoxOutlineBlank.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(CheckboxBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::CheckBoxOutlineBlank.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(CheckboxBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::CheckBoxOutlineBlank.to_string(),
-                            icon_style.clone(),
-                        ),
-                        color: Color::RED.into(),
-                        ..default()
-                    });
+                    for _ in 0..10 {
+                        CheckBoxBlueprint {
+                            state: CheckboxState::Unchecked,
+                            font: fonts.material.clone(),
+                        }
+                        .build(&mut container.spawn_empty());
+                    }
                 });
 
             // Checkboxes title
@@ -315,70 +261,13 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     ..default()
                 })
                 .with_children(|container| {
-                    container.spawn(RadioButtonBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::RadioButtonUnchecked.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(RadioButtonBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::RadioButtonUnchecked.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(RadioButtonBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::RadioButtonUnchecked.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(RadioButtonBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::RadioButtonUnchecked.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(RadioButtonBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::RadioButtonUnchecked.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(RadioButtonBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::RadioButtonUnchecked.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(RadioButtonBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::RadioButtonUnchecked.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
-                    container.spawn(RadioButtonBundle {
-                        // style: todo!(),
-                        text: Text::from_section(
-                            Icon::RadioButtonUnchecked.to_string(),
-                            icon_style.clone(),
-                        ),
-                        ..default()
-                    });
+                    for _ in 0..10 {
+                        RadioBlueprint {
+                            checked: false,
+                            font: fonts.material.clone(),
+                        }
+                        .build(&mut container.spawn_empty());
+                    }
                 });
         });
     });
