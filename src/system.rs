@@ -1,6 +1,6 @@
 use bevy::{
-    ecs::query::WorldQuery,
-    prelude::{info, AssetServer, Changed, Color, Commands, Or, Query, Res, With},
+    ecs::{entity::Entity, query::WorldQuery},
+    prelude::{info, AssetServer, Changed, Color, Commands, Or, Query, Res, Resource, With},
     text::{Text, TextStyle},
     ui::Interaction,
 };
@@ -21,7 +21,7 @@ const ICON_COLOR_NORMAL: Color = Color::DARK_GRAY;
 const ICON_COLOR_HOVERED: Color = Color::rgb(0.5, 0.5, 0.5);
 const ICON_COLOR_SELECTED: Color = Color::rgb_linear(1.0, 0.3, 0.2);
 
-// #[derive(Resource)]
+#[derive(Resource)]
 pub struct IconStyle(pub TextStyle);
 
 pub(crate) fn setup_resources(mut cmd: Commands, asset_server: Res<AssetServer>) {

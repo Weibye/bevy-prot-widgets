@@ -11,5 +11,5 @@ exclude = ["assets/**/*", "tools/**/*", ".github/**/*"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = "0.8"
+bevy = "0.9"
 material-icons = "0.2.0"

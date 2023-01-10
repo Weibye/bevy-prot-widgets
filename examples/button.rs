@@ -54,7 +54,7 @@ const BUTTON_THEME: ButtonTheme = ButtonTheme {
 
 /// Camera
 fn setup_camera(mut cmd: Commands) {
-    cmd.spawn_bundle(Camera2dBundle::default());
+    cmd.spawn(Camera2dBundle::default());
 }
 
 fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
@@ -84,18 +84,18 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
     };
 
     // root node
-    cmd.spawn_bundle(NodeBundle {
+    cmd.spawn(NodeBundle {
             style: Style {
                 size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
                 justify_content: JustifyContent::Center,
                 flex_direction: FlexDirection::Row,
                 ..default()
             },
-            color: COLOR_BACKGROUND.into(),
+            background_color: COLOR_BACKGROUND.into(),
             ..default()
         }).with_children(| root| {
             // Content container
-            root.spawn_bundle(NodeBundle {
+            root.spawn(NodeBundle {
                 style: Style {
                     size: Size::new(Val::Auto, Val::Percent(100.0)),
                     // min_size: Size::new(Val::Px(400.0), Val::Auto),
@@ -106,7 +106,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     align_items: AlignItems::FlexStart,
                     ..default()
                 },
-                color: COLOR_BACKGROUND.into(),
+                background_color: COLOR_BACKGROUND.into(),
                 ..default()
             }).with_children(| content | {
 
@@ -115,7 +115,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 They can be hovered and clicked. The most basic button is the text button");
 
                 // Example Showcase
-                content.spawn_bundle(NodeBundle {
+                content.spawn(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
                         margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
@@ -124,7 +124,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         justify_content: JustifyContent::Center,
                         ..default()
                     },
-                    color: COLOR_CONTENT_EXAMPLE.into(),
+                    background_color: COLOR_CONTENT_EXAMPLE.into(),
                     ..default()
                 }).with_children(| example_showcase | {
 
@@ -140,7 +140,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 Disabled buttons should not be triggered by the user. \
                 Buttons should clearly show when they are disabled by changing colors.");
                 // Example Showcase
-                content.spawn_bundle(NodeBundle {
+                content.spawn(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
                         margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
@@ -149,7 +149,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         justify_content: JustifyContent::Center,
                         ..default()
                     },
-                    color: COLOR_CONTENT_EXAMPLE.into(),
+                    background_color: COLOR_CONTENT_EXAMPLE.into(),
                     ..default()
                 }).with_children(| example_showcase | {
 
@@ -163,7 +163,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 create_p(content, &theme, "Buttons are triggered on release by default. \
                 By setting the trigger-policy you can change the button to trigger on press instead.");
                 // Example Showcase
-                content.spawn_bundle(NodeBundle {
+                content.spawn(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
                         margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
@@ -172,7 +172,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         justify_content: JustifyContent::Center,
                         ..default()
                     },
-                    color: COLOR_CONTENT_EXAMPLE.into(),
+                    background_color: COLOR_CONTENT_EXAMPLE.into(),
                     ..default()
                 }).with_children(| example_showcase | {
                     create_text_button(example_showcase, &theme, "Ok", true, TriggerPolicy::OnPress);
@@ -185,7 +185,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 create_p(content, &theme, "Some buttons only need icon.");
 
                 // Example Showcase
-                content.spawn_bundle(NodeBundle {
+                content.spawn(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
                         margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
@@ -194,7 +194,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         justify_content: JustifyContent::Center,
                         ..default()
                     },
-                    color: COLOR_CONTENT_EXAMPLE.into(),
+                    background_color: COLOR_CONTENT_EXAMPLE.into(),
                     ..default()
                 }).with_children(| example_showcase | {
 
@@ -208,7 +208,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 create_p(content, &theme, "We can also create buttons that has both icons and text.");
 
                 // Example Showcase
-                content.spawn_bundle(NodeBundle {
+                content.spawn(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
                         margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
@@ -217,7 +217,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         justify_content: JustifyContent::Center,
                         ..default()
                     },
-                    color: COLOR_CONTENT_EXAMPLE.into(),
+                    background_color: COLOR_CONTENT_EXAMPLE.into(),
                     ..default()
                 }).with_children(| example_showcase | {
 

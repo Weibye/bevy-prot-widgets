@@ -11,7 +11,7 @@ use crate::{
 
 /// Creates a new H1 title
 pub fn create_h1(container: &mut ChildBuilder, theme: &WidgetTheme, text: &str) {
-    container.spawn_bundle(
+    container.spawn(
         TextBundle::from_section(text, theme.h1.clone()).with_style(Style {
             margin: UiRect::new(
                 Val::Undefined,
@@ -26,7 +26,7 @@ pub fn create_h1(container: &mut ChildBuilder, theme: &WidgetTheme, text: &str) 
 
 /// Create a new paragraph section
 pub fn create_p(container: &mut ChildBuilder, theme: &WidgetTheme, text: &str) {
-    container.spawn_bundle(TextBundle::from_section(text, theme.p.clone()));
+    container.spawn(TextBundle::from_section(text, theme.p.clone()));
 }
 
 /// Creates a new Text Button Widget
@@ -38,7 +38,7 @@ pub fn create_text_button(
     policy: TriggerPolicy,
 ) {
     container
-        .spawn_bundle(
+        .spawn(
             ButtonWidgetBundle::new(
                 Style {
                     size: Size::new(Val::Auto, Val::Auto),
@@ -59,7 +59,7 @@ pub fn create_text_button(
             .with_policy(policy),
         )
         .with_children(|button| {
-            button.spawn_bundle(TextBundle::from_section(text, theme.widget.clone()));
+            button.spawn(TextBundle::from_section(text, theme.widget.clone()));
         });
 }
 
@@ -72,7 +72,7 @@ pub fn create_icon_button(
     policy: TriggerPolicy,
 ) {
     container
-        .spawn_bundle(
+        .spawn(
             ButtonWidgetBundle::new(
                 Style {
                     size: Size::new(Val::Auto, Val::Auto),
@@ -93,7 +93,7 @@ pub fn create_icon_button(
             .with_policy(policy),
         )
         .with_children(|button| {
-            button.spawn_bundle(TextBundle::from_section(
+            button.spawn(TextBundle::from_section(
                 icon.to_string(),
                 theme.icon.clone(),
             ));
@@ -110,7 +110,7 @@ pub fn create_label_button(
     policy: TriggerPolicy,
 ) {
     container
-        .spawn_bundle(
+        .spawn(
             ButtonWidgetBundle::new(
                 Style {
                     size: Size::new(Val::Auto, Val::Auto),
@@ -131,7 +131,7 @@ pub fn create_label_button(
             .with_policy(policy),
         )
         .with_children(|button| {
-            button.spawn_bundle(
+            button.spawn(
                 TextBundle::from_section(icon.to_string(), theme.icon.clone()).with_style(Style {
                     margin: UiRect::new(
                         Val::Undefined,
@@ -142,6 +142,6 @@ pub fn create_label_button(
                     ..default()
                 }),
             );
-            button.spawn_bundle(TextBundle::from_section(text, theme.widget.clone()));
+            button.spawn(TextBundle::from_section(text, theme.widget.clone()));
         });
 }
