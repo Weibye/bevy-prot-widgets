@@ -9,7 +9,7 @@ use crate::{
     entity::ToggleState,
     widget::{
         checkbox::{CheckboxIcons, CheckboxState, CheckboxWidget},
-        radio::{RadioButtonIcons, RadioButtonWidget},
+        radio::RadioWidget,
     },
 };
 
@@ -50,13 +50,13 @@ pub(crate) struct CheckboxQuery<'a> {
     pub icons: &'a CheckboxIcons,
 }
 
-#[derive(WorldQuery)]
-#[world_query(mutable)]
-pub(crate) struct RadioQuery<'a> {
-    pub text: &'a mut Text,
-    pub state: &'a ToggleState,
-    pub icons: &'a RadioButtonIcons,
-}
+// #[derive(WorldQuery)]
+// #[world_query(mutable)]
+// pub(crate) struct RadioQuery<'a> {
+//     pub text: &'a mut Text,
+//     pub state: &'a ToggleState,
+//     // pub icons: &'a RadioButtonIcons,
+// }
 
 #[derive(WorldQuery)]
 pub(crate) struct CheckboxChanged {
@@ -67,13 +67,13 @@ pub(crate) struct CheckboxChanged {
 #[derive(WorldQuery)]
 pub(crate) struct RadioChanged {
     changed: Changed<ToggleState>,
-    with: With<RadioButtonWidget>,
+    with: With<RadioWidget>,
 }
 
 #[derive(WorldQuery)]
 pub(crate) struct WidgetChanged {
     interactions: Changed<Interaction>,
-    widget: Or<(With<CheckboxWidget>, With<RadioButtonWidget>)>,
+    widget: Or<(With<CheckboxWidget>, With<RadioWidget>)>,
 }
 
 /// System that updates the visual of the checkbox according to their state
@@ -85,19 +85,6 @@ pub(crate) fn update_checkbox(mut q: Query<CheckboxQuery, CheckboxChanged>) {
             CheckboxState::Unchecked => checkbox.icons.unchecked,
             CheckboxState::Indeterminate => checkbox.icons.indeterminate,
         }
-        .to_string();
-    }
-}
-
-/// System that updates the visual of the checkbox according to their state
-pub(crate) fn update_radio(mut q: Query<RadioQuery, RadioChanged>) {
-    for mut radio in &mut q {
-        // Assume only one section in widgets for now
-        radio.text.sections[0].value = (if radio.state.0 {
-            radio.icons.checked
-        } else {
-            radio.icons.empty
-        })
         .to_string();
     }
 }

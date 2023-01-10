@@ -1,6 +1,6 @@
 use bevy::{
     ecs::system::EntityCommands,
-    prelude::{default, Bundle, Color, Component, Handle, NodeBundle},
+    prelude::{default, Bundle, Changed, Color, Component, Handle, NodeBundle, Query},
     text::{Font, Text, TextStyle},
     ui::CalculatedSize,
 };
@@ -11,7 +11,7 @@ use crate::blueprint::WidgetBlueprint;
 const FONT_SIZE: f32 = 50.0;
 const ICON_COLOR: Color = Color::BLACK;
 
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct IconWidget(pub Icon);
 
 impl Default for IconWidget {
@@ -47,7 +47,7 @@ impl<'w, 's> WidgetBlueprint<'w, 's> for IconWidgetBlueprint {
     }
 }
 
-#[derive(Bundle, Default)]
+#[derive(Bundle, Default, Debug)]
 pub struct IconWidgetBundle {
     #[bundle]
     pub node_bundle: NodeBundle,
@@ -55,4 +55,10 @@ pub struct IconWidgetBundle {
     pub text: Text,
     /// The calculated size based on the given image
     pub calculated_size: CalculatedSize,
+}
+
+pub(crate) fn update_changed_icons(mut q: Query<(&IconWidget, &mut Text), Changed<IconWidget>>) {
+    for (widget, mut text) in &mut q {
+        text.sections[0].value = widget.0.to_string();
+    }
 }
