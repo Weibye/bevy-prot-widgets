@@ -62,5 +62,4 @@ fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
     });
 
     // TODO: Show how to change the icon during runtime
-    
 }

@@ -30,25 +30,21 @@ impl<'w, 's> WidgetBlueprint<'w, 's> for IconWidgetBlueprint {
         self,
         cmd: &'a mut EntityCommands<'w, 's, 'a>,
     ) -> &'a mut EntityCommands<'w, 's, 'a> {
-        let icon_widget = IconWidgetBundle {
-            icon_widget: IconWidget(self.icon.clone()),
+        cmd.insert(IconWidgetBundle {
+            icon_widget: IconWidget(self.icon),
             text: Text::from_section(
                 self.icon.to_string(),
                 TextStyle {
-                    font: self.font.clone(),
+                    font: self.font,
                     font_size: FONT_SIZE,
                     color: ICON_COLOR,
                 },
             ),
             ..default()
-        };
-        cmd.insert(icon_widget);
+        });
 
         cmd
     }
-    // fn build<>(self, cmd: &'w mut EntityCommands) -> &'w mut EntityCommands<'w, 's, 'a> {
-    //
-    // }
 }
 
 #[derive(Bundle, Default)]
@@ -60,6 +56,3 @@ pub struct IconWidgetBundle {
     /// The calculated size based on the given image
     pub calculated_size: CalculatedSize,
 }
-
-// FIXME: When spawning icon widget, user should only have to specify which icon to refer to.
-// Then the _builder_ should make sure to set the correct font and text char in the text bundle
