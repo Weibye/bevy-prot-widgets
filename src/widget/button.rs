@@ -5,7 +5,7 @@ use bevy::{
         EventReader, EventWriter, NodeBundle, Or, Query, With,
     },
     text::Text,
-    ui::{Interaction, Style, UiColor},
+    ui::{Interaction, Style, BackgroundColor},
 };
 
 /// Event that a button has triggered
@@ -82,7 +82,7 @@ impl ButtonWidgetBundle {
         ButtonWidgetBundle {
             node_bundle: NodeBundle {
                 style,
-                color: UiColor(theme.background.default),
+                background_color: theme.background.default.into(),
                 ..default()
             },
             theme,
@@ -140,7 +140,7 @@ pub(crate) struct ButtonChanged {
 #[derive(WorldQuery)]
 #[world_query(mutable)]
 pub(crate) struct ButtonColorQuery<'a> {
-    pub color: &'a mut UiColor,
+    pub color: &'a mut BackgroundColor,
     pub state: &'a ButtonState,
     pub enabled: &'a ButtonEnabledState,
     pub theme: &'a ButtonTheme,

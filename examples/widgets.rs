@@ -31,7 +31,7 @@ const FONT: &str = "fonts/Roboto/Roboto-Medium.ttf";
 
 /// Camera
 fn setup_camera(mut cmd: Commands) {
-    cmd.spawn_bundle(Camera2dBundle::default());
+    cmd.spawn(Camera2dBundle::default());
 }
 
 fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
@@ -42,16 +42,16 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
     };
 
     // root node
-    cmd.spawn_bundle(NodeBundle {
+    cmd.spawn(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
             ..default()
         },
-        color: Color::WHITE.into(),
+        background_color: Color::WHITE.into(),
         ..default()
     })
     .with_children(|root| {
-        root.spawn_bundle(NodeBundle {
+        root.spawn(NodeBundle {
             style: Style {
                 size: Size::new(Val::Px(400.), Val::Auto),
                 flex_direction: FlexDirection::ColumnReverse,
@@ -59,12 +59,12 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 padding: UiRect::all(Val::Px(10.0)),
                 ..default()
             },
-            color: Color::WHITE.into(),
+            background_color: Color::WHITE.into(),
             ..default()
         })
         .with_children(|rect01| {
             // Buttons title
-            rect01.spawn_bundle(TextBundle::from_section(
+            rect01.spawn(TextBundle::from_section(
                 "Buttons",
                 TextStyle {
                     font: asset_server.load(FONT),
@@ -73,19 +73,19 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 },
             ));
             // Separator
-            rect01.spawn_bundle(NodeBundle {
+            rect01.spawn(NodeBundle {
                 style: Style {
                     size: Size::new(Val::Percent(100.0), Val::Px(1.0)),
                     margin: UiRect::new(Val::Undefined, Val::Px(5.0), Val::Undefined, Val::Px(5.0)),
                     ..default()
                 },
-                color: Color::BLACK.into(),
+                background_color: Color::BLACK.into(),
                 ..default()
             });
 
             // Button container
             rect01
-                .spawn_bundle(NodeBundle {
+                .spawn(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Auto, Val::Px(45.0)),
                         flex_direction: FlexDirection::Row,
@@ -98,7 +98,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 .with_children(|button_container| {
                     // Button 01
                     button_container
-                        .spawn_bundle(ButtonBundle {
+                        .spawn(ButtonBundle {
                             style: Style {
                                 size: Size::new(Val::Auto, Val::Auto),
                                 justify_content: JustifyContent::Center, // For centering button text
@@ -106,11 +106,11 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                                 flex_grow: 1.,
                                 ..default()
                             },
-                            color: NORMAL_BUTTON.into(),
+                            background_color: NORMAL_BUTTON.into(),
                             ..default()
                         })
                         .with_children(|parent| {
-                            parent.spawn_bundle(TextBundle::from_section(
+                            parent.spawn(TextBundle::from_section(
                                 "First button",
                                 TextStyle {
                                     font: asset_server.load(FONT),
@@ -122,7 +122,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
 
                     // Button 02
                     button_container
-                        .spawn_bundle(ButtonBundle {
+                        .spawn(ButtonBundle {
                             style: Style {
                                 size: Size::new(Val::Auto, Val::Auto),
                                 // horizontally center child text
@@ -138,11 +138,11 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                                 flex_grow: 1.,
                                 ..default()
                             },
-                            color: NORMAL_BUTTON.into(),
+                            background_color: NORMAL_BUTTON.into(),
                             ..default()
                         })
                         .with_children(|parent| {
-                            parent.spawn_bundle(TextBundle::from_section(
+                            parent.spawn(TextBundle::from_section(
                                 "Second",
                                 TextStyle {
                                     font: asset_server.load(FONT),
@@ -154,7 +154,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
 
                     // Button 03
                     button_container
-                        .spawn_bundle(ButtonBundle {
+                        .spawn(ButtonBundle {
                             style: Style {
                                 size: Size::new(Val::Auto, Val::Auto),
                                 // margin: UiRect::new(Val::Px(5.0), Val::Undefined, Val::Undefined, Val::Undefined),
@@ -165,11 +165,11 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                                 flex_grow: 1.,
                                 ..default()
                             },
-                            color: NORMAL_BUTTON.into(),
+                            background_color: NORMAL_BUTTON.into(),
                             ..default()
                         })
                         .with_children(|parent| {
-                            parent.spawn_bundle(TextBundle::from_section(
+                            parent.spawn(TextBundle::from_section(
                                 "Third",
                                 TextStyle {
                                     font: asset_server.load(FONT),
@@ -181,7 +181,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 });
 
             // Checkboxes title
-            rect01.spawn_bundle(TextBundle::from_section(
+            rect01.spawn(TextBundle::from_section(
                 "Checkboxes",
                 TextStyle {
                     font: asset_server.load(FONT),
@@ -190,19 +190,19 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 },
             ));
             // Separator
-            rect01.spawn_bundle(NodeBundle {
+            rect01.spawn(NodeBundle {
                 style: Style {
                     size: Size::new(Val::Percent(100.0), Val::Px(1.0)),
                     margin: UiRect::new(Val::Undefined, Val::Px(5.0), Val::Undefined, Val::Px(5.0)),
                     ..default()
                 },
-                color: Color::BLACK.into(),
+                background_color: Color::BLACK.into(),
                 ..default()
             });
 
             // Checkbox container
             rect01
-                .spawn_bundle(NodeBundle {
+                .spawn(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Auto, Val::Px(45.0)),
                         flex_direction: FlexDirection::Row,
@@ -214,7 +214,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     ..default()
                 })
                 .with_children(|container| {
-                    container.spawn_bundle(CheckboxBundle {
+                    container.spawn(CheckboxBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::CheckBoxOutlineBlank.to_string(),
@@ -222,7 +222,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(CheckboxBundle {
+                    container.spawn(CheckboxBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::CheckBoxOutlineBlank.to_string(),
@@ -230,7 +230,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(CheckboxBundle {
+                    container.spawn(CheckboxBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::CheckBoxOutlineBlank.to_string(),
@@ -238,7 +238,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(CheckboxBundle {
+                    container.spawn(CheckboxBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::CheckBoxOutlineBlank.to_string(),
@@ -247,7 +247,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         color: Color::GREEN.into(),
                         ..default()
                     });
-                    container.spawn_bundle(CheckboxBundle {
+                    container.spawn(CheckboxBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::CheckBoxOutlineBlank.to_string(),
@@ -255,7 +255,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(CheckboxBundle {
+                    container.spawn(CheckboxBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::CheckBoxOutlineBlank.to_string(),
@@ -263,7 +263,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(CheckboxBundle {
+                    container.spawn(CheckboxBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::CheckBoxOutlineBlank.to_string(),
@@ -271,7 +271,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(CheckboxBundle {
+                    container.spawn(CheckboxBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::CheckBoxOutlineBlank.to_string(),
@@ -283,7 +283,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 });
 
             // Checkboxes title
-            rect01.spawn_bundle(TextBundle::from_section(
+            rect01.spawn(TextBundle::from_section(
                 "Radio Buttons",
                 TextStyle {
                     font: asset_server.load(FONT),
@@ -292,19 +292,19 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 },
             ));
             // Separator
-            rect01.spawn_bundle(NodeBundle {
+            rect01.spawn(NodeBundle {
                 style: Style {
                     size: Size::new(Val::Percent(100.0), Val::Px(1.0)),
                     margin: UiRect::new(Val::Undefined, Val::Px(5.0), Val::Undefined, Val::Px(5.0)),
                     ..default()
                 },
-                color: Color::BLACK.into(),
+                background_color: Color::BLACK.into(),
                 ..default()
             });
 
             // Checkbox container
             rect01
-                .spawn_bundle(NodeBundle {
+                .spawn(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Auto, Val::Px(45.0)),
                         flex_direction: FlexDirection::Row,
@@ -315,7 +315,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     ..default()
                 })
                 .with_children(|container| {
-                    container.spawn_bundle(RadioButtonBundle {
+                    container.spawn(RadioButtonBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::RadioButtonUnchecked.to_string(),
@@ -323,7 +323,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(RadioButtonBundle {
+                    container.spawn(RadioButtonBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::RadioButtonUnchecked.to_string(),
@@ -331,7 +331,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(RadioButtonBundle {
+                    container.spawn(RadioButtonBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::RadioButtonUnchecked.to_string(),
@@ -339,7 +339,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(RadioButtonBundle {
+                    container.spawn(RadioButtonBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::RadioButtonUnchecked.to_string(),
@@ -347,7 +347,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(RadioButtonBundle {
+                    container.spawn(RadioButtonBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::RadioButtonUnchecked.to_string(),
@@ -355,7 +355,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(RadioButtonBundle {
+                    container.spawn(RadioButtonBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::RadioButtonUnchecked.to_string(),
@@ -363,7 +363,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(RadioButtonBundle {
+                    container.spawn(RadioButtonBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::RadioButtonUnchecked.to_string(),
@@ -371,7 +371,7 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         ),
                         ..default()
                     });
-                    container.spawn_bundle(RadioButtonBundle {
+                    container.spawn(RadioButtonBundle {
                         // style: todo!(),
                         text: Text::from_section(
                             Icon::RadioButtonUnchecked.to_string(),

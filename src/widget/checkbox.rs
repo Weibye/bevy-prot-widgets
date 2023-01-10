@@ -3,7 +3,7 @@ use bevy::{
         Bundle, Button, Component, ComputedVisibility, GlobalTransform, Transform, Visibility,
     },
     text::Text,
-    ui::{CalculatedSize, FocusPolicy, Interaction, Node, Style, UiColor, UiImage},
+    ui::{CalculatedSize, FocusPolicy, Interaction, Node, Style, UiImage, BackgroundColor},
 };
 use material_icons::Icon;
 
@@ -76,7 +76,7 @@ pub struct CheckboxBundle {
     /// The different state the checkbox can be in
     pub state: CheckboxState,
     /// Background color
-    pub color: UiColor,
+    pub color: BackgroundColor,
     /// Describes the image of the node
     pub image: UiImage,
 }
