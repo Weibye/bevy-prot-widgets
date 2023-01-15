@@ -5,7 +5,7 @@ use bevy_ecs::{
     system::{EntityCommands, Query},
 };
 use bevy_text::{Text, TextStyle};
-use bevy_ui::{prelude::NodeBundle, CalculatedSize, UiRect, Val, Style};
+use bevy_ui::{prelude::NodeBundle, CalculatedSize, Style, UiRect, Val};
 
 pub(crate) struct LabelPlugin;
 

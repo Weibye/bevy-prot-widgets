@@ -10,6 +10,7 @@ const H1_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
 const H2_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
 const H3_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
 const PARAGRAPH_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
+const BUTTON_LABEL: &str = "fonts/Roboto/Roboto-Bold.ttf";
 
 pub struct FontPlugin;
 
@@ -26,6 +27,7 @@ pub(crate) fn load_fonts(mut cmd: Commands, asset_loader: Res<AssetServer>) {
         h2: asset_loader.load(H2_FONT),
         h3: asset_loader.load(H3_FONT),
         p: asset_loader.load(PARAGRAPH_FONT),
+        button_label: asset_loader.load(BUTTON_LABEL),
     });
 }
 
@@ -45,4 +47,5 @@ pub struct FontHandles {
     pub h2: Handle<Font>,
     pub h3: Handle<Font>,
     pub p: Handle<Font>,
+    pub button_label: Handle<Font>,
 }

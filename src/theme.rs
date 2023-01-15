@@ -11,7 +11,7 @@ const COLOR_TEXT: Color = Color::rgb(0.905, 0.921, 0.941);
 const H1_FONT_SIZE: f32 = 35.0;
 const H2_FONT_SIZE: f32 = 30.0;
 const H3_FONT_SIZE: f32 = 25.0;
-const PARAGRAPH_FONT_SIZE: f32 = 18.0;
+const PARAGRAPH_FONT_SIZE: f32 = 16.0;
 const BUTTON_FONT_SIZE: f32 = 20.0;
 const ICON_FONT_SIZE: f32 = 25.0;
 
@@ -53,9 +53,9 @@ fn setup_theme(mut cmd: Commands, fonts: Res<FontHandles>) {
             color: COLOR_TEXT,
         },
         button: TextStyle {
-            font: fonts.p.clone(), 
+            font: fonts.p.clone(),
             font_size: BUTTON_FONT_SIZE,
-            color: COLOR_TEXT
+            color: COLOR_TEXT,
         },
     });
 }

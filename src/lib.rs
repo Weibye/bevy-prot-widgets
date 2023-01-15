@@ -10,7 +10,6 @@ use bevy_ui::Interaction;
 
 use fonts::FontPlugin;
 
-pub mod content_builder;
 mod entity;
 pub mod fonts;
 mod system;

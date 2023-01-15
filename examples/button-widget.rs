@@ -1,7 +1,6 @@
 use bevy::prelude::*;
 
 use bevy_prot_widgets::{
-    content_builder::*,
     theme::WidgetTheme,
     widget::{
         button::{
@@ -29,8 +28,6 @@ fn main() {
 // TODO: Show that clicking buttons actually change something
 
 const COLOR_CONTENT_EXAMPLE: Color = Color::rgb(0.055, 0.12, 0.19);
-
-// const BUTTON_FONT_SIZE: f32 = 20.0;
 
 // TODO: Button should not change on hover
 const BUTTON_THEME: ButtonTheme = ButtonTheme {
@@ -107,7 +104,7 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                     LabelButtonBlueprint {
                         label: LabelWidgetBlueprint {
                             text: "Open inventory".into(),
-                            theme: theme.p.clone(),
+                            theme: theme.button.clone(),
                         },
                         enabled: true,
                         policy: TriggerPolicy::OnRelease,
@@ -160,7 +157,7 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                         LabelButtonBlueprint {
                             label: LabelWidgetBlueprint {
                                 text: text.into(),
-                                theme: theme.p.clone(),
+                                theme: theme.button.clone(),
                             },
                             enabled: false,
                             policy: TriggerPolicy::OnRelease,
@@ -168,9 +165,17 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                     }
                 });
 
-                create_h1(content, &theme, "Trigger Policy");
-                create_p(content, &theme, "Buttons are triggered on release by default. \
-                By setting the trigger-policy you can change the button to trigger on press instead.");
+                LabelWidgetBlueprint {
+                    text: "Trigger Policy".into(),
+                    theme: theme.h1.clone(),
+                }.build(&mut content.spawn_empty());
+
+                LabelWidgetBlueprint {
+                    text: "Buttons are triggered on release by default. \
+                    By setting the trigger-policy you can change the button to trigger on press instead.".into(),
+                    theme: theme.p.clone(),
+                }.build(&mut content.spawn_empty());
+
                 // Example Showcase
                 content.spawn(NodeBundle {
                     style: Style {
@@ -188,7 +193,7 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                     LabelButtonBlueprint {
                         label: LabelWidgetBlueprint {
                             text: "Ok".into(),
-                            theme: theme.p.clone(),
+                            theme: theme.button.clone(),
                         },
                         enabled: true,
                         policy: TriggerPolicy::OnPress,
@@ -196,14 +201,21 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
 
                     IconLabelButtonBlueprint {
                         icon: IconWidgetBlueprint { icon: Icon::Wifi, theme: theme.icon.clone() },
-                        label: LabelWidgetBlueprint { text: "Enable Wifi".into(), theme: theme.p.clone() },
+                        label: LabelWidgetBlueprint { text: "Enable Wifi".into(), theme: theme.button.clone() },
                         enabled: true,
                         policy: TriggerPolicy::OnRelease,
                     }.build(&mut example_showcase.spawn_empty());
                 });
 
-                create_h1(content, &theme, "Icon Buttons");
-                create_p(content, &theme, "Some buttons only need icon.");
+                LabelWidgetBlueprint {
+                    text: "Icon Buttons".into(),
+                    theme: theme.h1.clone(),
+                }.build(&mut content.spawn_empty());
+
+                LabelWidgetBlueprint {
+                    text: "Some buttons only need icon.".into(),
+                    theme: theme.p.clone(),
+                }.build(&mut content.spawn_empty());
 
                 // Example Showcase
                 content.spawn(NodeBundle {
@@ -232,8 +244,15 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                     }
                 });
 
-                create_h1(content, &theme, "Icon and Text Buttons");
-                create_p(content, &theme, "We can also create buttons that has both icons and text.");
+                LabelWidgetBlueprint {
+                    text: "Icon and Text Buttons".into(),
+                    theme: theme.h1.clone(),
+                }.build(&mut content.spawn_empty());
+
+                LabelWidgetBlueprint {
+                    text: "We can also create buttons that has both icons and text.".into(),
+                    theme: theme.p.clone(),
+                }.build(&mut content.spawn_empty());
 
                 // Example Showcase
                 content.spawn(NodeBundle {
@@ -259,7 +278,7 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                     ] {
                         IconLabelButtonBlueprint {
                             icon: IconWidgetBlueprint { icon, theme: theme.icon.clone() },
-                            label: LabelWidgetBlueprint { text: text.into(), theme: theme.p.clone() },
+                            label: LabelWidgetBlueprint { text: text.into(), theme: theme.button.clone() },
                             enabled: true,
                             policy: TriggerPolicy::OnRelease,
                         }.build(&mut example_showcase.spawn_empty());
