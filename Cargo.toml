@@ -11,5 +11,19 @@ exclude = ["assets/**/*", "tools/**/*", ".github/**/*"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = "0.9"
+# Custom form of bevy with "blueprint" functionality enabled: 
+bevy_ecs = { git = "https://github.com/Weibye/bevy", branch = "blueprint" }
+bevy_ui = { git = "https://github.com/Weibye/bevy", branch = "blueprint" }
+bevy_text = { git = "https://github.com/Weibye/bevy", branch = "blueprint" }
+bevy_app = { git = "https://github.com/Weibye/bevy", branch = "blueprint" }
+bevy_render = { git = "https://github.com/Weibye/bevy", branch = "blueprint" }
+bevy_asset = { git = "https://github.com/Weibye/bevy", branch = "blueprint" }
+bevy_log = { git = "https://github.com/Weibye/bevy", branch = "blueprint" }
+bevy_hierarchy = { git = "https://github.com/Weibye/bevy", branch = "blueprint" }
 material-icons = "0.2.0"
+
+# [patch."https://github.com/bevyengine/bevy"]
+# bevy_ecs = { git = "https://github.com/Weibye/bevy?rev=24f6ce2" }
+
+[dev-dependencies]
+bevy = { git = "https://github.com/Weibye/bevy", branch = "blueprint" }

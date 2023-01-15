@@ -1,8 +1,8 @@
-use bevy::prelude::Component;
-
 // Resources
 
 // State
+
+use bevy_ecs::prelude::Component;
 
 /// Stores the state of a toggled widget element.
 #[derive(Component, Clone, Debug, Default)]

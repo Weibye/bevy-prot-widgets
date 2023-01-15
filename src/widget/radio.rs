@@ -1,66 +1,87 @@
-use bevy::{
-    prelude::{
-        Bundle, Button, Component, ComputedVisibility, GlobalTransform, Transform, Visibility,
-    },
-    text::Text,
-    ui::{CalculatedSize, FocusPolicy, Interaction, Node, Style},
+use bevy_app::{App, Plugin};
+
+use bevy_ecs::{
+    prelude::{Bundle, Component, EntityBlueprint, IntoSystemDescriptor},
+    query::Changed,
+    system::{EntityCommands, Query},
 };
+
+use bevy_text::TextStyle;
+use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
 
-use crate::entity::ToggleState;
+use super::icon::{update_changed_icons, IconWidget, IconWidgetBlueprint, IconWidgetBundle};
+
+pub(crate) struct RadioPlugin;
+
+impl Plugin for RadioPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_system(update_radio_icon.before(update_changed_icons))
+            .add_system(update_radio_interaction.before(update_radio_icon));
+    }
+}
 
 /// Marker component for a CheckBoxWidget
 #[derive(Component, Debug, Clone, Default)]
-pub struct RadioButtonWidget;
+pub struct RadioWidget(pub bool);
 
-/// Component that defines the icons of the [CheckboxWidget].
-#[derive(Component, Debug, Clone)]
-pub struct RadioButtonIcons {
-    pub empty: Icon,
-    pub checked: Icon,
+pub struct RadioBlueprint {
+    pub checked: bool,
+    pub theme: TextStyle,
 }
 
-impl Default for RadioButtonIcons {
-    fn default() -> Self {
-        Self {
-            empty: Icon::RadioButtonUnchecked,
-            checked: Icon::RadioButtonChecked,
+impl EntityBlueprint for RadioBlueprint {
+    fn build(self, entity: &mut EntityCommands) {
+        let icon = if self.checked {
+            Icon::RadioButtonChecked
+        } else {
+            Icon::RadioButtonUnchecked
+        };
+
+        IconWidgetBlueprint {
+            icon,
+            theme: self.theme,
         }
+        .build(entity);
+
+        entity.insert((RadioWidget(self.checked), Button, Interaction::default()));
     }
 }
 
 /// A Checkbox Widget
-#[derive(Bundle, Clone, Debug, Default)]
-pub struct RadioButtonBundle {
-    // From image-bundle
-    /// Describes the size of the node
-    pub node: Node,
-    /// Describes the style including flexbox settings
-    pub style: Style,
-    /// Contains the text of the node
-    pub text: Text,
-    /// The calculated size based on the given image
-    pub calculated_size: CalculatedSize,
-    /// Whether this node should block interaction with lower nodes
-    pub focus_policy: FocusPolicy,
-    /// The transform of the node
-    pub transform: Transform,
-    /// The global transform of the node
-    pub global_transform: GlobalTransform,
-    /// Describes the visibility properties of the node
-    pub visibility: Visibility,
-    /// Algorithmically-computed indication of whether an entity is visible and should be extracted for rendering
-    pub computed_visibility: ComputedVisibility,
-
+#[derive(Bundle, Debug, Default)]
+pub struct RadioBundle {
+    #[bundle]
+    pub icon: IconWidgetBundle,
     // Additional stuff
     /// Enables clicking on the widget
     pub button: Button,
     /// Interaction state of the widget
     pub interaction: Interaction,
     /// Marker to make it a "CheckboxWidget"
-    pub radio: RadioButtonWidget,
-    /// State of the widget
-    pub toggle: ToggleState,
-    /// The different icons for the widget
-    pub icons: RadioButtonIcons,
+    pub radio: RadioWidget,
+    // /// State of the widget
+    // pub toggle: ToggleState,
+    // /// The different icons for the widget
+    // pub icons: RadioButtonIcons,
+}
+
+pub(crate) fn update_radio_interaction(
+    mut q: Query<(&mut RadioWidget, &Interaction), Changed<Interaction>>,
+) {
+    for (mut radio, interaction) in &mut q {
+        if matches!(interaction, Interaction::Clicked) {
+            radio.0 = !radio.0;
+        }
+    }
+}
+
+pub fn update_radio_icon(mut q: Query<(&RadioWidget, &mut IconWidget), Changed<RadioWidget>>) {
+    for (radio, mut icon) in &mut q {
+        icon.0 = if radio.0 {
+            Icon::RadioButtonChecked
+        } else {
+            Icon::RadioButtonUnchecked
+        };
+    }
 }
