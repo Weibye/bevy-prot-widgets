@@ -83,8 +83,8 @@ pub struct IconLabelButtonBlueprint {
     pub policy: TriggerPolicy,
 }
 
-impl<'w, 's> EntityBlueprint for LabelButtonBlueprint {
-    fn build<'a>(self, entity: &'a mut EntityCommands) {
+impl EntityBlueprint for LabelButtonBlueprint {
+    fn build(self, entity: &mut EntityCommands) {
         let mut label_entity = entity.commands().spawn_empty();
         let label_entity_id = label_entity.id();
         self.label.build(&mut label_entity);
@@ -109,8 +109,8 @@ impl<'w, 's> EntityBlueprint for LabelButtonBlueprint {
     }
 }
 
-impl<'w, 's> EntityBlueprint for IconButtonBlueprint {
-    fn build<'a>(self, entity: &'a mut EntityCommands) {
+impl EntityBlueprint for IconButtonBlueprint {
+    fn build(self, entity: &mut EntityCommands) {
         let mut icon_entity = entity.commands().spawn_empty();
         let icon_entity_id = icon_entity.id();
         self.icon.build(&mut icon_entity);

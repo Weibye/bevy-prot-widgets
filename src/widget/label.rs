@@ -25,8 +25,8 @@ pub struct LabelWidgetBlueprint {
     pub theme: TextStyle,
 }
 
-impl<'w, 's> EntityBlueprint for LabelWidgetBlueprint {
-    fn build<'a>(self, cmd: &'a mut EntityCommands) {
+impl EntityBlueprint for LabelWidgetBlueprint {
+    fn build(self, cmd: &mut EntityCommands) {
         cmd.insert(LabelWidgetBundle {
             label: LabelWidget {
                 text: self.text.clone(),

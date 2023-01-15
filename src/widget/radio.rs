@@ -6,7 +6,7 @@ use bevy_ecs::{
     system::{EntityCommands, Query},
 };
 
-use bevy_text::{Text, TextStyle};
+use bevy_text::TextStyle;
 use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
 

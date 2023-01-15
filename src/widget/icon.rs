@@ -33,8 +33,8 @@ pub struct IconWidgetBlueprint {
 }
 
 /// Defines how to construct the IconWidget.
-impl<'w, 's> EntityBlueprint for IconWidgetBlueprint {
-    fn build<'a>(self, entity: &'a mut EntityCommands) {
+impl EntityBlueprint for IconWidgetBlueprint {
+    fn build(self, entity: &mut EntityCommands) {
         entity.insert(IconWidgetBundle {
             icon_widget: IconWidget(self.icon),
             text: Text::from_section(self.icon.to_string(), self.theme),

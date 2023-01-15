@@ -9,7 +9,6 @@ use bevy_log::info;
 use bevy_ui::Interaction;
 
 use fonts::FontPlugin;
-use system::update_widget_colors;
 
 pub mod content_builder;
 mod entity;
@@ -47,14 +46,14 @@ impl Plugin for WidgetPlugin {
         .add_plugin(RadioPlugin)
         .add_plugin(CheckBoxPlugin)
         // .add_event::<ButtonEvent>()
-        .add_system(button_output)
+        .add_system(button_output);
         // .add_system(toggle_system)
         // .add_system(button_color)
         // .add_system(button_interaction)
         // .add_system(button_trigger.after(button_interaction))
         // .add_system(on_button_trigger.after(button_trigger))
         // .add_system(update_checkbox.after(toggle_system))
-        .add_system(update_widget_colors);
+        // .add_system(update_widget_colors);
         // Load the correct fonts and put in a resource
     }
 }

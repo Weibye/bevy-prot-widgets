@@ -6,7 +6,7 @@ use bevy_ecs::{
     system::{EntityCommands, Query},
 };
 
-use bevy_text::{Text, TextStyle};
+use bevy_text::TextStyle;
 use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
 
@@ -38,8 +38,8 @@ pub struct CheckBoxBlueprint {
     pub theme: TextStyle,
 }
 
-impl<'w, 's> EntityBlueprint for CheckBoxBlueprint {
-    fn build<'a>(self, entity: &'a mut EntityCommands) {
+impl EntityBlueprint for CheckBoxBlueprint {
+    fn build(self, entity: &mut EntityCommands) {
         let icon = match self.state {
             CheckboxState::Checked => Icon::CheckBox,
             CheckboxState::Unchecked => Icon::CheckBoxOutlineBlank,

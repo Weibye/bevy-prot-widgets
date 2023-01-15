@@ -5,14 +5,14 @@ use bevy_render::color::Color;
 use bevy_text::TextStyle;
 
 const COLOR_BACKGROUND: Color = Color::rgb(0.047, 0.109, 0.172);
-const COLOR_CONTENT_EXAMPLE: Color = Color::rgb(0.055, 0.12, 0.19);
+// const COLOR_CONTENT_EXAMPLE: Color = Color::rgb(0.055, 0.12, 0.19);
 const COLOR_TEXT: Color = Color::rgb(0.905, 0.921, 0.941);
 
 const H1_FONT_SIZE: f32 = 30.0;
 const H2_FONT_SIZE: f32 = 20.0;
 const H3_FONT_SIZE: f32 = 15.0;
 const PARAGRAPH_FONT_SIZE: f32 = 11.0;
-const BUTTON_FONT_SIZE: f32 = 20.0;
+// const BUTTON_FONT_SIZE: f32 = 20.0;
 const ICON_FONT_SIZE: f32 = 25.0;
 
 pub struct ThemePlugin;
