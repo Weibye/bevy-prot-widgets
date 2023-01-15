@@ -28,10 +28,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
             justify_content: JustifyContent::Center,
             align_items: AlignItems::Center,
-            ..Default::default()
+            ..default()
         },
         background_color: Color::WHITE.into(),
-        ..Default::default()
+        ..default()
     })
     .with_children(|root| {
         for icon in [

@@ -7,17 +7,13 @@ use bevy_text::TextStyle;
 const COLOR_BACKGROUND: Color = Color::rgb(0.047, 0.109, 0.172);
 const COLOR_CONTENT_EXAMPLE: Color = Color::rgb(0.055, 0.12, 0.19);
 const COLOR_TEXT: Color = Color::rgb(0.905, 0.921, 0.941);
-const H1_FONT: &str = "fonts/Roboto/Roboto-Bold.ttf";
-const TEXT_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
-const WIDGET_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
-const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
 
 const H1_FONT_SIZE: f32 = 30.0;
 const H2_FONT_SIZE: f32 = 20.0;
 const H3_FONT_SIZE: f32 = 15.0;
 const PARAGRAPH_FONT_SIZE: f32 = 11.0;
 const BUTTON_FONT_SIZE: f32 = 20.0;
-const ICON_FONT_SIZE: f32 = 20.0;
+const ICON_FONT_SIZE: f32 = 25.0;
 
 pub struct ThemePlugin;
 
@@ -30,6 +26,7 @@ impl Plugin for ThemePlugin {
 
 fn setup_theme(mut cmd: Commands, fonts: Res<FontHandles>) {
     cmd.insert_resource(WidgetTheme {
+        background_color: COLOR_BACKGROUND,
         h1: TextStyle {
             font: fonts.h1.clone(),
             font_size: H1_FONT_SIZE,
@@ -62,6 +59,7 @@ fn setup_theme(mut cmd: Commands, fonts: Res<FontHandles>) {
 #[derive(Resource)]
 pub struct WidgetTheme {
     // Whatever fonts we need
+    pub background_color: Color,
     pub h1: TextStyle,
     pub h2: TextStyle,
     pub h3: TextStyle,

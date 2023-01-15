@@ -2,8 +2,7 @@
 
 use bevy::{
     prelude::{
-        default, App, BuildChildren, Camera2dBundle, Color, Commands, EntityBlueprint, NodeBundle,
-        Res,
+        default, App, BuildChildren, Camera2dBundle, Commands, EntityBlueprint, NodeBundle, Res,
     },
     ui::{AlignItems, FlexDirection, JustifyContent, Size, Style, Val},
     DefaultPlugins,
@@ -32,12 +31,12 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
     cmd.spawn(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-            justify_content: JustifyContent::SpaceEvenly,
+            justify_content: JustifyContent::Center,
             align_items: AlignItems::Center,
             flex_direction: FlexDirection::Row,
             ..default()
         },
-        background_color: Color::WHITE.into(),
+        background_color: theme.background_color.into(),
         ..default()
     })
     .with_children(|root| {

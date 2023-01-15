@@ -5,7 +5,7 @@ use bevy_ecs::{
     system::{EntityCommands, Query},
 };
 use bevy_text::{Text, TextStyle};
-use bevy_ui::{prelude::NodeBundle, CalculatedSize};
+use bevy_ui::{prelude::NodeBundle, CalculatedSize, Style, UiRect, Val};
 use material_icons::Icon;
 
 use super::label::update_changed_labels;
@@ -38,6 +38,13 @@ impl<'w, 's> EntityBlueprint for IconWidgetBlueprint {
         entity.insert(IconWidgetBundle {
             icon_widget: IconWidget(self.icon),
             text: Text::from_section(self.icon.to_string(), self.theme),
+            node_bundle: NodeBundle {
+                style: Style {
+                    margin: UiRect::all(Val::Px(5.0)),
+                    ..Default::default()
+                },
+                ..Default::default()
+            },
             ..Default::default()
         });
     }

@@ -2,7 +2,7 @@
 
 use bevy::{
     prelude::{
-        App, BuildChildren, Camera2dBundle, Color, Commands, EntityBlueprint, NodeBundle, Res,
+        default, App, BuildChildren, Camera2dBundle, Commands, EntityBlueprint, NodeBundle, Res,
     },
     ui::{AlignItems, JustifyContent, Size, Style, Val},
     DefaultPlugins,
@@ -30,10 +30,10 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
             justify_content: JustifyContent::Center,
             align_items: AlignItems::Center,
-            ..Default::default()
+            ..default()
         },
-        background_color: Color::WHITE.into(),
-        ..Default::default()
+        background_color: theme.background_color.into(),
+        ..default()
     })
     .with_children(|root| {
         for icon in [Icon::Comment, Icon::PlayArrow, Icon::Pause, Icon::Stop] {

@@ -10,7 +10,7 @@ use bevy_text::{Text, TextStyle};
 use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
 
-use super::icon::{update_changed_icons, IconWidget, IconWidgetBundle};
+use super::icon::{update_changed_icons, IconWidget, IconWidgetBlueprint, IconWidgetBundle};
 
 pub(crate) struct RadioPlugin;
 
@@ -30,23 +30,21 @@ pub struct RadioBlueprint {
     pub theme: TextStyle,
 }
 
-impl<'w, 's> EntityBlueprint for RadioBlueprint {
-    fn build<'a>(self, cmd: &'a mut EntityCommands) {
+impl EntityBlueprint for RadioBlueprint {
+    fn build(self, entity: &mut EntityCommands) {
         let icon = if self.checked {
             Icon::RadioButtonChecked
         } else {
             Icon::RadioButtonUnchecked
         };
 
-        cmd.insert(RadioBundle {
-            radio: RadioWidget(self.checked),
-            icon: IconWidgetBundle {
-                icon_widget: IconWidget(icon),
-                text: Text::from_section(icon.to_string(), self.theme),
-                ..Default::default()
-            },
-            ..Default::default()
-        });
+        IconWidgetBlueprint {
+            icon,
+            theme: self.theme,
+        }
+        .build(entity);
+
+        entity.insert((RadioWidget(self.checked), Button, Interaction::default()));
     }
 }
 

@@ -2,12 +2,13 @@
 
 use bevy::{
     prelude::{
-        App, BuildChildren, Camera2dBundle, Color, Commands, EntityBlueprint, NodeBundle, Res,
+        default, App, BuildChildren, Camera2dBundle, Commands, EntityBlueprint, NodeBundle, Res,
     },
     ui::{AlignItems, FlexDirection, JustifyContent, Size, Style, Val},
     DefaultPlugins,
 };
 use bevy_prot_widgets::{theme::WidgetTheme, widget::label::LabelWidgetBlueprint, WidgetPlugin};
+use bevy_ui::UiRect;
 
 fn main() {
     App::new()
@@ -27,13 +28,12 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
     cmd.spawn(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-            justify_content: JustifyContent::SpaceEvenly,
-            align_items: AlignItems::Center,
             flex_direction: FlexDirection::Column,
-            ..Default::default()
+            padding: UiRect::all(Val::Px(50.0)),
+            ..default()
         },
-        background_color: Color::WHITE.into(),
-        ..Default::default()
+        background_color: theme.background_color.into(),
+        ..default()
     })
     .with_children(|root| {
         for (label, text_style) in [

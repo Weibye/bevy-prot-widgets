@@ -31,10 +31,6 @@ fn main() {
 const COLOR_BACKGROUND: Color = Color::rgb(0.047, 0.109, 0.172);
 const COLOR_CONTENT_EXAMPLE: Color = Color::rgb(0.055, 0.12, 0.19);
 // const COLOR_TEXT: Color = Color::rgb(0.905, 0.921, 0.941);
-// const H1_FONT: &str = "fonts/Roboto/Roboto-Bold.ttf";
-// const TEXT_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
-// const WIDGET_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
-// const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
 
 // const H1_FONT_SIZE: f32 = 30.0;
 // const TEXT_FONT_SIZE: f32 = 18.0;
@@ -72,7 +68,7 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                 justify_content: JustifyContent::Center,
                 ..default()
             },
-            background_color: COLOR_BACKGROUND.into(),
+            background_color: theme.background_color.into(),
             ..default()
         }).with_children(| root| {
             // Content container

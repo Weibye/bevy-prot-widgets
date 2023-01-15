@@ -24,14 +24,6 @@ const ICON_COLOR_SELECTED: Color = Color::rgb_linear(1.0, 0.3, 0.2);
 #[derive(Resource)]
 pub struct IconStyle(pub TextStyle);
 
-pub(crate) fn setup_resources(mut cmd: Commands, asset_server: Res<AssetServer>) {
-    cmd.insert_resource(IconStyle(TextStyle {
-        font: asset_server.load(MATERIAL_FONT),
-        font_size: ICON_SIZE,
-        color: ICON_COLOR,
-    }));
-}
-
 /// System responsible for toggling the state of widgets that can toggle
 pub(crate) fn toggle_system(mut q: Query<(&mut ToggleState, &Interaction), Changed<Interaction>>) {
     for (mut state, interaction) in &mut q {

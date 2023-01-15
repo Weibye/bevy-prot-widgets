@@ -10,7 +10,7 @@ use bevy_text::{Text, TextStyle};
 use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
 
-use super::icon::{update_changed_icons, IconWidget, IconWidgetBundle};
+use super::icon::{update_changed_icons, IconWidget, IconWidgetBlueprint, IconWidgetBundle};
 
 pub(crate) struct CheckBoxPlugin;
 
@@ -46,15 +46,13 @@ impl<'w, 's> EntityBlueprint for CheckBoxBlueprint {
             CheckboxState::Indeterminate => Icon::IndeterminateCheckBox,
         };
 
-        entity.insert(CheckboxBundle {
-            checkbox: CheckboxWidget(self.state),
-            icon: IconWidgetBundle {
-                icon_widget: IconWidget(icon),
-                text: Text::from_section(icon.to_string(), self.theme),
-                ..Default::default()
-            },
-            ..Default::default()
-        });
+        IconWidgetBlueprint {
+            icon,
+            theme: self.theme,
+        }
+        .build(entity);
+
+        entity.insert((CheckboxWidget(self.state), Button, Interaction::default()));
     }
 }
 
