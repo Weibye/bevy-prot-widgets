@@ -1,4 +1,4 @@
-use bevy_app::{App, Plugin, StartupStage};
+use bevy_app::{App, Plugin};
 use bevy_asset::{AssetServer, Handle};
 use bevy_ecs::system::{Commands, Res, Resource};
 use bevy_text::Font;

@@ -1,13 +1,7 @@
-use bevy_hierarchy::{ChildBuilder};
-use bevy_ui::{
-    prelude::{TextBundle}, Style, UiRect, Val,
-};
-use material_icons::Icon;
+use bevy_hierarchy::ChildBuilder;
+use bevy_ui::{prelude::TextBundle, Style, UiRect, Val};
 
-use crate::{
-    theme::WidgetTheme,
-    widget::button::{ButtonEnabledState, ButtonWidgetBundle, TriggerPolicy},
-};
+use crate::theme::WidgetTheme;
 
 /// Creates a new H1 title
 pub fn create_h1(container: &mut ChildBuilder, theme: &WidgetTheme, text: &str) {

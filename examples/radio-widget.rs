@@ -7,7 +7,7 @@ use bevy::{
     ui::{AlignItems, FlexDirection, JustifyContent, Size, Style, Val},
     DefaultPlugins,
 };
-use bevy_prot_widgets::{widget::radio::RadioBlueprint, WidgetPlugin, theme::WidgetTheme};
+use bevy_prot_widgets::{theme::WidgetTheme, widget::radio::RadioBlueprint, WidgetPlugin};
 
 fn main() {
     App::new()

@@ -1,25 +1,23 @@
-use bevy_app::{Plugin, App};
-use bevy_asset::Handle;
+use bevy_app::{App, Plugin};
+
 use bevy_ecs::{
     prelude::{Bundle, Component, EntityBlueprint, IntoSystemDescriptor},
     query::Changed,
     system::{EntityCommands, Query},
 };
-use bevy_render::prelude::Color;
-use bevy_text::{Font, Text, TextStyle};
+
+use bevy_text::{Text, TextStyle};
 use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
 
-use super::icon::{IconWidget, IconWidgetBundle, update_changed_icons};
+use super::icon::{update_changed_icons, IconWidget, IconWidgetBundle};
 
 pub(crate) struct RadioPlugin;
 
 impl Plugin for RadioPlugin {
     fn build(&self, app: &mut App) {
-        app
-            .add_system(update_radio_icon.before(update_changed_icons))
-            .add_system(update_radio_interaction.before(update_radio_icon))
-        ;
+        app.add_system(update_radio_icon.before(update_changed_icons))
+            .add_system(update_radio_interaction.before(update_radio_icon));
     }
 }
 
@@ -44,10 +42,7 @@ impl<'w, 's> EntityBlueprint for RadioBlueprint {
             radio: RadioWidget(self.checked),
             icon: IconWidgetBundle {
                 icon_widget: IconWidget(icon),
-                text: Text::from_section(
-                    icon.to_string(),
-                    self.theme,
-                ),
+                text: Text::from_section(icon.to_string(), self.theme),
                 ..Default::default()
             },
             ..Default::default()
@@ -83,9 +78,7 @@ pub(crate) fn update_radio_interaction(
     }
 }
 
-pub fn update_radio_icon(
-    mut q: Query<(&RadioWidget, &mut IconWidget), Changed<RadioWidget>>,
-) {
+pub fn update_radio_icon(mut q: Query<(&RadioWidget, &mut IconWidget), Changed<RadioWidget>>) {
     for (radio, mut icon) in &mut q {
         icon.0 = if radio.0 {
             Icon::RadioButtonChecked

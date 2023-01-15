@@ -1,14 +1,13 @@
 use bevy_ecs::{
-    prelude::{Bundle, Component, Entity, EntityBlueprint, EventReader, EventWriter},
+    prelude::{Bundle, Component, Entity, EntityBlueprint},
     query::{AnyOf, Changed, Or, With, WorldQuery},
-    system::{EntityCommands, Query},
+    system::EntityCommands,
 };
 use bevy_hierarchy::{BuildChildren, Children};
-use bevy_log::info;
+
 use bevy_render::prelude::Color;
-use bevy_text::Text;
+
 use bevy_ui::{prelude::NodeBundle, widget::Button, BackgroundColor, Interaction};
-use material_icons::Icon;
 
 use super::{icon::IconWidgetBlueprint, label::LabelWidgetBlueprint};
 

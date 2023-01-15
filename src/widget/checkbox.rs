@@ -1,25 +1,23 @@
-use bevy_app::{Plugin, App};
-use bevy_asset::Handle;
+use bevy_app::{App, Plugin};
+
 use bevy_ecs::{
     prelude::{Bundle, Component, EntityBlueprint, IntoSystemDescriptor},
     query::Changed,
     system::{EntityCommands, Query},
 };
-use bevy_render::prelude::Color;
-use bevy_text::{Font, Text, TextStyle};
+
+use bevy_text::{Text, TextStyle};
 use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
 
-use super::icon::{IconWidget, IconWidgetBundle, update_changed_icons};
+use super::icon::{update_changed_icons, IconWidget, IconWidgetBundle};
 
 pub(crate) struct CheckBoxPlugin;
 
 impl Plugin for CheckBoxPlugin {
     fn build(&self, app: &mut App) {
-        app
-            .add_system(update_checkbox_icon.before(update_changed_icons))
-            .add_system(update_checkbox_interaction.before(update_checkbox_icon))
-        ;
+        app.add_system(update_checkbox_icon.before(update_changed_icons))
+            .add_system(update_checkbox_interaction.before(update_checkbox_icon));
     }
 }
 
@@ -52,10 +50,7 @@ impl<'w, 's> EntityBlueprint for CheckBoxBlueprint {
             checkbox: CheckboxWidget(self.state),
             icon: IconWidgetBundle {
                 icon_widget: IconWidget(icon),
-                text: Text::from_section(
-                    icon.to_string(),
-                    self.theme,
-                ),
+                text: Text::from_section(icon.to_string(), self.theme),
                 ..Default::default()
             },
             ..Default::default()

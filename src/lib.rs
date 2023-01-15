@@ -9,7 +9,7 @@ use bevy_log::info;
 use bevy_ui::Interaction;
 
 use fonts::FontPlugin;
-use system::{toggle_system, update_widget_colors};
+use system::update_widget_colors;
 
 pub mod content_builder;
 mod entity;
@@ -22,11 +22,7 @@ pub use entity::*;
 pub use system::*;
 
 use theme::ThemePlugin;
-use widget::{
-    icon::IconPlugin,
-    label::LabelPlugin,
-    radio::RadioPlugin, checkbox::CheckBoxPlugin,
-};
+use widget::{checkbox::CheckBoxPlugin, icon::IconPlugin, label::LabelPlugin, radio::RadioPlugin};
 
 // Widgetplugin should be the collector of all the widget systems
 pub struct WidgetPlugin;

@@ -9,8 +9,9 @@ use bevy::{
     DefaultPlugins,
 };
 use bevy_prot_widgets::{
+    theme::WidgetTheme,
     widget::checkbox::{CheckBoxBlueprint, CheckboxState},
-    WidgetPlugin, theme::WidgetTheme,
+    WidgetPlugin,
 };
 
 fn main() {

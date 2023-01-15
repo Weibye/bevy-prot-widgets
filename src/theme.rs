@@ -1,5 +1,5 @@
-use crate::{fonts::FontHandles, widget::button::ButtonTheme, WidgetStage};
-use bevy_app::{App, Plugin, StartupStage};
+use crate::{fonts::FontHandles, WidgetStage};
+use bevy_app::{App, Plugin};
 use bevy_ecs::system::{Commands, Res, Resource};
 use bevy_render::color::Color;
 use bevy_text::TextStyle;
