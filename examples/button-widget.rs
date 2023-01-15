@@ -28,14 +28,9 @@ fn main() {
 // TODO: Show buttons with different themes / styles
 // TODO: Show that clicking buttons actually change something
 
-const COLOR_BACKGROUND: Color = Color::rgb(0.047, 0.109, 0.172);
 const COLOR_CONTENT_EXAMPLE: Color = Color::rgb(0.055, 0.12, 0.19);
-// const COLOR_TEXT: Color = Color::rgb(0.905, 0.921, 0.941);
 
-// const H1_FONT_SIZE: f32 = 30.0;
-// const TEXT_FONT_SIZE: f32 = 18.0;
 // const BUTTON_FONT_SIZE: f32 = 20.0;
-// const ICON_FONT_SIZE: f32 = 20.0;
 
 // TODO: Button should not change on hover
 const BUTTON_THEME: ButtonTheme = ButtonTheme {
@@ -60,6 +55,7 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
+// TODO: Setup a scroll-bar widget
 fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
     // root node
     cmd.spawn(NodeBundle {
@@ -75,23 +71,26 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
             root.spawn(NodeBundle {
                 style: Style {
                     size: Size::new(Val::Auto, Val::Percent(100.0)),
-                    // min_size: Size::new(Val::Px(400.0), Val::Auto),
-                    // max_size: Size::new(Val::Px(800.0), Val::Auto),
                     padding: UiRect::all(Val::Px(30.0)),
                     flex_direction: FlexDirection::Column,
-                    justify_content: JustifyContent::FlexStart,
-                    align_items: AlignItems::FlexStart,
                     ..default()
                 },
-                background_color: COLOR_BACKGROUND.into(),
                 ..default()
             }).with_children(| content | {
 
-                create_h1(content, &theme, "Buttons");
-                create_p(content, &theme, "Buttons are used to trigger actions. \
-                They can be hovered and clicked. The most basic button is the text button");
+                LabelWidgetBlueprint {
+                    text: "Buttons".into(),
+                    theme: theme.h1.clone(),
+                }.build(&mut content.spawn_empty());
 
-                // Example Showcase
+                LabelWidgetBlueprint {
+                    text: "Buttons are used to trigger actions. \
+                    They can be hovered and clicked. \
+                    The most basic button is the text button".into(),
+                    theme: theme.p.clone(),
+                }.build(&mut content.spawn_empty());
+
+                // Example Showcase Contaner
                 content.spawn(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
@@ -131,12 +130,17 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                     }.build(&mut example_showcase.spawn_empty());
                 });
 
+                LabelWidgetBlueprint {
+                    text: "Disabled Buttons".into(),
+                    theme: theme.h1.clone(),
+                }.build(&mut content.spawn_empty());
 
-                create_h1(content, &theme, "Disabled Buttons");
-
-                create_p(content, &theme, "Buttons can be either enabled or disabled. \
-                Disabled buttons should not be triggered by the user. \
-                Buttons should clearly show when they are disabled by changing colors.");
+                LabelWidgetBlueprint {
+                    text: "Buttons can be either enabled or disabled. \
+                    Disabled buttons should not be triggered by the user. \
+                    Buttons should clearly show when they are disabled by changing colors.".into(),
+                    theme: theme.p.clone(),
+                }.build(&mut content.spawn_empty());
                 // Example Showcase
                 content.spawn(NodeBundle {
                     style: Style {

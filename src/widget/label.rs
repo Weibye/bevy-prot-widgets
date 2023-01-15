@@ -5,7 +5,7 @@ use bevy_ecs::{
     system::{EntityCommands, Query},
 };
 use bevy_text::{Text, TextStyle};
-use bevy_ui::{prelude::NodeBundle, CalculatedSize};
+use bevy_ui::{prelude::NodeBundle, CalculatedSize, UiRect, Val, Style};
 
 pub(crate) struct LabelPlugin;
 
@@ -32,6 +32,13 @@ impl EntityBlueprint for LabelWidgetBlueprint {
                 text: self.text.clone(),
             },
             text: Text::from_section(self.text, self.theme),
+            node_bundle: NodeBundle {
+                style: Style {
+                    margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(8.0), Val::Px(5.0)),
+                    ..Default::default()
+                },
+                ..Default::default()
+            },
             ..Default::default()
         });
     }

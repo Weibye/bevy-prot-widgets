@@ -8,11 +8,11 @@ const COLOR_BACKGROUND: Color = Color::rgb(0.047, 0.109, 0.172);
 // const COLOR_CONTENT_EXAMPLE: Color = Color::rgb(0.055, 0.12, 0.19);
 const COLOR_TEXT: Color = Color::rgb(0.905, 0.921, 0.941);
 
-const H1_FONT_SIZE: f32 = 30.0;
-const H2_FONT_SIZE: f32 = 20.0;
-const H3_FONT_SIZE: f32 = 15.0;
-const PARAGRAPH_FONT_SIZE: f32 = 11.0;
-// const BUTTON_FONT_SIZE: f32 = 20.0;
+const H1_FONT_SIZE: f32 = 35.0;
+const H2_FONT_SIZE: f32 = 30.0;
+const H3_FONT_SIZE: f32 = 25.0;
+const PARAGRAPH_FONT_SIZE: f32 = 18.0;
+const BUTTON_FONT_SIZE: f32 = 20.0;
 const ICON_FONT_SIZE: f32 = 25.0;
 
 pub struct ThemePlugin;
@@ -52,6 +52,11 @@ fn setup_theme(mut cmd: Commands, fonts: Res<FontHandles>) {
             font_size: ICON_FONT_SIZE,
             color: COLOR_TEXT,
         },
+        button: TextStyle {
+            font: fonts.p.clone(), 
+            font_size: BUTTON_FONT_SIZE,
+            color: COLOR_TEXT
+        },
     });
 }
 
@@ -65,6 +70,7 @@ pub struct WidgetTheme {
     pub h3: TextStyle,
     pub p: TextStyle,
     pub icon: TextStyle,
+    pub button: TextStyle,
     // Whatever colors we need
     // pub button_theme: ButtonTheme,
 }
