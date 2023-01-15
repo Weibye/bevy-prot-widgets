@@ -1,11 +1,12 @@
 use bevy_app::{App, Plugin};
 
 use bevy_ecs::{
-    prelude::{Bundle, Component, EntityBlueprint, IntoSystemDescriptor},
+    prelude::{Bundle, Component, Entity, EntityBlueprint, IntoSystemDescriptor},
     query::Changed,
     system::{EntityCommands, Query},
 };
 
+use bevy_log::info;
 use bevy_text::TextStyle;
 use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
@@ -23,7 +24,12 @@ impl Plugin for RadioPlugin {
 
 /// Marker component for a CheckBoxWidget
 #[derive(Component, Debug, Clone, Default)]
-pub struct RadioWidget(pub bool);
+pub struct Radio(pub bool);
+
+#[derive(Component, Debug)]
+pub struct RadioGroup {
+    pub entities: Vec<Entity>,
+}
 
 pub struct RadioBlueprint {
     pub checked: bool,
@@ -44,7 +50,7 @@ impl EntityBlueprint for RadioBlueprint {
         }
         .build(entity);
 
-        entity.insert((RadioWidget(self.checked), Button, Interaction::default()));
+        entity.insert((Radio(self.checked), Button, Interaction::default()));
     }
 }
 
@@ -59,7 +65,7 @@ pub struct RadioBundle {
     /// Interaction state of the widget
     pub interaction: Interaction,
     /// Marker to make it a "CheckboxWidget"
-    pub radio: RadioWidget,
+    pub radio: Radio,
     // /// State of the widget
     // pub toggle: ToggleState,
     // /// The different icons for the widget
@@ -67,16 +73,47 @@ pub struct RadioBundle {
 }
 
 pub(crate) fn update_radio_interaction(
-    mut q: Query<(&mut RadioWidget, &Interaction), Changed<Interaction>>,
+    mut radio: Query<(Entity, &mut Radio, &Interaction)>, // TODO: See if this can be improved with change trackers Changed<Interaction>>,
+    radio_group: Query<&RadioGroup>,
 ) {
-    for (mut radio, interaction) in &mut q {
+    let mut group_changes = vec![];
+
+    for (entity, _, interaction) in &mut radio {
         if matches!(interaction, Interaction::Clicked) {
-            radio.0 = !radio.0;
+            // If this was clicked,
+            // check if it belongs in a group
+            let mut result = None;
+
+            for group in &radio_group {
+                if group.entities.iter().any(|e| *e == entity) {
+                    // radio is member of this group
+                    result = Some(group);
+                    break;
+                }
+            }
+
+            if result.is_some() {
+                group_changes.push((entity, result.unwrap()));
+            } else {
+                // This is not part of a group, so we can just flip it here.
+                // radio_widget.0 = !radio_widget.0;
+            }
+        }
+    }
+
+    for (clicked_entity, group) in group_changes {
+        for member in &group.entities {
+            if let Ok((_, mut other_radio, _)) = radio.get_mut(*member) {
+                other_radio.0 = false;
+            }
+        }
+        if let Ok((_, mut radio_widget, _)) = radio.get_mut(clicked_entity) {
+            radio_widget.0 = true;
         }
     }
 }
 
-pub fn update_radio_icon(mut q: Query<(&RadioWidget, &mut IconWidget), Changed<RadioWidget>>) {
+pub fn update_radio_icon(mut q: Query<(&Radio, &mut IconWidget), Changed<Radio>>) {
     for (radio, mut icon) in &mut q {
         icon.0 = if radio.0 {
             Icon::RadioButtonChecked
