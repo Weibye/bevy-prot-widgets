@@ -1,13 +1,14 @@
 //! This example showcases how to use the Icon Widget
 
 use bevy::{
-    prelude::{default, App, BuildChildren, Camera2dBundle, Color, Commands, NodeBundle, Res},
+    prelude::{
+        App, BuildChildren, Camera2dBundle, Color, Commands, EntityBlueprint, NodeBundle,
+        Res,
+    },
     ui::{AlignItems, JustifyContent, Size, Style, Val},
     DefaultPlugins,
 };
-use bevy_prot_widgets::{
-    blueprint::WidgetBlueprint, fonts::FontLib, widget::icon::IconWidgetBlueprint, WidgetPlugin,
-};
+use bevy_prot_widgets::{fonts::FontLib, widget::icon::IconWidgetBlueprint, WidgetPlugin};
 use material_icons::Icon;
 
 fn main() {
@@ -30,36 +31,18 @@ fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
             justify_content: JustifyContent::Center,
             align_items: AlignItems::Center,
-            ..default()
+            ..Default::default()
         },
         background_color: Color::WHITE.into(),
-        ..default()
+        ..Default::default()
     })
     .with_children(|root| {
-        IconWidgetBlueprint {
-            icon: Icon::Comment,
-            font: fonts.material.clone(),
+        for icon in [Icon::Comment, Icon::PlayArrow, Icon::Pause, Icon::Stop] {
+            IconWidgetBlueprint {
+                icon,
+                font: fonts.material.clone(),
+            }
+            .build(&mut root.spawn_empty());
         }
-        .build(&mut root.spawn_empty());
-
-        IconWidgetBlueprint {
-            icon: Icon::PlayArrow,
-            font: fonts.material.clone(),
-        }
-        .build(&mut root.spawn_empty());
-
-        IconWidgetBlueprint {
-            icon: Icon::Pause,
-            font: fonts.material.clone(),
-        }
-        .build(&mut root.spawn_empty());
-
-        IconWidgetBlueprint {
-            icon: Icon::Stop,
-            font: fonts.material.clone(),
-        }
-        .build(&mut root.spawn_empty());
     });
-
-    // TODO: Show how to change the icon during runtime
 }

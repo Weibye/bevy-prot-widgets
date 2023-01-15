@@ -26,10 +26,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>) {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
             justify_content: JustifyContent::Center,
             align_items: AlignItems::Center,
-            ..default()
+            ..Default::default()
         },
         background_color: Color::WHITE.into(),
-        ..default()
+        ..Default::default()
     })
     .with_children(|root| {
         root.spawn(TextBundle::from_section(

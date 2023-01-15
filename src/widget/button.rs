@@ -1,12 +1,16 @@
-use bevy::{
-    ecs::query::WorldQuery,
-    prelude::{
-        default, info, AnyOf, Bundle, Button, Changed, Children, Color, Component, Entity,
-        EventReader, EventWriter, NodeBundle, Or, Query, With,
-    },
-    text::Text,
-    ui::{BackgroundColor, Interaction, Style},
+use bevy_ecs::{
+    prelude::{Bundle, Component, Entity, EntityBlueprint, EventReader, EventWriter},
+    query::{AnyOf, Changed, Or, With, WorldQuery},
+    system::{EntityCommands, Query},
 };
+use bevy_hierarchy::{BuildChildren, Children};
+use bevy_log::info;
+use bevy_render::prelude::Color;
+use bevy_text::Text;
+use bevy_ui::{prelude::NodeBundle, widget::Button, BackgroundColor, Interaction};
+use material_icons::Icon;
+
+use super::{label::LabelWidgetBlueprint, icon::IconWidgetBlueprint};
 
 /// Event that a button has triggered
 pub struct ButtonEvent(Entity);
@@ -58,9 +62,57 @@ pub struct ButtonTheme {
     pub foreground: ButtonColor,
 }
 
-pub struct ButtonWidgetBlueprint {
-    pub button: ButtonWidgetBundle,
-    pub label: f32,
+pub struct LabelButtonBlueprint {
+    pub label: LabelWidgetBlueprint,
+    pub enabled: bool,
+    pub policy: TriggerPolicy,
+}
+
+pub struct IconButtonBlueprint {
+    pub icon: IconWidgetBlueprint,
+    pub enabled: bool,
+    pub policy: TriggerPolicy,
+}
+
+impl<'w, 's> EntityBlueprint for LabelButtonBlueprint {
+    fn build<'a>(self, entity: &'a mut EntityCommands) {
+        let mut label_entity = entity.commands().spawn_empty();
+        let label_entity_id = label_entity.id();
+        self.label.build(&mut label_entity);
+
+        entity.insert(ButtonWidgetBundle {
+            button: Button,
+            widget: ButtonWidget,
+            policy: self.policy,
+            enabled: if self.enabled {
+                ButtonEnabledState::Enabled
+            } else {
+                ButtonEnabledState::Disabled
+            },
+            ..Default::default()
+        })
+        .add_child(label_entity_id);
+    }
+}
+
+impl<'w, 's> EntityBlueprint for IconButtonBlueprint {
+    fn build<'a>(self, entity: &'a mut EntityCommands) {
+        let mut icon_entity = entity.commands().spawn_empty();
+        let icon_entity_id = icon_entity.id();
+        self.icon.build(&mut icon_entity);
+
+        entity.insert(ButtonWidgetBundle {
+            button: Button,
+            widget: ButtonWidget,
+            policy: self.policy,
+            enabled: if self.enabled {
+                ButtonEnabledState::Enabled
+            } else {
+                ButtonEnabledState::Disabled
+            },
+            ..Default::default()
+        }).add_child(icon_entity_id);
+    }
 }
 
 /// A Button Widget
@@ -80,37 +132,7 @@ pub struct ButtonWidgetBundle {
     pub policy: TriggerPolicy,
     pub enabled: ButtonEnabledState,
     pub theme: ButtonTheme,
-}
-
-impl ButtonWidgetBundle {
-    pub fn new(style: Style, theme: ButtonTheme) -> Self {
-        ButtonWidgetBundle {
-            node_bundle: NodeBundle {
-                style,
-                background_color: theme.background.default.into(),
-                ..default()
-            },
-            theme,
-            ..default()
-        }
-    }
-
-    pub fn with_policy(mut self, policy: TriggerPolicy) -> Self {
-        self.policy = policy;
-        self
-    }
-    pub fn with_enabled(mut self, enabled: bool) -> Self {
-        self.enabled = if enabled {
-            ButtonEnabledState::Enabled
-        } else {
-            ButtonEnabledState::Disabled
-        };
-        self
-    }
-    pub fn with_theme(mut self, theme: ButtonTheme) -> Self {
-        self.theme = theme;
-        self
-    }
+    pub(crate) style: bevy_ui::Style,
 }
 
 #[derive(WorldQuery)]

@@ -1,11 +1,12 @@
-use bevy::{
-    ecs::system::EntityCommands,
-    prelude::{default, Bundle, Color, Component, Handle, NodeBundle},
-    text::{Font, Text, TextStyle},
-    ui::CalculatedSize,
+use bevy_asset::Handle;
+use bevy_ecs::{
+    prelude::{Bundle, Component, EntityBlueprint},
+    query::Changed,
+    system::{EntityCommands, Query},
 };
-
-use crate::blueprint::WidgetBlueprint;
+use bevy_render::prelude::Color;
+use bevy_text::{Font, Text, TextStyle};
+use bevy_ui::{prelude::NodeBundle, CalculatedSize};
 
 const FONT_SIZE: f32 = 50.0;
 const ICON_COLOR: Color = Color::BLACK;
@@ -20,11 +21,8 @@ pub struct LabelWidgetBlueprint {
     pub font: Handle<Font>,
 }
 
-impl<'w, 's> WidgetBlueprint<'w, 's> for LabelWidgetBlueprint {
-    fn build<'a>(
-        self,
-        cmd: &'a mut EntityCommands<'w, 's, 'a>,
-    ) -> &'a mut EntityCommands<'w, 's, 'a> {
+impl<'w, 's> EntityBlueprint for LabelWidgetBlueprint {
+    fn build<'a>(self, cmd: &'a mut EntityCommands) {
         cmd.insert(LabelWidgetBundle {
             label: LabelWidget {
                 text: self.text.clone(),
@@ -37,10 +35,8 @@ impl<'w, 's> WidgetBlueprint<'w, 's> for LabelWidgetBlueprint {
                     color: ICON_COLOR,
                 },
             ),
-            ..default()
+            ..Default::default()
         });
-
-        cmd
     }
 }
 
@@ -51,4 +47,10 @@ pub struct LabelWidgetBundle {
     pub label: LabelWidget,
     pub text: Text,
     pub calculated_size: CalculatedSize,
+}
+
+pub(crate) fn update_changed_labels(mut q: Query<(&LabelWidget, &mut Text), Changed<LabelWidget>>) {
+    for (widget, mut text) in &mut q {
+        text.sections[0].value = widget.text.clone();
+    }
 }

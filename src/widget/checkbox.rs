@@ -1,12 +1,13 @@
-use bevy::{
-    ecs::system::EntityCommands,
-    prelude::{default, Bundle, Button, Changed, Color, Component, Handle, Query},
-    text::{Font, Text, TextStyle},
-    ui::Interaction,
+use bevy_asset::Handle;
+use bevy_ecs::{
+    prelude::{Bundle, Component, EntityBlueprint},
+    query::Changed,
+    system::{EntityCommands, Query},
 };
+use bevy_render::prelude::Color;
+use bevy_text::{Font, Text, TextStyle};
+use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
-
-use crate::blueprint::WidgetBlueprint;
 
 use super::icon::{IconWidget, IconWidgetBundle};
 
@@ -30,11 +31,8 @@ pub struct CheckBoxBlueprint {
     pub font: Handle<Font>,
 }
 
-impl<'w, 's> WidgetBlueprint<'w, 's> for CheckBoxBlueprint {
-    fn build<'a>(
-        self,
-        cmd: &'a mut EntityCommands<'w, 's, 'a>,
-    ) -> &'a mut EntityCommands<'w, 's, 'a> {
+impl<'w, 's> EntityBlueprint for CheckBoxBlueprint {
+    fn build<'a>(self, cmd: &'a mut EntityCommands) {
         let icon = match self.state {
             CheckboxState::Checked => Icon::CheckBox,
             CheckboxState::Unchecked => Icon::CheckBoxOutlineBlank,
@@ -53,12 +51,10 @@ impl<'w, 's> WidgetBlueprint<'w, 's> for CheckBoxBlueprint {
                         color: ICON_COLOR,
                     },
                 ),
-                ..default()
+                ..Default::default()
             },
-            ..default()
+            ..Default::default()
         });
-
-        cmd
     }
 }
 

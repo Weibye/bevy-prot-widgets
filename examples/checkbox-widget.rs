@@ -1,12 +1,14 @@
 //! This example showcases how to use the Checkbox Widget
 
 use bevy::{
-    prelude::{default, App, BuildChildren, Camera2dBundle, Color, Commands, NodeBundle, Res},
+    prelude::{
+        default, App, BuildChildren, Camera2dBundle, Color, Commands, EntityBlueprint, NodeBundle,
+        Res,
+    },
     ui::{AlignItems, FlexDirection, JustifyContent, Size, Style, Val},
     DefaultPlugins,
 };
 use bevy_prot_widgets::{
-    blueprint::WidgetBlueprint,
     fonts::FontLib,
     widget::checkbox::{CheckBoxBlueprint, CheckboxState},
     WidgetPlugin,
@@ -33,10 +35,10 @@ fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
             justify_content: JustifyContent::SpaceEvenly,
             align_items: AlignItems::Center,
             flex_direction: FlexDirection::Row,
-            ..default()
+            ..Default::default()
         },
         background_color: Color::WHITE.into(),
-        ..default()
+        ..Default::default()
     })
     .with_children(|root| {
         for _ in 0..12 {

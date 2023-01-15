@@ -1,9 +1,12 @@
-use bevy::{
-    ecs::{entity::Entity, query::WorldQuery},
-    prelude::{info, AssetServer, Changed, Color, Commands, Or, Query, Res, Resource, With},
-    text::{Text, TextStyle},
-    ui::Interaction,
+use bevy_asset::AssetServer;
+use bevy_ecs::{
+    query::{Changed, Or, With, WorldQuery},
+    system::{Commands, Query, Res, Resource},
 };
+use bevy_log::info;
+use bevy_render::color::Color;
+use bevy_text::{Text, TextStyle};
+use bevy_ui::Interaction;
 
 use crate::{
     entity::ToggleState,

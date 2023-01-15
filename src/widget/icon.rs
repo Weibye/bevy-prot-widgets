@@ -1,12 +1,13 @@
-use bevy::{
-    ecs::system::EntityCommands,
-    prelude::{default, Bundle, Changed, Color, Component, Handle, NodeBundle, Query},
-    text::{Font, Text, TextStyle},
-    ui::CalculatedSize,
+use bevy_asset::Handle;
+use bevy_ecs::{
+    prelude::{Bundle, Component, EntityBlueprint},
+    query::Changed,
+    system::{EntityCommands, Query},
 };
+use bevy_render::prelude::Color;
+use bevy_text::{Font, Text, TextStyle};
+use bevy_ui::{prelude::NodeBundle, CalculatedSize};
 use material_icons::Icon;
-
-use crate::blueprint::WidgetBlueprint;
 
 const FONT_SIZE: f32 = 50.0;
 const ICON_COLOR: Color = Color::BLACK;
@@ -25,11 +26,8 @@ pub struct IconWidgetBlueprint {
     pub font: Handle<Font>,
 }
 
-impl<'w, 's> WidgetBlueprint<'w, 's> for IconWidgetBlueprint {
-    fn build<'a>(
-        self,
-        cmd: &'a mut EntityCommands<'w, 's, 'a>,
-    ) -> &'a mut EntityCommands<'w, 's, 'a> {
+impl<'w, 's> EntityBlueprint for IconWidgetBlueprint {
+    fn build<'a>(self, cmd: &'a mut EntityCommands) {
         cmd.insert(IconWidgetBundle {
             icon_widget: IconWidget(self.icon),
             text: Text::from_section(
@@ -40,10 +38,8 @@ impl<'w, 's> WidgetBlueprint<'w, 's> for IconWidgetBlueprint {
                     color: ICON_COLOR,
                 },
             ),
-            ..default()
+            ..Default::default()
         });
-
-        cmd
     }
 }
 

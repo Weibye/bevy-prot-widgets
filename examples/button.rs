@@ -3,8 +3,8 @@ use bevy::prelude::*;
 use bevy_prot_widgets::{
     content_builder::*,
     theme::WidgetTheme,
-    widget::button::{ButtonColor, ButtonTheme, TriggerPolicy},
-    WidgetPlugin,
+    widget::{button::{ButtonColor, ButtonTheme, TriggerPolicy, LabelButtonBlueprint, IconButtonBlueprint}, label::LabelWidgetBlueprint, icon::IconWidgetBlueprint},
+    WidgetPlugin, fonts::FontLib,
 };
 use material_icons::Icon;
 
@@ -57,7 +57,7 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
-fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
+fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>) {
     // Setup theme used for these widgets
     let theme = WidgetTheme {
         h1: TextStyle {
@@ -89,10 +89,10 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
                 justify_content: JustifyContent::Center,
                 flex_direction: FlexDirection::Row,
-                ..default()
+                ..Default::default()
             },
             background_color: COLOR_BACKGROUND.into(),
-            ..default()
+            ..Default::default()
         }).with_children(| root| {
             // Content container
             root.spawn(NodeBundle {
@@ -104,10 +104,10 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                     flex_direction: FlexDirection::ColumnReverse,
                     justify_content: JustifyContent::FlexStart,
                     align_items: AlignItems::FlexStart,
-                    ..default()
+                    ..Default::default()
                 },
                 background_color: COLOR_BACKGROUND.into(),
-                ..default()
+                ..Default::default()
             }).with_children(| content | {
 
                 create_h1(content, &theme, "Buttons");
@@ -122,14 +122,30 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        ..default()
+                        ..Default::default()
                     },
                     background_color: COLOR_CONTENT_EXAMPLE.into(),
-                    ..default()
+                    ..Default::default()
                 }).with_children(| example_showcase | {
+                    
+                    LabelButtonBlueprint {
+                        label: LabelWidgetBlueprint {
+                            text: "Open inventory".into(),
+                            font: fonts.normal.clone(),
+                        },
+                        enabled: true,
+                        policy: TriggerPolicy::OnRelease,
+                    }.build(&mut example_showcase.spawn_empty());
 
-                    create_text_button(example_showcase, &theme, "Open Inventory", true, TriggerPolicy::OnRelease);
-                    create_icon_button(example_showcase, &theme, Icon::Menu, true, TriggerPolicy::OnRelease);
+                    IconButtonBlueprint {
+                        icon: IconWidgetBlueprint {
+                            font: fonts.material.clone(),
+                            icon: Icon::Menu,
+                        },
+                        enabled: true,
+                        policy: TriggerPolicy::OnRelease,
+                    }.build(&mut example_showcase.spawn_empty());
+
                     create_label_button(example_showcase, &theme, Icon::Send, "Send", true, TriggerPolicy::OnRelease);
                 });
 
@@ -147,15 +163,22 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        ..default()
+                        ..Default::default()
                     },
                     background_color: COLOR_CONTENT_EXAMPLE.into(),
-                    ..default()
+                    ..Default::default()
                 }).with_children(| example_showcase | {
 
                     // Spawn text-buttons
                     for text in ["Ok", "Submit", "Restart Game"] {
-                        create_text_button(example_showcase, &theme, text, false, TriggerPolicy::OnRelease);
+                        LabelButtonBlueprint {
+                            label: LabelWidgetBlueprint {
+                                text: text.into(),
+                                font: fonts.normal.clone(),
+                            },
+                            enabled: false,
+                            policy: TriggerPolicy::OnRelease,
+                        }.build(&mut example_showcase.spawn_empty());
                     }
                 });
 
@@ -170,13 +193,20 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        ..default()
+                        ..Default::default()
                     },
                     background_color: COLOR_CONTENT_EXAMPLE.into(),
-                    ..default()
+                    ..Default::default()
                 }).with_children(| example_showcase | {
-                    create_text_button(example_showcase, &theme, "Ok", true, TriggerPolicy::OnPress);
-                    create_text_button(example_showcase, &theme, "Ok", true, TriggerPolicy::OnPress);
+                    LabelButtonBlueprint {
+                        label: LabelWidgetBlueprint {
+                            text: "Ok".into(),
+                            font: fonts.normal.clone(),
+                        },
+                        enabled: true,
+                        policy: TriggerPolicy::OnPress,
+                    }.build(&mut example_showcase.spawn_empty());
+                    
                     create_label_button(example_showcase, &theme, Icon::Wifi, "Enable Wifi", true, TriggerPolicy::OnPress);
 
                 });
@@ -192,15 +222,22 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        ..default()
+                        ..Default::default()
                     },
                     background_color: COLOR_CONTENT_EXAMPLE.into(),
-                    ..default()
+                    ..Default::default()
                 }).with_children(| example_showcase | {
 
                     // Spawn icon-buttons
                     for icon in [Icon::Wifi, Icon::Subtitles, Icon::Delete, Icon::Add, Icon::Home] {
-                        create_icon_button(example_showcase, &theme, icon, true, TriggerPolicy::OnRelease);
+                        IconButtonBlueprint {
+                            icon: IconWidgetBlueprint {
+                                font: fonts.material.clone(),
+                                icon: icon,
+                            },
+                            enabled: true,
+                            policy: TriggerPolicy::OnRelease,
+                        }.build(&mut example_showcase.spawn_empty());
                     }
                 });
 
@@ -215,10 +252,10 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>) {
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        ..default()
+                        ..Default::default()
                     },
                     background_color: COLOR_CONTENT_EXAMPLE.into(),
-                    ..default()
+                    ..Default::default()
                 }).with_children(| example_showcase | {
 
                     // Spawn icon-buttons

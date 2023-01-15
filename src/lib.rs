@@ -1,11 +1,11 @@
-use bevy::{
-    prelude::{info, App, Changed, Entity, IntoSystemDescriptor, Plugin, Query, StartupStage},
-    ui::Interaction,
-};
+use bevy_app::{App, Plugin, StartupStage};
+use bevy_ecs::{prelude::Entity, query::Changed, schedule::IntoSystemDescriptor, system::Query};
+use bevy_log::info;
+use bevy_ui::Interaction;
+
 use fonts::load_fonts;
 use system::{setup_resources, toggle_system, update_widget_colors};
 
-pub mod blueprint;
 pub mod content_builder;
 mod entity;
 pub mod fonts;
@@ -20,6 +20,7 @@ use widget::{
     button::{button_color, button_interaction, button_trigger, on_button_trigger, ButtonEvent},
     checkbox::{update_checkbox_icon, update_checkbox_interaction},
     icon::update_changed_icons,
+    label::update_changed_labels,
     radio::{update_radio_icon, update_radio_interaction},
 };
 
@@ -45,6 +46,7 @@ impl Plugin for WidgetPlugin {
                     .after(update_checkbox_interaction),
             )
             .add_system(update_changed_icons)
+            .add_system(update_changed_labels)
             .add_system(button_output)
             .add_system(toggle_system)
             .add_system(button_color)

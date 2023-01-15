@@ -1,12 +1,11 @@
 //! This example showcases how to use the Label Widget
 
 use bevy::{
-    prelude::{default, App, BuildChildren, Camera2dBundle, Color, Commands, NodeBundle, Res},
+    prelude::{App, BuildChildren, Camera2dBundle, Color, Commands, NodeBundle, Res, EntityBlueprint},
     ui::{AlignItems, FlexDirection, JustifyContent, Size, Style, Val},
     DefaultPlugins,
 };
-use bevy_prot_widgets::{
-    blueprint::WidgetBlueprint, fonts::FontLib, widget::label::LabelWidgetBlueprint, WidgetPlugin,
+use bevy_prot_widgets::{ fonts::FontLib, widget::label::LabelWidgetBlueprint, WidgetPlugin,
 };
 
 fn main() {
@@ -30,36 +29,19 @@ fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
             justify_content: JustifyContent::SpaceEvenly,
             align_items: AlignItems::Center,
             flex_direction: FlexDirection::Column,
-            ..default()
+            ..Default::default()
         },
         background_color: Color::WHITE.into(),
-        ..default()
+        ..Default::default()
     })
     .with_children(|root| {
-        LabelWidgetBlueprint {
-            text: "This is a text-label widget".into(),
-            font: fonts.normal.clone(),
-        }
-        .build(&mut root.spawn_empty());
 
-        LabelWidgetBlueprint {
-            text: "Label 02".into(),
-            font: fonts.normal.clone(),
+        for label in ["This is a text-label widget", "This is a different one", "Some label", "Fourth label"] {
+            LabelWidgetBlueprint {
+                text: label.into(),
+                font: fonts.normal.clone(),
+            }
+            .build(&mut root.spawn_empty());
         }
-        .build(&mut root.spawn_empty());
-
-        LabelWidgetBlueprint {
-            text: "Label 03".into(),
-            font: fonts.normal.clone(),
-        }
-        .build(&mut root.spawn_empty());
-
-        LabelWidgetBlueprint {
-            text: "Label 04".into(),
-            font: fonts.normal.clone(),
-        }
-        .build(&mut root.spawn_empty());
     });
-
-    // TODO: Show how to change the text during runtime
 }

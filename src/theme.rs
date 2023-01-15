@@ -1,4 +1,4 @@
-use bevy::text::TextStyle;
+use bevy_text::TextStyle;
 
 use crate::widget::button::ButtonTheme;
 

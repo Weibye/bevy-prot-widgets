@@ -1,12 +1,11 @@
 //! This example showcases how to use the Radio Widget
 
 use bevy::{
-    prelude::{default, App, BuildChildren, Camera2dBundle, Color, Commands, NodeBundle, Res},
+    prelude::{App, BuildChildren, Camera2dBundle, Color, Commands, NodeBundle, Res, EntityBlueprint},
     ui::{AlignItems, FlexDirection, JustifyContent, Size, Style, Val},
     DefaultPlugins,
 };
-use bevy_prot_widgets::{
-    blueprint::WidgetBlueprint, fonts::FontLib, widget::radio::RadioBlueprint, WidgetPlugin,
+use bevy_prot_widgets::{fonts::FontLib, widget::radio::RadioBlueprint, WidgetPlugin,
 };
 
 fn main() {
@@ -30,10 +29,10 @@ fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
             justify_content: JustifyContent::SpaceEvenly,
             align_items: AlignItems::Center,
             flex_direction: FlexDirection::Row,
-            ..default()
+            ..Default::default()
         },
         background_color: Color::WHITE.into(),
-        ..default()
+        ..Default::default()
     })
     .with_children(|root| {
         for _ in 0..12 {

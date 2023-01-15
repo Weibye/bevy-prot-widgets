@@ -50,10 +50,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
     cmd.spawn(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-            ..default()
+            ..Default::default()
         },
         background_color: Color::WHITE.into(),
-        ..default()
+        ..Default::default()
     })
     .with_children(|root| {
         root.spawn(NodeBundle {
@@ -62,10 +62,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
                 flex_direction: FlexDirection::ColumnReverse,
                 margin: UiRect::all(Val::Px(5.)),
                 padding: UiRect::all(Val::Px(10.0)),
-                ..default()
+                ..Default::default()
             },
             background_color: Color::WHITE.into(),
-            ..default()
+            ..Default::default()
         })
         .with_children(|rect01| {
             // Buttons title
@@ -82,10 +82,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
                 style: Style {
                     size: Size::new(Val::Percent(100.0), Val::Px(1.0)),
                     margin: UiRect::new(Val::Undefined, Val::Px(5.0), Val::Undefined, Val::Px(5.0)),
-                    ..default()
+                    ..Default::default()
                 },
                 background_color: Color::BLACK.into(),
-                ..default()
+                ..Default::default()
             });
 
             // Button container
@@ -96,9 +96,9 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Stretch,
                         justify_content: JustifyContent::SpaceBetween,
-                        ..default()
+                        ..Default::default()
                     },
-                    ..default()
+                    ..Default::default()
                 })
                 .with_children(|button_container| {
                     // Button 01
@@ -109,10 +109,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
                                 justify_content: JustifyContent::Center, // For centering button text
                                 align_items: AlignItems::Center, // For centering button text
                                 flex_grow: 1.,
-                                ..default()
+                                ..Default::default()
                             },
                             background_color: NORMAL_BUTTON.into(),
-                            ..default()
+                            ..Default::default()
                         })
                         .with_children(|parent| {
                             parent.spawn(TextBundle::from_section(
@@ -141,10 +141,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
                                 // vertically center child text
                                 align_items: AlignItems::Center,
                                 flex_grow: 1.,
-                                ..default()
+                                ..Default::default()
                             },
                             background_color: NORMAL_BUTTON.into(),
-                            ..default()
+                            ..Default::default()
                         })
                         .with_children(|parent| {
                             parent.spawn(TextBundle::from_section(
@@ -168,10 +168,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
                                 // vertically center child text
                                 align_items: AlignItems::Center,
                                 flex_grow: 1.,
-                                ..default()
+                                ..Default::default()
                             },
                             background_color: NORMAL_BUTTON.into(),
-                            ..default()
+                            ..Default::default()
                         })
                         .with_children(|parent| {
                             parent.spawn(TextBundle::from_section(
@@ -199,10 +199,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
                 style: Style {
                     size: Size::new(Val::Percent(100.0), Val::Px(1.0)),
                     margin: UiRect::new(Val::Undefined, Val::Px(5.0), Val::Undefined, Val::Px(5.0)),
-                    ..default()
+                    ..Default::default()
                 },
                 background_color: Color::BLACK.into(),
-                ..default()
+                ..Default::default()
             });
 
             // Checkbox container
@@ -213,10 +213,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
                         flex_direction: FlexDirection::Row,
                         // align_items: AlignItems::Stretch,
                         justify_content: JustifyContent::SpaceBetween,
-                        ..default()
+                        ..Default::default()
                     },
                     // color: Color::RED.into(),
-                    ..default()
+                    ..Default::default()
                 })
                 .with_children(|container| {
                     for _ in 0..10 {
@@ -242,10 +242,10 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
                 style: Style {
                     size: Size::new(Val::Percent(100.0), Val::Px(1.0)),
                     margin: UiRect::new(Val::Undefined, Val::Px(5.0), Val::Undefined, Val::Px(5.0)),
-                    ..default()
+                    ..Default::default()
                 },
                 background_color: Color::BLACK.into(),
-                ..default()
+                ..Default::default()
             });
 
             // Checkbox container
@@ -256,9 +256,9 @@ fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>)
                         flex_direction: FlexDirection::Row,
                         // align_items: AlignItems::Stretch,
                         justify_content: JustifyContent::SpaceBetween,
-                        ..default()
+                        ..Default::default()
                     },
-                    ..default()
+                    ..Default::default()
                 })
                 .with_children(|container| {
                     for _ in 0..10 {

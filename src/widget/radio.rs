@@ -1,14 +1,13 @@
-use bevy::prelude::{Changed, Query};
-use bevy::render::color::Color;
-use bevy::{
-    ecs::system::EntityCommands,
-    prelude::{default, Bundle, Button, Component, Handle},
-    text::{Font, Text, TextStyle},
-    ui::Interaction,
+use bevy_asset::Handle;
+use bevy_ecs::{
+    prelude::{Bundle, Component, EntityBlueprint},
+    query::Changed,
+    system::{EntityCommands, Query},
 };
+use bevy_render::prelude::Color;
+use bevy_text::{Font, Text, TextStyle};
+use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
-
-use crate::blueprint::WidgetBlueprint;
 
 use super::icon::{IconWidget, IconWidgetBundle};
 
@@ -24,11 +23,8 @@ pub struct RadioBlueprint {
     pub font: Handle<Font>,
 }
 
-impl<'w, 's> WidgetBlueprint<'w, 's> for RadioBlueprint {
-    fn build<'a>(
-        self,
-        cmd: &'a mut EntityCommands<'w, 's, 'a>,
-    ) -> &'a mut EntityCommands<'w, 's, 'a> {
+impl<'w, 's> EntityBlueprint for RadioBlueprint {
+    fn build<'a>(self, cmd: &'a mut EntityCommands) {
         let icon = if self.checked {
             Icon::RadioButtonChecked
         } else {
@@ -47,12 +43,10 @@ impl<'w, 's> WidgetBlueprint<'w, 's> for RadioBlueprint {
                         color: ICON_COLOR,
                     },
                 ),
-                ..default()
+                ..Default::default()
             },
-            ..default()
+            ..Default::default()
         });
-
-        cmd
     }
 }
 

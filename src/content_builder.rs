@@ -1,12 +1,13 @@
-use bevy::{
-    prelude::{default, BuildChildren, ChildBuilder, TextBundle},
-    ui::{AlignItems, JustifyContent, Size, Style, UiRect, Val},
+use bevy_hierarchy::{BuildChildren, ChildBuilder};
+use bevy_ui::{
+    prelude::{NodeBundle, TextBundle},
+    AlignItems, JustifyContent, Size, Style, UiRect, Val,
 };
 use material_icons::Icon;
 
 use crate::{
     theme::WidgetTheme,
-    widget::button::{ButtonWidgetBundle, TriggerPolicy},
+    widget::button::{ButtonEnabledState, ButtonWidgetBundle, TriggerPolicy},
 };
 
 /// Creates a new H1 title
@@ -19,7 +20,7 @@ pub fn create_h1(container: &mut ChildBuilder, theme: &WidgetTheme, text: &str) 
                 Val::Px(15.0),
                 Val::Undefined,
             ),
-            ..default()
+            ..Default::default()
         }),
     );
 }
@@ -27,77 +28,6 @@ pub fn create_h1(container: &mut ChildBuilder, theme: &WidgetTheme, text: &str) 
 /// Create a new paragraph section
 pub fn create_p(container: &mut ChildBuilder, theme: &WidgetTheme, text: &str) {
     container.spawn(TextBundle::from_section(text, theme.p.clone()));
-}
-
-/// Creates a new Text Button Widget
-pub fn create_text_button(
-    container: &mut ChildBuilder,
-    theme: &WidgetTheme,
-    text: &str,
-    enabled: bool,
-    policy: TriggerPolicy,
-) {
-    container
-        .spawn(
-            ButtonWidgetBundle::new(
-                Style {
-                    size: Size::new(Val::Auto, Val::Auto),
-                    padding: UiRect::new(
-                        Val::Px(15.0),
-                        Val::Px(15.0),
-                        Val::Px(10.0),
-                        Val::Px(10.0),
-                    ),
-                    margin: UiRect::all(Val::Px(4.0)),
-                    align_items: AlignItems::Center,
-                    justify_content: JustifyContent::Center,
-                    ..default()
-                },
-                theme.button_theme.clone(),
-            )
-            .with_enabled(enabled)
-            .with_policy(policy),
-        )
-        .with_children(|button| {
-            button.spawn(TextBundle::from_section(text, theme.widget.clone()));
-        });
-}
-
-/// Creates a new icon-button widget
-pub fn create_icon_button(
-    container: &mut ChildBuilder,
-    theme: &WidgetTheme,
-    icon: Icon,
-    enabled: bool,
-    policy: TriggerPolicy,
-) {
-    container
-        .spawn(
-            ButtonWidgetBundle::new(
-                Style {
-                    size: Size::new(Val::Auto, Val::Auto),
-                    padding: UiRect::new(
-                        Val::Px(15.0),
-                        Val::Px(15.0),
-                        Val::Px(10.0),
-                        Val::Px(10.0),
-                    ),
-                    margin: UiRect::all(Val::Px(4.0)),
-                    justify_content: JustifyContent::Center,
-                    align_items: AlignItems::Center,
-                    ..default()
-                },
-                theme.button_theme.clone(),
-            )
-            .with_enabled(enabled)
-            .with_policy(policy),
-        )
-        .with_children(|button| {
-            button.spawn(TextBundle::from_section(
-                icon.to_string(),
-                theme.icon.clone(),
-            ));
-        });
 }
 
 /// Creates a new button with icon and text
@@ -110,9 +40,9 @@ pub fn create_label_button(
     policy: TriggerPolicy,
 ) {
     container
-        .spawn(
-            ButtonWidgetBundle::new(
-                Style {
+        .spawn(ButtonWidgetBundle {
+            node_bundle: NodeBundle {
+                style: Style {
                     size: Size::new(Val::Auto, Val::Auto),
                     padding: UiRect::new(
                         Val::Px(15.0),
@@ -123,13 +53,19 @@ pub fn create_label_button(
                     margin: UiRect::all(Val::Px(4.0)),
                     align_items: AlignItems::Center,
                     justify_content: JustifyContent::Center,
-                    ..default()
+                    ..Default::default()
                 },
-                theme.button_theme.clone(),
-            )
-            .with_enabled(enabled)
-            .with_policy(policy),
-        )
+                ..Default::default()
+            },
+            theme: theme.button_theme.clone(),
+            policy,
+            enabled: if enabled {
+                ButtonEnabledState::Enabled
+            } else {
+                ButtonEnabledState::Disabled
+            },
+            ..Default::default()
+        })
         .with_children(|button| {
             button.spawn(
                 TextBundle::from_section(icon.to_string(), theme.icon.clone()).with_style(Style {
@@ -139,7 +75,7 @@ pub fn create_label_button(
                         Val::Undefined,
                         Val::Undefined,
                     ),
-                    ..default()
+                    ..Default::default()
                 }),
             );
             button.spawn(TextBundle::from_section(text, theme.widget.clone()));

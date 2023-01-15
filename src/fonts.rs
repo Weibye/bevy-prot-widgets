@@ -1,7 +1,6 @@
-use bevy::{
-    prelude::{AssetServer, Commands, Handle, Res, Resource},
-    text::Font,
-};
+use bevy_asset::{AssetServer, Handle};
+use bevy_ecs::system::{Commands, Res, Resource};
+use bevy_text::Font;
 
 const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
 const NORMAL_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
