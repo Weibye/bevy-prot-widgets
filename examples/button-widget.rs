@@ -90,8 +90,8 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                 // Example Showcase Contaner
                 content.spawn(NodeBundle {
                     style: Style {
-                        size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
-                        margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
+                        margin: UiRect::vertical(Val::Px(10.0)),
+                        padding: UiRect::vertical(Val::Px(10.0)),
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
@@ -121,7 +121,7 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
 
                     IconLabelButtonBlueprint {
                         icon: IconWidgetBlueprint { icon: Icon::Send, theme: theme.icon.clone() },
-                        label: LabelWidgetBlueprint { text: "Send".into(), theme: theme.p.clone() },
+                        label: LabelWidgetBlueprint { text: "Send".into(), theme: theme.button.clone() },
                         enabled: true,
                         policy: TriggerPolicy::OnRelease,
                     }.build(&mut example_showcase.spawn_empty());
@@ -141,8 +141,8 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                 // Example Showcase
                 content.spawn(NodeBundle {
                     style: Style {
-                        size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
-                        margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
+                        margin: UiRect::vertical(Val::Px(10.0)),
+                        padding: UiRect::vertical(Val::Px(10.0)),
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
@@ -179,8 +179,8 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                 // Example Showcase
                 content.spawn(NodeBundle {
                     style: Style {
-                        size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
-                        margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
+                        margin: UiRect::vertical(Val::Px(10.0)),
+                        padding: UiRect::vertical(Val::Px(10.0)),
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
@@ -220,8 +220,8 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                 // Example Showcase
                 content.spawn(NodeBundle {
                     style: Style {
-                        size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
-                        margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
+                        margin: UiRect::vertical(Val::Px(10.0)),
+                        padding: UiRect::vertical(Val::Px(10.0)),
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
@@ -257,8 +257,8 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                 // Example Showcase
                 content.spawn(NodeBundle {
                     style: Style {
-                        size: Size::new(Val::Percent(100.0), Val::Px(80.0)),
-                        margin: UiRect::new(Val::Undefined, Val::Undefined, Val::Px(10.0), Val::Px(10.0)),
+                        margin: UiRect::vertical(Val::Px(10.0)),
+                        padding: UiRect::vertical(Val::Px(10.0)),
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,

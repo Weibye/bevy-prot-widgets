@@ -7,7 +7,9 @@ use bevy_hierarchy::{BuildChildren, Children};
 
 use bevy_render::prelude::Color;
 
-use bevy_ui::{prelude::NodeBundle, widget::Button, BackgroundColor, Interaction};
+use bevy_ui::{
+    prelude::NodeBundle, widget::Button, BackgroundColor, Interaction, Style, UiRect, Val,
+};
 
 use super::{icon::IconWidgetBlueprint, label::LabelWidgetBlueprint};
 
@@ -100,7 +102,12 @@ impl EntityBlueprint for LabelButtonBlueprint {
                     ButtonEnabledState::Disabled
                 },
                 node_bundle: NodeBundle {
-                    background_color: Color::BLACK.into(),
+                    style: Style {
+                        margin: UiRect::all(Val::Px(5.0)),
+                        padding: UiRect::all(Val::Px(10.0)),
+                        ..Default::default()
+                    },
+                    background_color: Color::rgb(0.25, 0.25, 0.25).into(),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -124,6 +131,15 @@ impl EntityBlueprint for IconButtonBlueprint {
                     ButtonEnabledState::Enabled
                 } else {
                     ButtonEnabledState::Disabled
+                },
+                node_bundle: NodeBundle {
+                    style: Style {
+                        margin: UiRect::all(Val::Px(5.0)),
+                        padding: UiRect::all(Val::Px(10.0)),
+                        ..Default::default()
+                    },
+                    background_color: Color::rgb(0.25, 0.25, 0.25).into(),
+                    ..Default::default()
                 },
                 ..Default::default()
             })
@@ -150,6 +166,15 @@ impl EntityBlueprint for IconLabelButtonBlueprint {
                     ButtonEnabledState::Enabled
                 } else {
                     ButtonEnabledState::Disabled
+                },
+                node_bundle: NodeBundle {
+                    style: Style {
+                        margin: UiRect::all(Val::Px(5.0)),
+                        padding: UiRect::all(Val::Px(10.0)),
+                        ..Default::default()
+                    },
+                    background_color: Color::rgb(0.25, 0.25, 0.25).into(),
+                    ..Default::default()
                 },
                 ..Default::default()
             })
