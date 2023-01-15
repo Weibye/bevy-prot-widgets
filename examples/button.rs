@@ -3,8 +3,15 @@ use bevy::prelude::*;
 use bevy_prot_widgets::{
     content_builder::*,
     theme::WidgetTheme,
-    widget::{button::{ButtonColor, ButtonTheme, TriggerPolicy, LabelButtonBlueprint, IconButtonBlueprint}, label::LabelWidgetBlueprint, icon::IconWidgetBlueprint},
-    WidgetPlugin, fonts::FontLib,
+    widget::{
+        button::{
+            ButtonColor, ButtonTheme, IconButtonBlueprint, IconLabelButtonBlueprint,
+            LabelButtonBlueprint, TriggerPolicy,
+        },
+        icon::IconWidgetBlueprint,
+        label::LabelWidgetBlueprint,
+    },
+    WidgetPlugin,
 };
 use material_icons::Icon;
 
@@ -23,16 +30,16 @@ fn main() {
 
 const COLOR_BACKGROUND: Color = Color::rgb(0.047, 0.109, 0.172);
 const COLOR_CONTENT_EXAMPLE: Color = Color::rgb(0.055, 0.12, 0.19);
-const COLOR_TEXT: Color = Color::rgb(0.905, 0.921, 0.941);
-const H1_FONT: &str = "fonts/Roboto/Roboto-Bold.ttf";
-const TEXT_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
-const WIDGET_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
-const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
+// const COLOR_TEXT: Color = Color::rgb(0.905, 0.921, 0.941);
+// const H1_FONT: &str = "fonts/Roboto/Roboto-Bold.ttf";
+// const TEXT_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
+// const WIDGET_FONT: &str = "fonts/Roboto/Roboto-Regular.ttf";
+// const MATERIAL_FONT: &str = "fonts/MaterialIcons-Regular.ttf";
 
-const H1_FONT_SIZE: f32 = 30.0;
-const TEXT_FONT_SIZE: f32 = 18.0;
-const BUTTON_FONT_SIZE: f32 = 20.0;
-const ICON_FONT_SIZE: f32 = 20.0;
+// const H1_FONT_SIZE: f32 = 30.0;
+// const TEXT_FONT_SIZE: f32 = 18.0;
+// const BUTTON_FONT_SIZE: f32 = 20.0;
+// const ICON_FONT_SIZE: f32 = 20.0;
 
 // TODO: Button should not change on hover
 const BUTTON_THEME: ButtonTheme = ButtonTheme {
@@ -57,42 +64,16 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
-fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>) {
-    // Setup theme used for these widgets
-    let theme = WidgetTheme {
-        h1: TextStyle {
-            font: asset_server.load(H1_FONT),
-            font_size: H1_FONT_SIZE,
-            color: COLOR_TEXT,
-        },
-        p: TextStyle {
-            font: asset_server.load(TEXT_FONT),
-            font_size: TEXT_FONT_SIZE,
-            color: COLOR_TEXT,
-        },
-        icon: TextStyle {
-            font: asset_server.load(MATERIAL_FONT),
-            font_size: ICON_FONT_SIZE,
-            color: COLOR_TEXT,
-        },
-        widget: TextStyle {
-            font: asset_server.load(WIDGET_FONT),
-            font_size: BUTTON_FONT_SIZE,
-            color: COLOR_TEXT,
-        },
-        button_theme: BUTTON_THEME,
-    };
-
+fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
     // root node
     cmd.spawn(NodeBundle {
             style: Style {
                 size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
                 justify_content: JustifyContent::Center,
-                flex_direction: FlexDirection::Row,
-                ..Default::default()
+                ..default()
             },
             background_color: COLOR_BACKGROUND.into(),
-            ..Default::default()
+            ..default()
         }).with_children(| root| {
             // Content container
             root.spawn(NodeBundle {
@@ -101,13 +82,13 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<Font
                     // min_size: Size::new(Val::Px(400.0), Val::Auto),
                     // max_size: Size::new(Val::Px(800.0), Val::Auto),
                     padding: UiRect::all(Val::Px(30.0)),
-                    flex_direction: FlexDirection::ColumnReverse,
+                    flex_direction: FlexDirection::Column,
                     justify_content: JustifyContent::FlexStart,
                     align_items: AlignItems::FlexStart,
-                    ..Default::default()
+                    ..default()
                 },
                 background_color: COLOR_BACKGROUND.into(),
-                ..Default::default()
+                ..default()
             }).with_children(| content | {
 
                 create_h1(content, &theme, "Buttons");
@@ -122,16 +103,16 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<Font
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        ..Default::default()
+                        ..default()
                     },
                     background_color: COLOR_CONTENT_EXAMPLE.into(),
-                    ..Default::default()
+                    ..default()
                 }).with_children(| example_showcase | {
-                    
+
                     LabelButtonBlueprint {
                         label: LabelWidgetBlueprint {
                             text: "Open inventory".into(),
-                            font: fonts.normal.clone(),
+                            theme: theme.p.clone(),
                         },
                         enabled: true,
                         policy: TriggerPolicy::OnRelease,
@@ -139,14 +120,19 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<Font
 
                     IconButtonBlueprint {
                         icon: IconWidgetBlueprint {
-                            font: fonts.material.clone(),
                             icon: Icon::Menu,
+                            theme: theme.icon.clone(),
                         },
                         enabled: true,
                         policy: TriggerPolicy::OnRelease,
                     }.build(&mut example_showcase.spawn_empty());
 
-                    create_label_button(example_showcase, &theme, Icon::Send, "Send", true, TriggerPolicy::OnRelease);
+                    IconLabelButtonBlueprint {
+                        icon: IconWidgetBlueprint { icon: Icon::Send, theme: theme.icon.clone() },
+                        label: LabelWidgetBlueprint { text: "Send".into(), theme: theme.p.clone() },
+                        enabled: true,
+                        policy: TriggerPolicy::OnRelease,
+                    }.build(&mut example_showcase.spawn_empty());
                 });
 
 
@@ -163,10 +149,10 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<Font
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        ..Default::default()
+                        ..default()
                     },
                     background_color: COLOR_CONTENT_EXAMPLE.into(),
-                    ..Default::default()
+                    ..default()
                 }).with_children(| example_showcase | {
 
                     // Spawn text-buttons
@@ -174,7 +160,7 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<Font
                         LabelButtonBlueprint {
                             label: LabelWidgetBlueprint {
                                 text: text.into(),
-                                font: fonts.normal.clone(),
+                                theme: theme.p.clone(),
                             },
                             enabled: false,
                             policy: TriggerPolicy::OnRelease,
@@ -193,22 +179,27 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<Font
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        ..Default::default()
+                        ..default()
                     },
                     background_color: COLOR_CONTENT_EXAMPLE.into(),
-                    ..Default::default()
+                    ..default()
                 }).with_children(| example_showcase | {
+
                     LabelButtonBlueprint {
                         label: LabelWidgetBlueprint {
                             text: "Ok".into(),
-                            font: fonts.normal.clone(),
+                            theme: theme.p.clone(),
                         },
                         enabled: true,
                         policy: TriggerPolicy::OnPress,
                     }.build(&mut example_showcase.spawn_empty());
-                    
-                    create_label_button(example_showcase, &theme, Icon::Wifi, "Enable Wifi", true, TriggerPolicy::OnPress);
 
+                    IconLabelButtonBlueprint {
+                        icon: IconWidgetBlueprint { icon: Icon::Wifi, theme: theme.icon.clone() },
+                        label: LabelWidgetBlueprint { text: "Enable Wifi".into(), theme: theme.p.clone() },
+                        enabled: true,
+                        policy: TriggerPolicy::OnRelease,
+                    }.build(&mut example_showcase.spawn_empty());
                 });
 
                 create_h1(content, &theme, "Icon Buttons");
@@ -222,18 +213,18 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<Font
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        ..Default::default()
+                        ..default()
                     },
                     background_color: COLOR_CONTENT_EXAMPLE.into(),
-                    ..Default::default()
+                    ..default()
                 }).with_children(| example_showcase | {
 
                     // Spawn icon-buttons
                     for icon in [Icon::Wifi, Icon::Subtitles, Icon::Delete, Icon::Add, Icon::Home] {
                         IconButtonBlueprint {
                             icon: IconWidgetBlueprint {
-                                font: fonts.material.clone(),
-                                icon: icon,
+                                icon,
+                                theme: theme.icon.clone(),
                             },
                             enabled: true,
                             policy: TriggerPolicy::OnRelease,
@@ -252,10 +243,10 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<Font
                         flex_direction: FlexDirection::Row,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        ..Default::default()
+                        ..default()
                     },
                     background_color: COLOR_CONTENT_EXAMPLE.into(),
-                    ..Default::default()
+                    ..default()
                 }).with_children(| example_showcase | {
 
                     // Spawn icon-buttons
@@ -266,7 +257,12 @@ fn setup_page(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<Font
                         (Icon::Add, "Add item"), 
                         (Icon::Home, "Home")
                     ] {
-                        create_label_button(example_showcase, &theme, icon, text,  true, TriggerPolicy::OnRelease);
+                        IconLabelButtonBlueprint {
+                            icon: IconWidgetBlueprint { icon, theme: theme.icon.clone() },
+                            label: LabelWidgetBlueprint { text: text.into(), theme: theme.p.clone() },
+                            enabled: true,
+                            policy: TriggerPolicy::OnRelease,
+                        }.build(&mut example_showcase.spawn_empty());
                     }
                 });
             });

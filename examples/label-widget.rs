@@ -1,12 +1,13 @@
 //! This example showcases how to use the Label Widget
 
 use bevy::{
-    prelude::{App, BuildChildren, Camera2dBundle, Color, Commands, NodeBundle, Res, EntityBlueprint},
+    prelude::{
+        App, BuildChildren, Camera2dBundle, Color, Commands, EntityBlueprint, NodeBundle, Res,
+    },
     ui::{AlignItems, FlexDirection, JustifyContent, Size, Style, Val},
     DefaultPlugins,
 };
-use bevy_prot_widgets::{ fonts::FontLib, widget::label::LabelWidgetBlueprint, WidgetPlugin,
-};
+use bevy_prot_widgets::{theme::WidgetTheme, widget::label::LabelWidgetBlueprint, WidgetPlugin};
 
 fn main() {
     App::new()
@@ -22,7 +23,7 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
-fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
+fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
     cmd.spawn(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
@@ -35,11 +36,18 @@ fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
         ..Default::default()
     })
     .with_children(|root| {
-
-        for label in ["This is a text-label widget", "This is a different one", "Some label", "Fourth label"] {
+        for (label, text_style) in [
+            ("This is a H1 header", theme.h1.clone()),
+            ("This is a H2 header", theme.h2.clone()),
+            ("This is a H3 header", theme.h3.clone()),
+            (
+                "This is a paragraph, and it is a bit longer.",
+                theme.p.clone(),
+            ),
+        ] {
             LabelWidgetBlueprint {
                 text: label.into(),
-                font: fonts.normal.clone(),
+                theme: text_style,
             }
             .build(&mut root.spawn_empty());
         }

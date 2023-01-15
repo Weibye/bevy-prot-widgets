@@ -9,7 +9,7 @@ use bevy::{
     DefaultPlugins,
 };
 use bevy_prot_widgets::{
-    fonts::FontLib,
+    fonts::FontHandles,
     widget::checkbox::{CheckBoxBlueprint, CheckboxState},
     WidgetPlugin,
 };
@@ -28,7 +28,7 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
-fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
+fn setup_page(mut cmd: Commands, fonts: Res<FontHandles>) {
     cmd.spawn(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),

@@ -2,13 +2,12 @@
 
 use bevy::{
     prelude::{
-        App, BuildChildren, Camera2dBundle, Color, Commands, EntityBlueprint, NodeBundle,
-        Res,
+        App, BuildChildren, Camera2dBundle, Color, Commands, EntityBlueprint, NodeBundle, Res,
     },
     ui::{AlignItems, JustifyContent, Size, Style, Val},
     DefaultPlugins,
 };
-use bevy_prot_widgets::{fonts::FontLib, widget::icon::IconWidgetBlueprint, WidgetPlugin};
+use bevy_prot_widgets::{theme::WidgetTheme, widget::icon::IconWidgetBlueprint, WidgetPlugin};
 use material_icons::Icon;
 
 fn main() {
@@ -25,7 +24,7 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
-fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
+fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
     cmd.spawn(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
@@ -40,7 +39,7 @@ fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
         for icon in [Icon::Comment, Icon::PlayArrow, Icon::Pause, Icon::Stop] {
             IconWidgetBlueprint {
                 icon,
-                font: fonts.material.clone(),
+                theme: theme.icon.clone(),
             }
             .build(&mut root.spawn_empty());
         }

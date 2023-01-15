@@ -1,12 +1,13 @@
 //! This example showcases how to use the Radio Widget
 
 use bevy::{
-    prelude::{App, BuildChildren, Camera2dBundle, Color, Commands, NodeBundle, Res, EntityBlueprint},
+    prelude::{
+        App, BuildChildren, Camera2dBundle, Color, Commands, EntityBlueprint, NodeBundle, Res,
+    },
     ui::{AlignItems, FlexDirection, JustifyContent, Size, Style, Val},
     DefaultPlugins,
 };
-use bevy_prot_widgets::{fonts::FontLib, widget::radio::RadioBlueprint, WidgetPlugin,
-};
+use bevy_prot_widgets::{fonts::FontHandles, widget::radio::RadioBlueprint, WidgetPlugin};
 
 fn main() {
     App::new()
@@ -22,7 +23,7 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
-fn setup_page(mut cmd: Commands, fonts: Res<FontLib>) {
+fn setup_page(mut cmd: Commands, fonts: Res<FontHandles>) {
     cmd.spawn(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),

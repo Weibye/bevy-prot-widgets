@@ -1,15 +1,19 @@
-use bevy_asset::Handle;
+use bevy_app::{App, Plugin};
 use bevy_ecs::{
     prelude::{Bundle, Component, EntityBlueprint},
     query::Changed,
     system::{EntityCommands, Query},
 };
-use bevy_render::prelude::Color;
-use bevy_text::{Font, Text, TextStyle};
+use bevy_text::{Text, TextStyle};
 use bevy_ui::{prelude::NodeBundle, CalculatedSize};
 
-const FONT_SIZE: f32 = 50.0;
-const ICON_COLOR: Color = Color::BLACK;
+pub struct LabelPlugin;
+
+impl Plugin for LabelPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_system(update_changed_labels);
+    }
+}
 
 #[derive(Component, Default)]
 pub struct LabelWidget {
@@ -18,7 +22,7 @@ pub struct LabelWidget {
 
 pub struct LabelWidgetBlueprint {
     pub text: String,
-    pub font: Handle<Font>,
+    pub theme: TextStyle,
 }
 
 impl<'w, 's> EntityBlueprint for LabelWidgetBlueprint {
@@ -27,14 +31,7 @@ impl<'w, 's> EntityBlueprint for LabelWidgetBlueprint {
             label: LabelWidget {
                 text: self.text.clone(),
             },
-            text: Text::from_section(
-                self.text,
-                TextStyle {
-                    font: self.font,
-                    font_size: FONT_SIZE,
-                    color: ICON_COLOR,
-                },
-            ),
+            text: Text::from_section(self.text, self.theme),
             ..Default::default()
         });
     }

@@ -1,11 +1,11 @@
 //! This example illustrates the various widgets in Bevy UI.
 
 use bevy::prelude::*;
+use bevy_prot_widgets::widget::checkbox::CheckboxBundle;
 use bevy_prot_widgets::{
-    blueprint::WidgetBlueprint,
-    fonts::FontLib,
+    fonts::FontHandles,
     widget::{
-        checkbox::{CheckBoxBlueprint, CheckboxBundle, CheckboxState},
+        checkbox::{CheckBoxBlueprint, CheckboxState},
         radio::{RadioBlueprint, RadioBundle},
     },
     WidgetPlugin,
@@ -39,7 +39,7 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
-fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontLib>) {
+fn setup(mut cmd: Commands, asset_server: Res<AssetServer>, fonts: Res<FontHandles>) {
     let icon_style = TextStyle {
         font: asset_server.load(MATERIAL_FONT),
         font_size: 40.0,

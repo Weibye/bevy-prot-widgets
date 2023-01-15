@@ -32,14 +32,14 @@ pub struct CheckBoxBlueprint {
 }
 
 impl<'w, 's> EntityBlueprint for CheckBoxBlueprint {
-    fn build<'a>(self, cmd: &'a mut EntityCommands) {
+    fn build<'a>(self, entity: &'a mut EntityCommands) {
         let icon = match self.state {
             CheckboxState::Checked => Icon::CheckBox,
             CheckboxState::Unchecked => Icon::CheckBoxOutlineBlank,
             CheckboxState::Indeterminate => Icon::IndeterminateCheckBox,
         };
 
-        cmd.insert(CheckboxBundle {
+        entity.insert(CheckboxBundle {
             checkbox: CheckboxWidget(self.state),
             icon: IconWidgetBundle {
                 icon_widget: IconWidget(icon),
