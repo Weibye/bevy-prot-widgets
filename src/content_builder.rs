@@ -1,7 +1,6 @@
-use bevy_hierarchy::{BuildChildren, ChildBuilder};
+use bevy_hierarchy::{ChildBuilder};
 use bevy_ui::{
-    prelude::{NodeBundle, TextBundle},
-    AlignItems, JustifyContent, Size, Style, UiRect, Val,
+    prelude::{TextBundle}, Style, UiRect, Val,
 };
 use material_icons::Icon;
 

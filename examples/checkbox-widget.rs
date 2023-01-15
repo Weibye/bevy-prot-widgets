@@ -9,9 +9,8 @@ use bevy::{
     DefaultPlugins,
 };
 use bevy_prot_widgets::{
-    fonts::FontHandles,
     widget::checkbox::{CheckBoxBlueprint, CheckboxState},
-    WidgetPlugin,
+    WidgetPlugin, theme::WidgetTheme,
 };
 
 fn main() {
@@ -28,23 +27,23 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
-fn setup_page(mut cmd: Commands, fonts: Res<FontHandles>) {
+fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
     cmd.spawn(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
             justify_content: JustifyContent::SpaceEvenly,
             align_items: AlignItems::Center,
             flex_direction: FlexDirection::Row,
-            ..Default::default()
+            ..default()
         },
         background_color: Color::WHITE.into(),
-        ..Default::default()
+        ..default()
     })
     .with_children(|root| {
         for _ in 0..12 {
             CheckBoxBlueprint {
                 state: CheckboxState::Unchecked,
-                font: fonts.material.clone(),
+                theme: theme.icon.clone(),
             }
             .build(&mut root.spawn_empty());
         }

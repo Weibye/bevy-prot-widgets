@@ -1,7 +1,6 @@
 //! This example illustrates the various widgets in Bevy UI.
 
 use bevy::prelude::*;
-use bevy_prot_widgets::widget::checkbox::CheckboxBundle;
 use bevy_prot_widgets::{
     fonts::FontHandles,
     widget::{
@@ -16,11 +15,8 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugin(WidgetPlugin)
-        // Startup
         .add_startup_system(setup_camera)
         .add_startup_system(setup)
-        // .add_startup_system(load_icons)
-        // .add_system(update_checkbox.after(toggle_system))
         .run();
 }
 

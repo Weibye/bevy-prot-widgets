@@ -1,6 +1,7 @@
+use bevy_app::{Plugin, App};
 use bevy_asset::Handle;
 use bevy_ecs::{
-    prelude::{Bundle, Component, EntityBlueprint},
+    prelude::{Bundle, Component, EntityBlueprint, IntoSystemDescriptor},
     query::Changed,
     system::{EntityCommands, Query},
 };
@@ -9,10 +10,18 @@ use bevy_text::{Font, Text, TextStyle};
 use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
 
-use super::icon::{IconWidget, IconWidgetBundle};
+use super::icon::{IconWidget, IconWidgetBundle, update_changed_icons};
 
-const FONT_SIZE: f32 = 50.0;
-const ICON_COLOR: Color = Color::BLACK;
+pub(crate) struct CheckBoxPlugin;
+
+impl Plugin for CheckBoxPlugin {
+    fn build(&self, app: &mut App) {
+        app
+            .add_system(update_checkbox_icon.before(update_changed_icons))
+            .add_system(update_checkbox_interaction.before(update_checkbox_icon))
+        ;
+    }
+}
 
 /// Marker component for a [CheckboxWidget].
 #[derive(Component, Debug, Clone, Default)]
@@ -28,7 +37,7 @@ pub enum CheckboxState {
 
 pub struct CheckBoxBlueprint {
     pub state: CheckboxState,
-    pub font: Handle<Font>,
+    pub theme: TextStyle,
 }
 
 impl<'w, 's> EntityBlueprint for CheckBoxBlueprint {
@@ -45,11 +54,7 @@ impl<'w, 's> EntityBlueprint for CheckBoxBlueprint {
                 icon_widget: IconWidget(icon),
                 text: Text::from_section(
                     icon.to_string(),
-                    TextStyle {
-                        font: self.font,
-                        font_size: FONT_SIZE,
-                        color: ICON_COLOR,
-                    },
+                    self.theme,
                 ),
                 ..Default::default()
             },

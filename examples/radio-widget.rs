@@ -7,7 +7,7 @@ use bevy::{
     ui::{AlignItems, FlexDirection, JustifyContent, Size, Style, Val},
     DefaultPlugins,
 };
-use bevy_prot_widgets::{fonts::FontHandles, widget::radio::RadioBlueprint, WidgetPlugin};
+use bevy_prot_widgets::{widget::radio::RadioBlueprint, WidgetPlugin, theme::WidgetTheme};
 
 fn main() {
     App::new()
@@ -23,7 +23,7 @@ fn setup_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }
 
-fn setup_page(mut cmd: Commands, fonts: Res<FontHandles>) {
+fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
     cmd.spawn(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
@@ -39,7 +39,7 @@ fn setup_page(mut cmd: Commands, fonts: Res<FontHandles>) {
         for _ in 0..12 {
             RadioBlueprint {
                 checked: false,
-                font: fonts.material.clone(),
+                theme: theme.icon.clone(),
             }
             .build(&mut root.spawn_empty());
         }

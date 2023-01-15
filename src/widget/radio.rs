@@ -1,6 +1,7 @@
+use bevy_app::{Plugin, App};
 use bevy_asset::Handle;
 use bevy_ecs::{
-    prelude::{Bundle, Component, EntityBlueprint},
+    prelude::{Bundle, Component, EntityBlueprint, IntoSystemDescriptor},
     query::Changed,
     system::{EntityCommands, Query},
 };
@@ -9,18 +10,26 @@ use bevy_text::{Font, Text, TextStyle};
 use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
 
-use super::icon::{IconWidget, IconWidgetBundle};
+use super::icon::{IconWidget, IconWidgetBundle, update_changed_icons};
+
+pub(crate) struct RadioPlugin;
+
+impl Plugin for RadioPlugin {
+    fn build(&self, app: &mut App) {
+        app
+            .add_system(update_radio_icon.before(update_changed_icons))
+            .add_system(update_radio_interaction.before(update_radio_icon))
+        ;
+    }
+}
 
 /// Marker component for a CheckBoxWidget
 #[derive(Component, Debug, Clone, Default)]
 pub struct RadioWidget(pub bool);
 
-const FONT_SIZE: f32 = 50.0;
-const ICON_COLOR: Color = Color::BLACK;
-
 pub struct RadioBlueprint {
     pub checked: bool,
-    pub font: Handle<Font>,
+    pub theme: TextStyle,
 }
 
 impl<'w, 's> EntityBlueprint for RadioBlueprint {
@@ -37,11 +46,7 @@ impl<'w, 's> EntityBlueprint for RadioBlueprint {
                 icon_widget: IconWidget(icon),
                 text: Text::from_section(
                     icon.to_string(),
-                    TextStyle {
-                        font: self.font,
-                        font_size: FONT_SIZE,
-                        color: ICON_COLOR,
-                    },
+                    self.theme,
                 ),
                 ..Default::default()
             },
@@ -78,7 +83,7 @@ pub(crate) fn update_radio_interaction(
     }
 }
 
-pub(crate) fn update_radio_icon(
+pub fn update_radio_icon(
     mut q: Query<(&RadioWidget, &mut IconWidget), Changed<RadioWidget>>,
 ) {
     for (radio, mut icon) in &mut q {

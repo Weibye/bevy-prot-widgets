@@ -7,7 +7,7 @@ use bevy_ecs::{
 use bevy_text::{Text, TextStyle};
 use bevy_ui::{prelude::NodeBundle, CalculatedSize};
 
-pub struct LabelPlugin;
+pub(crate) struct LabelPlugin;
 
 impl Plugin for LabelPlugin {
     fn build(&self, app: &mut App) {

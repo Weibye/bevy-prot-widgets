@@ -10,7 +10,7 @@ use material_icons::Icon;
 
 use super::label::update_changed_labels;
 
-pub struct IconPlugin;
+pub(crate) struct IconPlugin;
 
 impl Plugin for IconPlugin {
     fn build(&self, app: &mut App) {
@@ -53,7 +53,7 @@ pub struct IconWidgetBundle {
     pub calculated_size: CalculatedSize,
 }
 
-fn update_changed_icons(mut q: Query<(&IconWidget, &mut Text), Changed<IconWidget>>) {
+pub(crate) fn update_changed_icons(mut q: Query<(&IconWidget, &mut Text), Changed<IconWidget>>) {
     for (widget, mut text) in &mut q {
         text.sections[0].value = widget.0.to_string();
     }
