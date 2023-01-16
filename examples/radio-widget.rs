@@ -36,7 +36,8 @@ fn setup_camera(mut cmd: Commands) {
 
 // TODO: Setup a scroll-bar widget
 fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
-    let mut radio_group: Vec<Entity> = vec![];
+    let mut radio_group_01: Vec<Entity> = vec![];
+    let mut radio_group_02: Vec<Entity> = vec![];
     // root node
     cmd.spawn(NodeBundle {
         style: Style {
@@ -114,7 +115,79 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
                                     })
                                     .with_children(|entry| {
                                         let mut entity = entry.spawn_empty();
-                                        radio_group.push(entity.id());
+                                        radio_group_01.push(entity.id());
+
+                                        RadioBlueprint {
+                                            checked: false,
+                                            theme: theme.icon.clone(),
+                                        }
+                                        .build(&mut entity);
+
+                                        LabelWidgetBlueprint {
+                                            text: direction.into(),
+                                            theme: theme.h3.clone(),
+                                        }
+                                        .build(&mut entry.spawn_empty());
+                                    });
+                            }
+                        });
+                });
+
+            LabelWidgetBlueprint {
+                text: "Direction".into(),
+                theme: theme.h1.clone(),
+            }
+            .build(&mut content.spawn_empty());
+
+            LabelWidgetBlueprint {
+                text: "Can also do horizontal direction.".into(),
+                theme: theme.p.clone(),
+            }
+            .build(&mut content.spawn_empty());
+
+            // Example Showcase Contaner
+            content
+                .spawn(NodeBundle {
+                    style: Style {
+                        margin: UiRect::vertical(Val::Px(10.0)),
+                        padding: UiRect::vertical(Val::Px(10.0)),
+                        flex_direction: FlexDirection::Column,
+                        align_items: AlignItems::Center,
+                        justify_content: JustifyContent::Center,
+                        ..default()
+                    },
+                    background_color: COLOR_CONTENT_EXAMPLE.into(),
+                    ..default()
+                })
+                .with_children(|example_showcase| {
+                    LabelWidgetBlueprint {
+                        text: "Cardinal Direction".into(),
+                        theme: theme.h2.clone(),
+                    }
+                    .build(&mut example_showcase.spawn_empty());
+
+                    // Group
+                    example_showcase
+                        .spawn((NodeBundle {
+                            style: Style {
+                                flex_direction: FlexDirection::Row,
+                                ..default()
+                            },
+                            ..default()
+                        },))
+                        .with_children(|group| {
+                            for direction in ["North", "South", "East", "West"] {
+                                group
+                                    .spawn(NodeBundle {
+                                        style: Style {
+                                            flex_direction: FlexDirection::Row,
+                                            ..default()
+                                        },
+                                        ..default()
+                                    })
+                                    .with_children(|entry| {
+                                        let mut entity = entry.spawn_empty();
+                                        radio_group_02.push(entity.id());
 
                                         RadioBlueprint {
                                             checked: false,
@@ -135,15 +208,10 @@ fn setup_page(mut cmd: Commands, theme: Res<WidgetTheme>) {
     });
 
     cmd.spawn(RadioGroup {
-        entities: radio_group.into(),
+        entities: radio_group_01.into(),
     });
 
-    //         for _ in 0..12 {
-    //             RadioBlueprint {
-    //                 checked: false,
-    //                 theme: theme.icon.clone(),
-    //             }
-    //             .build(&mut root.spawn_empty());
-    //         }
-    //     });
+    cmd.spawn(RadioGroup {
+        entities: radio_group_02.into(),
+    });
 }

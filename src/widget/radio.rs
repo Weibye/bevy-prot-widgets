@@ -6,7 +6,6 @@ use bevy_ecs::{
     system::{EntityCommands, Query},
 };
 
-use bevy_log::info;
 use bevy_text::TextStyle;
 use bevy_ui::{widget::Button, Interaction};
 use material_icons::Icon;
@@ -92,8 +91,8 @@ pub(crate) fn update_radio_interaction(
                 }
             }
 
-            if result.is_some() {
-                group_changes.push((entity, result.unwrap()));
+            if let Some(result_group) = result {
+                group_changes.push((entity, result_group));
             } else {
                 // This is not part of a group, so we can just flip it here.
                 // radio_widget.0 = !radio_widget.0;
